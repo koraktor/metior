@@ -50,6 +50,11 @@ There are several ways of contributing to Metior's development:
 * Create a Metior fork on [GitHub][1] and start hacking. Extra points for using
   Metior pull requests and feature branches.
 
+## About the name
+
+The latin word "metior" means "I measure". That's just what Metior does –
+measuring source code histories.
+
 ## License
 
 This code is free software; you can redistribute it and/or modify it under the
