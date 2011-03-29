@@ -1,0 +1,16 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    diff-lcs (1.1.2)
+    grit (2.4.1)
+      diff-lcs (~> 1.1)
+      mime-types (~> 1.15)
+    mime-types (1.16)
+    yard (0.6.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  grit (~> 2.4.0)
+  yard

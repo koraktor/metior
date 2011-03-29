@@ -1,0 +1,4 @@
+.bundle/
+.yardoc/
+doc/
+pkg/
