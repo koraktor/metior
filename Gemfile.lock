@@ -13,4 +13,4 @@ PLATFORMS
 
 DEPENDENCIES
   grit (~> 2.4.0)
-  yard
+  yard (~> 0.6.5)
