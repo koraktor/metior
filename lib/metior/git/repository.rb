@@ -28,7 +28,7 @@ module Metior
       # @param [String] path The file system path of the repository
       def initialize(path)
         super path
-        
+
         @grit_repo = Grit::Repo.new(path)
       end
 
@@ -60,7 +60,6 @@ module Metior
       # Because of some Grit internal limitations, the commits have to be
       # loaded in batches of up to 500 commits.
       #
-      # 
       # @param [String] branch The branch to load commits from
       # @return [Array<Commit>] All commits from the given branch
       # @see Grit::Repo#commits

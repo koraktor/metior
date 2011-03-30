@@ -3,7 +3,6 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-
 module Metior
 
   # This class represents a commit in a source code repository
