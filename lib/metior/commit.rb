@@ -58,6 +58,13 @@ module Metior
       additions + deletions
     end
 
+    # Returns the subject line of the commit message, i.e. the first line
+    #
+    # @return [String] The subject of the commit
+    def subject
+      @message.split(/$/).first
+    end
+
   end
 
 end
