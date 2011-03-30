@@ -26,13 +26,14 @@ module Metior
       @path     = path
     end
 
-    # Returns all authors from the given branch
+    # Returns all authors from the given branch in a hash where the IDs of the
+    # authors are the keys and the authors are the values
     #
     # This will call +commits(branch)+ if the authors for the branch are not
     # known yet.
     #
     # @param [String] The branch from which the authors should be retrieved
-    # @return [Array<Actor>] All authors from the given branch
+    # @return [Hash<String, Actor>] All authors from the given branch
     # @see #commits
     def authors(branch = vcs::DEFAULT_BRANCH)
       commits(branch) if @authors[branch].nil?
