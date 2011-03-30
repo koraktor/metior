@@ -20,7 +20,7 @@ module Metior
     unless @@vcs_types.key? type
       raise 'No VCS registered for :%s' % type
     end
-    @@vcs_types[type]
+    @@vcs_types[type].init
   end
 
   # Returns a Hash with all available VCS types as keys and the implementation
@@ -38,6 +38,43 @@ module Metior
   # @author Sebastian Staudt
   module VCS
 
+    # This module provided class methods for VCS implementation +Module+s that
+    # implement smart auto-loading of dependencies and classes.
+    module ClassMethods
+
+      # Missing constants may indicate
+      #
+      # Trying to access either the +Actor+, +Commit+ or +Repository+ class
+      # in a VCS +Module+ will trigger auto-loading first.
+      #
+      # @param [Symbol] The symbolic name of the missing constant
+      # @see #init
+      def const_missing(const)
+        init if [:Actor, :Commit, :Repository].include?(const)
+        super unless const_defined? const
+        const_get const
+      end
+
+      # This initializes the VCS's implementation +Module+
+      #
+      # First the corresponding Bundler group is loaded so all dependencies are
+      # met. Afterwards the +Actor+, +Commit+ and +Repository+ classes are
+      # required.
+      #
+      # @see Bundler.setup
+      def init
+        Bundler.setup self::NAME
+
+        path = self::NAME.to_s
+        require "metior/#{path}/actor"
+        require "metior/#{path}/commit"
+        require "metior/#{path}/repository"
+
+        self
+      end
+
+    end
+
     # Including +VCS+ will make a +Module+ available as a supported VCS type in
     # Metior
     #
@@ -52,8 +89,10 @@ module Metior
     #
     # @param [Module] mod The +Module+ that provides a Metior implementation
     #        for a specific VCS
-    # @see Metior#vcs_types
+    # @see Metior.vcs_types
     def self.included(mod)
+      mod.extend ClassMethods
+
       Metior.vcs_types[mod::NAME.to_sym] = mod
       @@vcs = mod
     end

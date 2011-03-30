@@ -23,7 +23,3 @@ module Metior
   end
 
 end
-
-require 'metior/git/actor'
-require 'metior/git/commit'
-require 'metior/git/repository'
