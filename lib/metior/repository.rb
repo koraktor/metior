@@ -35,7 +35,7 @@ module Metior
     # @param [String] The branch from which the authors should be retrieved
     # @return [Hash<String, Actor>] All authors from the given branch
     # @see #commits
-    def authors(branch = vcs::DEFAULT_BRANCH)
+    def authors(branch = self.class::DEFAULT_BRANCH)
       commits(branch) if @authors[branch].nil?
       @authors[branch]
     end
@@ -45,7 +45,7 @@ module Metior
     # @abstract It has to be implemented by VCS specific subclasses
     # @param [String] branch The branch to load commits from
     # @return [Array<Commit>] All commits from the given branch
-    def commits(branch = vcs::DEFAULT_BRANCH)
+    def commits(branch = self.class::DEFAULT_BRANCH)
     end
 
     # Returns a list of top contributors in the given branch
@@ -59,7 +59,7 @@ module Metior
     # @return [Array<Actor>] An array of the given number of top contributors
     #         in the given branch
     # @see #authors
-    def top_contributors(branch = vcs::DEFAULT_BRANCH, count = 3)
+    def top_contributors(branch = self.class::DEFAULT_BRANCH, count = 3)
       authors = authors(branch).values.sort_by { |author| author.commits.size }
       count = [count, authors.size].min
       authors[-count..-1].reverse

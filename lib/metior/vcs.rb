@@ -94,16 +94,6 @@ module Metior
       mod.extend ClassMethods
 
       Metior.vcs_types[mod::NAME.to_sym] = mod
-      @@vcs = mod
-    end
-
-    # This is a helper method to easily refer to the currently used VCS
-    # implementation +Module+ from outside its scope, e.g. inside of
-    # +Metior::Repository+.
-    #
-    # @return [VCS] The current VCS implementation +Module+
-    def vcs
-      @@vcs
     end
 
   end
