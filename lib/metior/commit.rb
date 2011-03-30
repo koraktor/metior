@@ -51,6 +51,13 @@ module Metior
       @branch = branch
     end
 
+    # Returns the total of changed lines in this commit
+    #
+    # @return [Fixnum] The total number of changed lines
+    def modifications
+      additions + deletions
+    end
+
   end
 
 end

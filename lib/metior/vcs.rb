@@ -92,8 +92,19 @@ module Metior
     # @see Metior.vcs_types
     def self.included(mod)
       mod.extend ClassMethods
+      mod.instance_variable_set :@features, {
+        :line_stats => true
+      }
 
       Metior.vcs_types[mod::NAME.to_sym] = mod
+    end
+
+    # Checks if a specific feature is supported by the VCS (or its
+    # implementation)
+    #
+    # @return [true, false] +true+ if the feature is supported
+    def supports?(feature)
+      self.class.included_modules.first.instance_variable_get(:@features)[feature] == true
     end
 
   end

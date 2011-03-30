@@ -72,6 +72,13 @@ module Metior
         ]
     end
 
+    # Returns the total of changed lines in all commits of this actor
+    #
+    # @return [Fixnum] The total number of changed lines
+    def modifications
+      additions + deletions
+    end
+
   end
 
 end
