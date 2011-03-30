@@ -12,5 +12,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  grit (~> 2.4.0)
+  grit (~> 2.4.1)
   yard (~> 0.6.5)
