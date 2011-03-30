@@ -40,6 +40,7 @@ module Metior
       commits(branch) if @authors[branch].nil?
       @authors[branch]
     end
+    alias_method :contributors, :authors
 
     # Loads all commits including their authors from the given branch
     #
@@ -64,6 +65,7 @@ module Metior
       count = [count, authors.size].min
       authors[-count..-1].reverse
     end
+    alias_method :significant_contributors, :significant_authors
 
     # Returns a list of commits with the biggest impact on the repository, i.e.
     # changing the most code
@@ -92,11 +94,12 @@ module Metior
     # @return [Array<Actor>] An array of the given number of top contributors
     #         in the given branch
     # @see #authors
-    def top_contributors(branch = self.class::DEFAULT_BRANCH, count = 3)
+    def top_authors(branch = self.class::DEFAULT_BRANCH, count = 3)
       authors = authors(branch).values.sort_by { |author| author.commits.size }
       count = [count, authors.size].min
       authors[-count..-1].reverse
     end
+    alias_method :top_contributors, :top_authors
 
   end
 
