@@ -20,6 +20,12 @@ module Metior
 
       include Metior::GitHub
 
+      # @return [String] The project name of the repository
+      attr_reader :project
+
+      # @return [String] The GitHub username of the repository's owner
+      attr_reader :user
+
       # Creates a new GitHub repository based on the given user and project
       # names
       #
