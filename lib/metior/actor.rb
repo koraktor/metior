@@ -15,9 +15,15 @@ module Metior
   # @author Sebastian Staudt
   class Actor
 
+    # @return [Fixnum] The lines of code that have been added by this actor
+    attr_reader :additions
+
     # @return [Array<Commit>] The list of commits this actor has contributed to
     #         the source code repository
     attr_reader :commits
+
+    # @return [Fixnum] The lines of code that have been deleted by this actor
+    attr_reader :deletions
 
     # @return [String] The full name of the actor
     attr_reader :name
@@ -38,8 +44,10 @@ module Metior
     #
     # @param [Repository] repo The repository this actor belongs to
     def initialize(repo)
-      @commits = []
-      @repo    = repo
+      @additions = 0
+      @commits   = []
+      @deletions = 0
+      @repo      = repo
     end
 
     # Adds a new commit to the list of commits this actor has contributed to
@@ -47,7 +55,9 @@ module Metior
     #
     # @param [Commit] commit The commit to add to the list
     def add_commit(commit)
+      @additions += commit.additions
       @commits << commit
+      @deletions += commit.deletions
     end
 
     # Creates a string representation for this actor without recursing into

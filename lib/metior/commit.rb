@@ -15,6 +15,9 @@ module Metior
   # @author Sebastian Staudt
   class Commit
 
+    # @return [Fixnum] The lines of code that have been added in this commit
+    attr_reader :additions
+
     # @return [Actor] This commit's author
     attr_reader :author
 
@@ -29,6 +32,9 @@ module Metior
 
     # @return [Actor] This commit's committer
     attr_reader :committer
+
+    # @return [Fixnum] The lines of code that have been deleted in this commit
+    attr_reader :deletions
 
     # @return [String] The commit message of this commit
     attr_reader :message

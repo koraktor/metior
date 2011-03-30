@@ -27,17 +27,18 @@ module Metior
       def initialize(repo, branch, commit)
         super repo, branch
 
-        authors = repo.authors(branch)
-        author = authors[Actor.id_for commit.author]
-        author = Actor.new repo, commit.author if author.nil?
-        author.add_commit self
-
-        @author         = author
+        @additions      = commit.stats.additions
         @authored_date  = commit.authored_date
         @committer      = Actor.new repo, commit.committer
         @committed_date = commit.committed_date
+        @deletions      = commit.stats.deletions
         @id             = commit.id
         @message        = commit.message
+
+        authors = repo.authors(branch)
+        @author = authors[Actor.id_for commit.author]
+        @author = Actor.new repo, commit.author if author.nil?
+        @author.add_commit self
       end
 
     end
