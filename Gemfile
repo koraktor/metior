@@ -12,3 +12,8 @@ end
 group :development do
   gem 'yard', '~> 0.6.5'
 end
+
+group :test do
+  gem 'mocha', '~> 0.9.12'
+  gem 'shoulda', '~> 2.11.3'
+end

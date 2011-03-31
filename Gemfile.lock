@@ -15,6 +15,7 @@ GEM
     hashie (1.0.0)
     json (1.5.1)
     mime-types (1.16)
+    mocha (0.9.12)
     multi_json (0.0.5)
     multi_xml (0.2.2)
     multipart-post (1.1.0)
@@ -26,6 +27,7 @@ GEM
       multi_json (~> 0.0.5)
       multi_xml (~> 0.2.0)
     rack (1.2.2)
+    shoulda (2.11.3)
     yard (0.6.5)
 
 PLATFORMS
@@ -34,5 +36,7 @@ PLATFORMS
 DEPENDENCIES
   grit (~> 2.4.1)
   json (~> 1.5.1)
+  mocha (~> 0.9.12)
   octokit (~> 0.6.0)
+  shoulda (~> 2.11.3)
   yard (~> 0.6.5)
