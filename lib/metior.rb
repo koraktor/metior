@@ -12,6 +12,7 @@ Bundler.setup :default
 
 require 'metior/git'
 require 'metior/github'
+require 'metior/version'
 
 # Metior is a source code history analyzer that provides various statistics
 # about a source code repository and its change over time.
