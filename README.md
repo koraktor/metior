@@ -24,7 +24,9 @@ If you're interested in Metior, feel free to join the discussion on Convore in
 ## Requirements
 
 * Grit — a Ruby API for Git
-* [Git](http://git-scm.com) >= 1.6
+  * [Git](http://git-scm.com) >= 1.6
+* Octokit — a Ruby wrapper for the GitHub API
+  * JSON — a JSON parser for Ruby
 
 ## Documentation
 
