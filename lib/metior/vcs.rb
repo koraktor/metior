@@ -73,6 +73,15 @@ module Metior
         self
       end
 
+      # Checks if a specific feature is supported by the VCS (or its
+      # implementation)
+      #
+      # @return [true, false] +true+ if the feature is supported
+      # @see VCS#supports?
+      def supports?(feature)
+        self.send(:class_variable_get, :@@features)[feature] == true
+      end
+
     end
 
     # Including +VCS+ will make a +Module+ available as a supported VCS type in
@@ -92,7 +101,7 @@ module Metior
     # @see Metior.vcs_types
     def self.included(mod)
       mod.extend ClassMethods
-      mod.instance_variable_set :@features, {
+      mod.send :class_variable_set, :@@features, {
         :line_stats => true
       }
 
@@ -103,8 +112,9 @@ module Metior
     # implementation)
     #
     # @return [true, false] +true+ if the feature is supported
+    # @see ClassMethods#supports?
     def supports?(feature)
-      self.class.included_modules.first.instance_variable_get(:@features)[feature] == true
+      self.class.included_modules.first.supports? feature
     end
 
   end
