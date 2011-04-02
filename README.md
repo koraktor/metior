@@ -19,7 +19,16 @@ If you're interested in Metior, feel free to join the discussion on Convore in
 
     repo = Metior::Git::Repository '~/open-source/metior'
     repo.commits 'development'         # Get all commits in development
-    repo.top_committers 'master', 5    # Get the top 5 committers in master
+    repo.significant_authors           # Get up to 3 of the most important
+                                       # authors
+    repo.significant_commits, 20       # Get up to 20 of the commits changing
+                                       # the most lines
+    repo.top_authors 'master', 5       # Get the top 5 authors in master
+
+### Get statistics about a set of commits
+
+    Metior::Commit.activity repo.commits
+    Metior::Commit.activity repo.authors[author_id].commits
 
 ## Requirements
 
