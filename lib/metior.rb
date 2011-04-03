@@ -10,6 +10,7 @@ require 'rubygems'
 require 'bundler'
 Bundler.setup :default
 
+require 'core_ext/object'
 require 'metior/git'
 require 'metior/github'
 require 'metior/version'

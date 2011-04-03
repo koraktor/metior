@@ -114,7 +114,7 @@ module Metior
     # @return [true, false] +true+ if the feature is supported
     # @see ClassMethods#supports?
     def supports?(feature)
-      self.class.included_modules.first.supports? feature
+      singleton_class.included_modules.first.supports? feature
     end
 
   end
