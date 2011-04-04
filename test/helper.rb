@@ -9,3 +9,18 @@ require 'metior'
 include Metior
 
 Bundler.require :test
+
+# Extends TestCase functionality
+class Test::Unit::TestCase
+
+  # Provides a negative assertion that's easier on the eyes
+  #
+  # The assertion fails, if the given value is +true+.
+  #
+  # @param [true, false] boolean The value that should be +false+
+  # @param [String] message The message that should be displayed
+  def assert_not(boolean, message = nil)
+    assert !boolean, message
+  end
+
+end

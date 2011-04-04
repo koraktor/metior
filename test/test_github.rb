@@ -10,10 +10,10 @@ class TestGitHub < Test::Unit::TestCase
   context 'The GitHub implementation' do
 
     should 'not support line stats' do
-      assert !Metior::GitHub.supports?(:line_stats)
+      assert_not Metior::GitHub.supports? :line_stats
       object = Object.new
       object.extend Metior::GitHub
-      assert !object.supports?(:line_stats)
+      assert_not object.supports? :line_stats
     end
 
   end
