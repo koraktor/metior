@@ -16,6 +16,20 @@ class TestGitHub < Test::Unit::TestCase
       assert_not object.supports? :line_stats
     end
 
+    should 'not be able to get the most significant authors of a repository' do
+      repo = Metior::GitHub::Repository.new 'koraktor', 'rubikon'
+      assert_raises UnsupportedError do
+        repo.significant_authors
+      end
+    end
+
+    should 'not be able to get the most significant commits of a repository' do
+      repo = Metior::GitHub::Repository.new 'koraktor', 'rubikon'
+      assert_raises UnsupportedError do
+        repo.significant_commits
+      end
+    end
+
   end
 
 end
