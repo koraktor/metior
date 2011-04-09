@@ -19,7 +19,7 @@ class Test::Unit::TestCase
   #
   # @param [true, false] boolean The value that should be +false+
   # @param [String] message The message that should be displayed
-  def assert_not(boolean, message = nil)
+  def assert_not(boolean, message = '')
     assert !boolean, message
   end
 
