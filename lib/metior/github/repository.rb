@@ -47,12 +47,14 @@ module Metior
       # @return [Array<Commit>] All commits from the given branch
       def commits(branch = DEFAULT_BRANCH)
         if @commits[branch].nil?
-          @authors[branch] = {}
-          @commits[branch] = []
+          @authors[branch]    = {}
+          @commits[branch]    = []
+          @committers[branch] = {}
           load_commits(branch).each do |gh_commit|
             commit = Commit.new(self, branch, gh_commit)
             @commits[branch] << commit
-            @authors[branch][commit.author.id] = commit.author
+            @authors[branch][commit.author.id]       = commit.author
+            @committers[branch][commit.committer.id] = commit.committer
           end
         end
 

@@ -22,9 +22,10 @@ module Metior
     #
     # @param [String] path The file system path of the repository
     def initialize(path)
-      @authors  = {}
-      @commits  = {}
-      @path     = path
+      @authors    = {}
+      @commits    = {}
+      @committers = {}
+      @path       = path
     end
 
     # Returns all authors from the given branch in a hash where the IDs of the
@@ -49,6 +50,22 @@ module Metior
     # @return [Array<Commit>] All commits from the given branch
     def commits(branch = self.class::DEFAULT_BRANCH)
     end
+
+    # Returns all committers from the given branch in a hash where the IDs of
+    # the committers are the keys and the committers are the values
+    #
+    # This will call +commits(branch)+ if the committers for the branch are not
+    # known yet.
+    #
+    # @param [String] branch The branch from which the committers should be
+    #        retrieved
+    # @return [Hash<String, Actor>] All committers from the given branch
+    # @see #commits
+    def committers(branch = self.class::DEFAULT_BRANCH)
+      commits(branch) if @committers[branch].nil?
+      @committers[branch]
+    end
+    alias_method :collaborators, :committers
 
     # Returns a list of authors with the biggest impact on the repository, i.e.
     # changing the most code

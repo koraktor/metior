@@ -29,7 +29,6 @@ module Metior
 
         @additions      = 0
         @authored_date  = commit.authored_date
-        @committer      = Actor.new repo, commit.committer
         @committed_date = commit.committed_date
         @deletions      = 0
         @id             = commit.id
@@ -39,6 +38,11 @@ module Metior
         @author = authors[Actor.id_for commit.author]
         @author = Actor.new repo, commit.author if author.nil?
         @author.add_commit self
+
+        committers = repo.committers branch
+        @committer = committers[Actor.id_for commit.committer]
+        @committer = Actor.new repo, commit.committer if @committer.nil?
+        @committer.add_commit self
       end
 
     end
