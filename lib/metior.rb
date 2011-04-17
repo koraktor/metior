@@ -8,7 +8,6 @@ $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
 require 'rubygems'
 require 'bundler'
-Bundler.setup :default
 
 require 'core_ext/object'
 require 'metior/git'
