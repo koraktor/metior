@@ -20,6 +20,15 @@ require 'metior/version'
 # @author Sebastian Staudt
 module Metior
 
+  # Creates a new repository for the given repository type and path
+  #
+  # @param [Symbol] type The type of the repository, e.g. +:git+
+  # @param [String] path The file system path of the repository
+  # @return [Repository] A VCS specific +Repository+ instance
+  def self.repository(type, path)
+    vcs(type)::Repository.new path
+  end
+
   # Calculates simplistic stats for the given repository and branch
   #
   # @param [Symbol] type The type of the repository, e.g. +:git+
@@ -28,8 +37,7 @@ module Metior
   #        the VCS's default branch
   # @return [Hash] The calculated stats for the given repository and branch
   def self.simple_stats(type, path, branch = nil)
-    vcs = vcs(type)
-    repo = vcs::Repository.new path
+    repo = repository type, path
     branch ||= vcs::DEFAULT_BRANCH
 
     {
