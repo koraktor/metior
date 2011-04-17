@@ -73,10 +73,23 @@ module Metior
         self
       end
 
+      # Marks one or more features as not supported by the VCSs (or its
+      # implementation)
+      #
+      # @param [Array<Symbol>] features The features that are not supported
+      # @see #supports?
+      def not_supported(*features)
+        features.each do |feature|
+          self.send(:class_variable_get, :@@features)[feature] = false
+        end
+      end
+
       # Checks if a specific feature is supported by the VCS (or its
       # implementation)
       #
+      # @param [Symbol] feature The feature to check
       # @return [true, false] +true+ if the feature is supported
+      # @see #not_supported
       # @see VCS#supports?
       def supports?(feature)
         self.send(:class_variable_get, :@@features)[feature] == true
