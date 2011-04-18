@@ -2,4 +2,5 @@
 
 ## `master` branch
 
- * Basic stats support for Git repositories
+ * Basic support for Git repositories
+ * Basic support for GitHub repositories
