@@ -23,10 +23,11 @@ module Metior
   # Creates a new repository for the given repository type and path
   #
   # @param [Symbol] type The type of the repository, e.g. +:git+
-  # @param [String] path The file system path of the repository
+  # @param [Array<Object>] options The options to use for creating the new
+  #        repository, e.g. a file system path
   # @return [Repository] A VCS specific +Repository+ instance
-  def self.repository(type, path)
-    vcs(type)::Repository.new path
+  def self.repository(type, *options)
+    vcs(type)::Repository.new *options
   end
 
   # Calculates simplistic stats for the given repository and branch
