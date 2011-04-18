@@ -10,7 +10,7 @@ group :github do
 end
 
 group :development do
-  gem 'yard', '~> 0.6.5'
+  gem 'yard', '~> 0.6.8'
 end
 
 group :test do

@@ -28,7 +28,7 @@ GEM
       multi_xml (~> 0.2.0)
     rack (1.2.2)
     shoulda (2.11.3)
-    yard (0.6.7)
+    yard (0.6.8)
 
 PLATFORMS
   ruby
@@ -39,4 +39,4 @@ DEPENDENCIES
   mocha (~> 0.9.12)
   octokit (~> 0.6.0)
   shoulda (~> 2.11.3)
-  yard (~> 0.6.5)
+  yard (~> 0.6.8)
