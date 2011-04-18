@@ -20,7 +20,7 @@ module Metior
     # Git's default branch is _master_
     DEFAULT_BRANCH = 'master'
 
-    not_supported :line_stats
+    not_supported :file_stats, :line_stats
 
   end
 

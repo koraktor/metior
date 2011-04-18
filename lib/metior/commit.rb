@@ -15,6 +15,9 @@ module Metior
   # @author Sebastian Staudt
   class Commit
 
+    # @return [Array<String>] A list of file paths added in this commit
+    attr_reader :added_files
+
     # @return [Fixnum] The lines of code that have been added in this commit
     attr_reader :additions
 
@@ -33,11 +36,17 @@ module Metior
     # @return [Actor] This commit's committer
     attr_reader :committer
 
+    # @return [Array<String>] A list of file paths deleted in this commit
+    attr_reader :deleted_files
+
     # @return [Fixnum] The lines of code that have been deleted in this commit
     attr_reader :deletions
 
     # @return [String] The commit message of this commit
     attr_reader :message
+
+    # @return [Array<String>] A list of file paths modified in this commit
+    attr_reader :modified_files
 
     # @return [Repository] The repository this commit belongs to
     attr_reader :repo

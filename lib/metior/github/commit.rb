@@ -27,12 +27,15 @@ module Metior
       def initialize(repo, branch, commit)
         super repo, branch
 
+        @added_files    = []
         @additions      = 0
         @authored_date  = commit.authored_date
         @committed_date = commit.committed_date
+        @deleted_files  = []
         @deletions      = 0
         @id             = commit.id
         @message        = commit.message
+        @modified_files = []
 
         authors = repo.authors(branch)
         @author = authors[Actor.id_for commit.author]

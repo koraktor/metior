@@ -43,6 +43,19 @@ module Metior
         @committer = committers[Actor.id_for commit.committer]
         @committer = Actor.new repo, commit.committer if @committer.nil?
         @committer.add_commit self
+
+        @added_files    = []
+        @modified_files = []
+        @deleted_files  = []
+        commit.diffs.each do |diff|
+          if diff.new_file
+            @added_files    << diff.b_path
+          elsif diff.deleted_file
+            @deleted_files  << diff.b_path
+          else
+            @modified_files << diff.b_path
+          end
+        end
       end
 
     end
