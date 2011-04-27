@@ -56,7 +56,7 @@ module Metior
         page = 1
         begin
           begin
-            commits += Octokit.commits("#{@user}/#{@project}", branch, :page => page)
+            commits += Octokit.commits(@path, branch, :page => page)
             page += 1
           end while true
         rescue Octokit::NotFound
