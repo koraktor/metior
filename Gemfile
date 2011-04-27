@@ -6,7 +6,7 @@ end
 
 group :github do
   gem 'json', '~> 1.5.1'
-  gem 'octokit', '~> 0.6.0'
+  gem 'octokit', '~> 0.6.2'
 end
 
 group :development do
