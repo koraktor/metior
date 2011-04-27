@@ -34,7 +34,8 @@ module Metior
 
       private
 
-      # This method uses Grit to load all commits from the given branch.
+      # This method uses Grit to load all commits from the given branch and
+      # optionally compares them with a base branch
       #
       # Because of some Grit internal limitations, the commits have to be
       # loaded in batches of up to 500 commits.
@@ -43,9 +44,13 @@ module Metior
       #       kernel. You will have to raise the timeout limit using
       #       +Grit.git_timeout=+.
       # @param [String] branch The branch to load commits from
+      # @param [String] base Only commits not contained in +base+ will be
+      #        listed
       # @return [Array<Commit>] All commits from the given branch
       # @see Grit::Repo#commits
-      def load_commits(branch)
+      def load_commits(branch, base = nil)
+        branch = "%s..%s" % [base, branch] unless base.nil?
+
         commits = []
         skip = 0
         begin
