@@ -19,6 +19,8 @@ If you're interested in Metior, feel free to join the discussion on Convore in
 
     repo = Metior::Git::Repository '~/open-source/metior'
     repo.commits 'development'         # Get all commits in development
+    repo.line_history                  # Quick access to lines added and
+                                       # removed in each commit
     repo.significant_authors           # Get up to 3 of the most important
                                        # authors
     repo.significant_commits, 20       # Get up to 20 of the commits changing
