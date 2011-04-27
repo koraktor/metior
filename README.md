@@ -20,7 +20,7 @@ Metior.simple_stats :git, '~/open-source/metior'
 ### More fine-grained access to repository statistics
 
 ```ruby
-repo = Metior::Git::Repository '~/open-source/metior'
+repo = Metior::Git::Repository.new '~/open-source/metior'
 repo.commits 'development'         # Get all commits in development
 repo.line_history                  # Quick access to lines added and removed in
                                    # in each commit
