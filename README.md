@@ -13,29 +13,24 @@ If you're interested in Metior, feel free to join the discussion on Convore in
 
 ### One-liner for some basic statistics
 
-```ruby
-Metior.simple_stats :git, '~/open-source/metior'
-```
+    Metior.simple_stats :git, '~/open-source/metior'
 
 ### More fine-grained access to repository statistics
 
-```ruby
-repo = Metior::Git::Repository.new '~/open-source/metior'
-repo.commits 'development'         # Get all commits in development
-repo.line_history                  # Quick access to lines added and removed in
-                                   # in each commit
-repo.significant_authors           # Get up to 3 of the most important authors
-repo.significant_commits, 20       # Get up to 20 of the commits changing the
-                                   # most lines
-repo.top_authors 'master', 5       # Get the top 5 authors in master
-```
+    repo = Metior::Git::Repository.new '~/open-source/metior'
+    repo.commits 'development'         # Get all commits in development
+    repo.line_history                  # Quick access to lines added and
+                                       # removed in each commit
+    repo.significant_authors           # Get up to 3 of the most important
+                                       # authors
+    repo.significant_commits, 20       # Get up to 20 of the commits changing
+                                       # the most lines
+    repo.top_authors 'master', 5       # Get the top 5 authors in master
 
 ### Get statistics about a set of commits
 
-```ruby
-Metior::Commit.activity repo.commits
-Metior::Commit.activity repo.authors[author_id].commits
-```
+    Metior::Commit.activity repo.commits
+    Metior::Commit.activity repo.authors[author_id].commits
 
 ## Requirements
 
