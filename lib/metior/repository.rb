@@ -43,12 +43,25 @@ module Metior
     end
     alias_method :contributors, :authors
 
-    # Loads all commits including their authors from the given branch
+    # Loads all commits including their committers and authors from the given
+    # branch
     #
-    # @abstract It has to be implemented by VCS specific subclasses
     # @param [String] branch The branch to load commits from
     # @return [Array<Commit>] All commits from the given branch
-    def commits(branch = self.class::DEFAULT_BRANCH)
+    def commits(branch = DEFAULT_BRANCH)
+      if @commits[branch].nil?
+        @authors[branch]    = {}
+        @committers[branch] = {}
+        @commits[branch]    = []
+        load_commits(branch).each do |git_commit|
+          commit = self.class::Commit.new(self, branch, git_commit)
+          @commits[branch] << commit
+          @authors[branch][commit.author.id]       = commit.author
+          @committers[branch][commit.committer.id] = commit.committer
+        end
+      end
+
+      @commits[branch]
     end
 
     # Returns all committers from the given branch in a hash where the IDs of
@@ -145,6 +158,17 @@ module Metior
       authors[-count..-1].reverse
     end
     alias_method :top_contributors, :top_authors
+
+    private
+
+    # Loads all commits from the given branch
+    #
+    # @abstract It has to be implemented by VCS specific subclasses
+    # @param [String] branch The branch to load commits from
+    # @return [Array<Commit>] All commits from the given branch
+    def load_commits
+      raise NotImplementedError
+    end
 
   end
 

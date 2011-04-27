@@ -32,29 +32,6 @@ module Metior
         @grit_repo = Grit::Repo.new(path)
       end
 
-      # Loads all commits including their authors from the given branch
-      #
-      # @note Grit will choke on huge repositories, like Homebrew or the Linux
-      #       kernel. You will have to raise the timeout limit using
-      #       +Grit.git_timeout=+.
-      # @param [String] branch The branch to load commits from
-      # @return [Array<Commit>] All commits from the given branch
-      def commits(branch = DEFAULT_BRANCH)
-        if @commits[branch].nil?
-          @authors[branch]    = {}
-          @committers[branch] = {}
-          @commits[branch]    = []
-          load_commits(branch).each do |git_commit|
-            commit = Commit.new(self, branch, git_commit)
-            @commits[branch] << commit
-            @authors[branch][commit.author.id]       = commit.author
-            @committers[branch][commit.committer.id] = commit.committer
-          end
-        end
-
-        @commits[branch]
-      end
-
       private
 
       # This method uses Grit to load all commits from the given branch.
@@ -62,6 +39,9 @@ module Metior
       # Because of some Grit internal limitations, the commits have to be
       # loaded in batches of up to 500 commits.
       #
+      # @note Grit will choke on huge repositories, like Homebrew or the Linux
+      #       kernel. You will have to raise the timeout limit using
+      #       +Grit.git_timeout=+.
       # @param [String] branch The branch to load commits from
       # @return [Array<Commit>] All commits from the given branch
       # @see Grit::Repo#commits

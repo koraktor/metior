@@ -38,34 +38,16 @@ module Metior
         @user    = user
       end
 
-      # Loads all commits including their authors from the given branch
-      #
-      # @note GitHub API is currently limited to 60 calls a minute, so you
-      #       won't be able to query branches with more than 2100 commits
-      #       (35 commits per call).
-      # @param [String] branch The branch to load commits from
-      # @return [Array<Commit>] All commits from the given branch
-      def commits(branch = DEFAULT_BRANCH)
-        if @commits[branch].nil?
-          @authors[branch]    = {}
-          @commits[branch]    = []
-          @committers[branch] = {}
-          load_commits(branch).each do |gh_commit|
-            commit = Commit.new(self, branch, gh_commit)
-            @commits[branch] << commit
-            @authors[branch][commit.author.id]       = commit.author
-            @committers[branch][commit.committer.id] = commit.committer
-          end
-        end
-
-        @commits[branch]
-      end
+      private
 
       # This method uses Octokit to load all commits from the given branch
       #
       # Because of GitHub API limitations, the commits have to be loaded in
       # batches.
       #
+      # @note GitHub API is currently limited to 60 calls a minute, so you
+      #       won't be able to query branches with more than 2100 commits
+      #       (35 commits per call).
       # @param [String] branch The branch to load commits from
       # @return [Array<Commit>] All commits from the given branch
       # @see Octokit::Commits#commits
