@@ -5,7 +5,7 @@
 
 require 'helper'
 
-class TestLoading < Test::Unit::TestCase
+class TestClassLoading < Test::Unit::TestCase
 
   context 'Metior' do
 
@@ -56,52 +56,6 @@ class TestLoading < Test::Unit::TestCase
       assert Object.const_defined? :Octokit
     end
 
-  end
-
-  def run(result)
-    r, w = IO.pipe
-    yield(STARTED, name)
-    @_result = result
-    fork do
-      r.close
-      begin
-        fail = nil
-        setup
-        __send__(@method_name)
-      rescue Test::Unit::AssertionFailedError => e
-        fail = Test::Unit::Failure.new(name, filter_backtrace(e.backtrace), e.message)
-      rescue Exception
-        raise if PASSTHROUGH_EXCEPTIONS.include? $!.class
-        fail = Test::Unit::Error.new(name, $!)
-      ensure
-        begin
-          teardown
-        rescue Test::Unit::AssertionFailedError => e
-          fail = Test::Unit::Failure.new(name, filter_backtrace(e.backtrace), e.message)
-        rescue Exception
-          raise if PASSTHROUGH_EXCEPTIONS.include? $!.class
-          fail = Test::Unit::Error.new(name, $!)
-        end
-      end
-      Marshal::dump [@_result.assertion_count, fail], w
-      w.close
-    end
-    w.close
-    Process.wait
-    results = Marshal::load r.read
-    r.close
-    result.instance_variable_set :@assertion_count, results.first
-    fail = results.last
-    unless fail.nil?
-      @test_passed = false
-      if fail.is_a? Test::Unit::Failure
-        add_failure fail
-      else
-        add_error fail
-      end
-    end
-    result.add_run
-    yield(FINISHED, name)
   end
 
 end
