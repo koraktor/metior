@@ -40,25 +40,29 @@ module Metior
 
       private
 
-      # This method uses Octokit to load all commits from the given branch and
-      # optionally compares them with a base branch
+      # This method uses Octokit to load all commits from the given commit
+      # range
       #
-      # If you want to compare a branch with another (i.e. if you supply
-      # +base+), it needs two calls to the GitHub API to get all commits of
-      # each branch. The comparison is done in the code, so the limits (see
-      # below) will be effectively cut in half.
+      # If you want to compare a branch with another (i.e. if you supply a
+      # range of commits), it needs two calls to the GitHub API to get all
+      # commits of each branch. The comparison is done in the code, so the
+      # limits (see below) will be effectively cut in half.
       #
       # @note GitHub API is currently limited to 60 calls a minute, so you
       #       won't be able to query branches with more than 2100 commits
       #       (35 commits per call).
-      # @param [String] branch The branch to load commits from
-      # @param [String] base Only commits not contained in +base+ will be
-      #        listed
-      # @return [Array<Commit>] All commits from the given branch
+      # @param [String, Range] range The range of commits for which the commits
+      #        should be loaded. This may be given as a string
+      #        (+'master..development'+), a range (+'master'..'development'+)
+      #        or as a single ref (+'master'+). A single ref name means all
+      #        commits reachable from that ref.
+      # @return [Array<Commit>] All commits in the given commit range
       # @see #load_branch_commits
-      def load_commits(branch, base = nil)
-        commits      = load_branch_commits branch
-        base_commits = load_branch_commits(base).map! { |commit| commit.id }
+      def load_commits(range)
+        commits      = load_branch_commits range.last
+        base_commits = load_branch_commits(range.first).map! do |commit|
+          commit.id
+        end
         commits.reject { |commit| base_commits.include? commit.id }
       end
 

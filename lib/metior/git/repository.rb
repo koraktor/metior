@@ -34,8 +34,7 @@ module Metior
 
       private
 
-      # This method uses Grit to load all commits from the given branch and
-      # optionally compares them with a base branch
+      # This method uses Grit to load all commits from the given commit range
       #
       # Because of some Grit internal limitations, the commits have to be
       # loaded in batches of up to 500 commits.
@@ -43,18 +42,24 @@ module Metior
       # @note Grit will choke on huge repositories, like Homebrew or the Linux
       #       kernel. You will have to raise the timeout limit using
       #       +Grit.git_timeout=+.
-      # @param [String] branch The branch to load commits from
-      # @param [String] base Only commits not contained in +base+ will be
-      #        listed
-      # @return [Array<Commit>] All commits from the given branch
+      # @param [String, Range] range The range of commits for which the commits
+      #        should be loaded. This may be given as a string
+      #        (+'master..development'+), a range (+'master'..'development'+)
+      #        or as a single ref (+'master'+). A single ref name means all
+      #        commits reachable from that ref.
+      # @return [Array<Commit>] All commits in the given commit range
       # @see Grit::Repo#commits
-      def load_commits(branch, base = nil)
-        branch = "%s..%s" % [base, branch] unless base.nil?
+      def load_commits(range)
+        if range.first == ''
+          range = range.last
+        else
+          range = '%s..%s' % [range.first, range.last]
+        end
 
         commits = []
         skip = 0
         begin
-          commits += @grit_repo.commits(branch, 500, skip)
+          commits += @grit_repo.commits(range, 500, skip)
           skip += 500
         end while commits.size == skip
         commits
