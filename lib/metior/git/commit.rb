@@ -19,7 +19,7 @@ module Metior
       include Metior::Git
 
       # Creates a new Git commit object linked to the repository and branch it
-      # belongs to and the data from the corresponding +Grit::Commit+ object
+      # belongs to and the data from the corresponding `Grit::Commit` object
       #
       # @param [Repository] repo The Git repository this commit belongs to
       # @param [String] branch The branch this commits belongs to

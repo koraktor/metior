@@ -12,7 +12,7 @@ module Metior
   # @author Sebastian Staudt
   module Git
 
-    # Git will be registered as +:git+
+    # Git will be registered as `:git`
     NAME = :git
 
     include Metior::VCS

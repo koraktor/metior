@@ -11,7 +11,7 @@ module Metior
   # corresponding implementation modules
   @@vcs_types = {}
 
-  # Returns the VCS implementation +Module+ for a given symbolic VCS name
+  # Returns the VCS implementation `Module` for a given symbolic VCS name
   #
   # @param [Symbol] type The symbolic type name of the VCS
   # @return [VCS] The VCS for the given name
@@ -33,19 +33,19 @@ module Metior
   end
 
   # This module provides functionality to automatically register new VCS
-  # implementations +Module+s
+  # implementations `Module`s
   #
   # @author Sebastian Staudt
   module VCS
 
-    # This module provided class methods for VCS implementation +Module+s that
+    # This module provided class methods for VCS implementation `Module`s that
     # implement smart auto-loading of dependencies and classes.
     module ClassMethods
 
       # Missing constants may indicate
       #
-      # Trying to access either the +Actor+, +Commit+ or +Repository+ class
-      # in a VCS +Module+ will trigger auto-loading first.
+      # Trying to access either the `Actor`, `Commit` or `Repository` class
+      # in a VCS `Module` will trigger auto-loading first.
       #
       # @param [Symbol] The symbolic name of the missing constant
       # @see #init
@@ -55,10 +55,10 @@ module Metior
         const_get const
       end
 
-      # This initializes the VCS's implementation +Module+
+      # This initializes the VCS's implementation `Module`
       #
       # First the corresponding Bundler group is loaded so all dependencies are
-      # met. Afterwards the +Actor+, +Commit+ and +Repository+ classes are
+      # met. Afterwards the `Actor`, `Commit` and `Repository` classes are
       # required.
       #
       # @see Bundler.setup
@@ -88,7 +88,7 @@ module Metior
       # implementation)
       #
       # @param [Symbol] feature The feature to check
-      # @return [true, false] +true+ if the feature is supported
+      # @return [true, false] `true` if the feature is supported
       # @see #not_supported
       # @see VCS#supports?
       def supports?(feature)
@@ -97,10 +97,10 @@ module Metior
 
     end
 
-    # Including +VCS+ will make a +Module+ available as a supported VCS type in
+    # Including `VCS` will make a `Module` available as a supported VCS type in
     # Metior
     #
-    # @example This will automatically register +ExoticVCS+ as +:exotic+
+    # @example This will automatically register `ExoticVCS` as `:exotic`
     #   module ExoticVCS
     #
     #     NAME = :exotic
@@ -109,10 +109,10 @@ module Metior
     #
     #   end
     #
-    # @param [Module] mod The +Module+ that provides a Metior implementation
+    # @param [Module] mod The `Module` that provides a Metior implementation
     #        for a specific VCS
-    # @raise [RuntimeError] if the VCS +Module+ does not have the +NAME+
-    #        constant defined prior to including +Metior::VCS+
+    # @raise [RuntimeError] if the VCS `Module` does not have the `NAME`
+    #        constant defined prior to including `Metior::VCS`
     # @see Metior.vcs_types
     def self.included(mod)
       mod.extend ClassMethods
@@ -137,7 +137,7 @@ module Metior
     # Checks if a specific feature is supported by the VCS (or its
     # implementation)
     #
-    # @return [true, false] +true+ if the feature is supported
+    # @return [true, false] `true` if the feature is supported
     # @see ClassMethods#supports?
     def supports?(feature)
       singleton_class.included_modules.first.supports? feature

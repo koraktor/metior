@@ -22,7 +22,7 @@ module Metior
 
       # Creates a new Git repository based on the given path
       #
-      # This creates a new +Grit::Repo+ instance to interface with the
+      # This creates a new `Grit::Repo` instance to interface with the
       # repository.
       #
       # @param [String] path The file system path of the repository
@@ -41,11 +41,11 @@ module Metior
       #
       # @note Grit will choke on huge repositories, like Homebrew or the Linux
       #       kernel. You will have to raise the timeout limit using
-      #       +Grit.git_timeout=+.
+      #       `Grit.git_timeout=`.
       # @param [String, Range] range The range of commits for which the commits
       #        should be loaded. This may be given as a string
-      #        (+'master..development'+), a range (+'master'..'development'+)
-      #        or as a single ref (+'master'+). A single ref name means all
+      #        (`'master..development'`), a range (`'master'..'development'`)
+      #        or as a single ref (`'master'`). A single ref name means all
       #        commits reachable from that ref.
       # @return [Array<Commit>] All commits in the given commit range
       # @see Grit::Repo#commits

@@ -5,7 +5,7 @@
 
 unless Object.method_defined? :singleton_class
 
-  # Provides the +singleton_class+ method for Ruby implementations not
+  # Provides the `singleton_class` method for Ruby implementations not
   # supporting it
   #
   # @author Sebastian Staudt

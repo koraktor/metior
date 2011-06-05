@@ -53,8 +53,8 @@ module Metior
       #       (35 commits per call).
       # @param [String, Range] range The range of commits for which the commits
       #        should be loaded. This may be given as a string
-      #        (+'master..development'+), a range (+'master'..'development'+)
-      #        or as a single ref (+'master'+). A single ref name means all
+      #        (`'master..development'`), a range (`'master'..'development'`)
+      #        or as a single ref (`'master'`). A single ref name means all
       #        commits reachable from that ref.
       # @return [Array<Commit>] All commits in the given commit range
       # @see #load_branch_commits

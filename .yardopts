@@ -1,3 +1,4 @@
 --files Changelog.md,LICENSE
+--markup markdown
 --private
 --protected

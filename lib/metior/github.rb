@@ -12,7 +12,7 @@ module Metior
   # @author Sebastian Staudt
   module GitHub
 
-    # GitHub will be registered as +:github+
+    # GitHub will be registered as `:github`
     NAME = :github
 
     include Metior::VCS
