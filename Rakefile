@@ -5,14 +5,14 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-require 'rake/gempackagetask'
 require 'rake/testtask'
+require 'rubygems/package_task'
 
 task :default => :test
 
 # Rake tasks for building the gem
 spec = Gem::Specification.load('metior.gemspec')
-Rake::GemPackageTask.new(spec) do |pkg|
+Gem::PackageTask.new(spec) do |pkg|
 end
 
 # Rake task for running the test suite
