@@ -84,6 +84,53 @@ module Metior
     end
     alias_method :collaborators, :committers
 
+    # This evaluates basic statistics about the files in a given branch.
+    #
+    # @example
+    #  repo.file_stats
+    #  => {
+    #       'a_file.rb' => {
+    #         :added_date => Tue Mar 29 16:13:47 +0200 2011,
+    #         :deleted_date => Sun Jun 05 12:56:18 +0200 2011,
+    #         :last_modified_date => Thu Apr 21 20:08:00 +0200 2011,
+    #         :modifications => 9
+    #       }
+    #     }
+    # @param [String] branch The branch from which the commit stat should be
+    #        retrieved
+    # @param [String] base Only commits not contained in +base+ will be listed
+    # @return [Hash<String, Hash<Symbol, Object>>] Each file is returned as a
+    #         key in this hash. The value of this key is another hash
+    #         containing the stats for this file. Depending on the state of the
+    #         file this includes +:added_date+, +:deleted_date+,
+    #         +:last_modified_date+ and +:modifications+.
+    # @see Commit#added_files
+    # @see Commit#deleted_files
+    # @see Commit#modified_files
+    def file_stats(branch = self.class::DEFAULT_BRANCH, base = nil)
+      support! :line_stats
+
+      stats = {}
+      commits(branch, base).each do |commit|
+        commit.added_files.each do |file|
+          stats[file] = { :modifications => 0 } unless stats.key? file
+          stats[file][:added_date] = commit.authored_date
+          stats[file][:modifications] += 1
+        end
+        commit.modified_files.each do |file|
+          stats[file] = { :modifications => 0 } unless stats.key? file
+          stats[file][:last_modified_date] = commit.authored_date
+          stats[file][:modifications] += 1
+        end
+        commit.deleted_files.each do |file|
+          stats[file] = { :modifications => 0 } unless stats.key? file
+          stats[file][:deleted_date] = commit.authored_date
+        end
+      end
+
+      stats
+    end
+
     # This evaluates the changed lines in each commit of the given branch.
     #
     # For easier use, the values are stored in separate arrays where each
