@@ -52,6 +52,9 @@ module Metior
             @added_files    << diff.b_path
           elsif diff.deleted_file
             @deleted_files  << diff.b_path
+          elsif diff.renamed_file
+            @added_files    << diff.b_path
+            @deleted_files  << diff.a_path
           else
             @modified_files << diff.b_path
           end
