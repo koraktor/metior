@@ -38,6 +38,7 @@ module Metior
     # @param [Object] actor The actor object retrieved from the VCS
     # @return [String] A unique identifier for the given actor
     def self.id_for(actor)
+      raise NotImplementedError
     end
 
     # Creates a new actor linked to the given source code repository
