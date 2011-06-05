@@ -111,6 +111,8 @@ module Metior
     #
     # @param [Module] mod The +Module+ that provides a Metior implementation
     #        for a specific VCS
+    # @raise [RuntimeError] if the VCS +Module+ does not have the +NAME+
+    #        constant defined prior to including +Metior::VCS+
     # @see Metior.vcs_types
     def self.included(mod)
       mod.extend ClassMethods
@@ -118,6 +120,7 @@ module Metior
         :line_stats => true
       }
 
+      raise "#{mod}::NAME is not set." unless mod.const_defined? :NAME
       Metior.vcs_types[mod::NAME.to_sym] = mod
     end
 
