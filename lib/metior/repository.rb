@@ -51,7 +51,7 @@ module Metior
     # @param [String] branch The branch to load commits from
     # @param [String] base Only commits not contained in +base+ will be listed
     # @return [Array<Commit>] All commits from the given branch
-    def commits(branch = DEFAULT_BRANCH, base = nil)
+    def commits(branch = self.class::DEFAULT_BRANCH, base = nil)
       if @commits[branch].nil?
         @authors[branch]    = {}
         @committers[branch] = {}
