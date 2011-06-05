@@ -122,6 +122,16 @@ module Metior
     end
 
     # Checks if a specific feature is supported by the VCS (or its
+    # implementation) and raises an error if the feature is not available
+    #
+    # @raise [UnsupportedError] if the feature is not supported by the VCS (or
+    #        its implementation)
+    # @see #supports?
+    def support!(feature)
+      raise UnsupportedError unless supports? feature
+    end
+
+    # Checks if a specific feature is supported by the VCS (or its
     # implementation)
     #
     # @return [true, false] +true+ if the feature is supported

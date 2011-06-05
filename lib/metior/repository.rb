@@ -102,7 +102,7 @@ module Metior
     # @see Commit#additions
     # @see Commit#deletions
     def line_history(branch = self.class::DEFAULT_BRANCH, base = nil)
-      raise UnsupportedError unless supports? :line_stats
+      support! :line_stats
 
       history = { :additions => [], :deletions => [] }
       commits(branch, base).reverse.each do |commit|
@@ -122,7 +122,7 @@ module Metior
     # @return [Array<Actor>] An array of the given number of the most
     #         significant authors in the given branch
     def significant_authors(branch = self.class::DEFAULT_BRANCH, count = 3, base = nil)
-      raise UnsupportedError unless supports? :line_stats
+      support! :line_stats
 
       authors = authors(branch, base).values.sort_by { |author| author.modifications }
       count = [count, authors.size].min
@@ -139,7 +139,7 @@ module Metior
     # @return [Array<Actor>] An array of the given number of the most
     #         significant commits in the given branch
     def significant_commits(branch = self.class::DEFAULT_BRANCH, count = 10, base = nil)
-      raise UnsupportedError unless supports? :line_stats
+      support! :line_stats
 
       commits = commits(branch, base).sort_by { |commit| commit.modifications }
       count = [count, commits.size].min
