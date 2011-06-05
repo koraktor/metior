@@ -29,7 +29,7 @@ GEM
     rash (0.3.0)
       hashie (~> 1.0.0)
     shoulda (2.11.3)
-    yard (0.6.8)
+    yard (0.7.1)
 
 PLATFORMS
   ruby
@@ -40,4 +40,4 @@ DEPENDENCIES
   mocha (~> 0.9.12)
   octokit (~> 0.6.3)
   shoulda (~> 2.11.3)
-  yard (~> 0.6.8)
+  yard (~> 0.7.1)
