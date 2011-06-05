@@ -5,7 +5,6 @@ group :git do
 end
 
 group :github do
-  gem 'json', '~> 1.5.1'
   gem 'octokit', '~> 0.6.3'
 end
 

@@ -13,7 +13,6 @@ GEM
       diff-lcs (~> 1.1)
       mime-types (~> 1.15)
     hashie (1.0.0)
-    json (1.5.1)
     mime-types (1.16)
     mocha (0.9.12)
     multi_json (1.0.2)
@@ -37,7 +36,6 @@ PLATFORMS
 
 DEPENDENCIES
   grit (~> 2.4.1)
-  json (~> 1.5.1)
   mocha (~> 0.9.12)
   octokit (~> 0.6.3)
   rake (~> 0.9.1)
