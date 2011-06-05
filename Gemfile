@@ -10,6 +10,7 @@ group :github do
 end
 
 group :development do
+  gem 'rake', '~> 0.9.1'
   gem 'yard', '~> 0.7.1'
 end
 
