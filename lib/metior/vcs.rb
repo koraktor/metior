@@ -117,6 +117,7 @@ module Metior
     def self.included(mod)
       mod.extend ClassMethods
       mod.send :class_variable_set, :@@features, {
+        :file_stats => true,
         :line_stats => true
       }
 

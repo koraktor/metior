@@ -9,11 +9,12 @@ class TestGit < Test::Unit::TestCase
 
   context 'The Git implementation' do
 
+    should 'support file stats' do
+      assert Metior::Git.supports? :file_stats
+    end
+
     should 'support line stats' do
       assert Metior::Git.supports? :line_stats
-      object = Object.new
-      object.extend Metior::Git
-      assert object.supports? :line_stats
     end
 
   end
