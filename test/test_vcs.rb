@@ -10,6 +10,8 @@ class TestVCS < Test::Unit::TestCase
   context 'The VCS module' do
 
     setup do
+      require 'metior/vcs'
+
       module MockVCS
         NAME = :mock
         include VCS

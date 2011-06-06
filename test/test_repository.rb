@@ -3,11 +3,15 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
+require 'helper'
+
 class TestRepository < Test::Unit::TestCase
 
   context 'The base class for Metior VCS repositories' do
 
     setup do
+      require 'metior/repository'
+
       @repo = Metior::Repository.new('dummy')
     end
 
