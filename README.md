@@ -19,6 +19,8 @@ If you're interested in Metior, feel free to join the discussion on Convore in
 
     repo = Metior::Git::Repository.new '~/open-source/metior'
     repo.commits 'development'         # Get all commits in development
+    repo.file_stats                    # Basic statistics about the files
+                                       # contained in a repository
     repo.line_history                  # Quick access to lines added and
                                        # removed in each commit
     repo.significant_authors           # Get up to 3 of the most important
@@ -32,12 +34,32 @@ If you're interested in Metior, feel free to join the discussion on Convore in
     Metior::Commit.activity repo.commits
     Metior::Commit.activity repo.authors[author_id].commits
 
+## Advanced usage
+
+### Specifying commit ranges
+
+Sometimes it's more useful to not analyze the whole history of a repository's
+branch. For example when analyzing the changes from one branch to another, or
+from the last released version to the latest code. In that case you will have
+to specify a commit range. Specifying a commit range works just like in Git:
+
+    'master..development'
+    'master'..'development'
+    'master..HEAD'
+    'master'..'HEAD'
+    'deadbeef..HEAD'
+
+Given that your currently checked out branch is `development` and `master`
+points to commit `deadbeef`, the above statements are equal. Please also note
+the different syntaxes: The first, third and fifth example are standards string
+which will be parsed by Metior. The second and fourth example are Ruby `Range`
+objects which can be used by Metior right away.
+
 ## Requirements
 
 * Grit — a Ruby API for Git
   * [Git](http://git-scm.com) >= 1.6
 * Octokit — a Ruby wrapper for the GitHub API
-  * JSON — a JSON parser for Ruby
 
 ## Documentation
 
@@ -47,9 +69,10 @@ documentation of the current development version is also available [there][5].
 ## Future plans
 
 * More statistics and analyses
-* More supported VCSs, like Subversion or Mercurial
+* Generation of reports in HTML or other formats
 * Support for creating graphs
 * Console and web application to accompany this API
+* More supported VCSs, like Subversion or Mercurial
 * Code analysis to show programming languages, effective lines of code, etc.
 
 ## Contribute
