@@ -22,10 +22,10 @@ module Metior
       # belongs to and the data from the corresponding `Grit::Commit` object
       #
       # @param [Repository] repo The Git repository this commit belongs to
-      # @param [String] branch The branch this commits belongs to
+      # @param [String] range The commit range this commits belongs to
       # @param [Grit::Commit] commit The commit object from Grit
-      def initialize(repo, branch, commit)
-        super repo, branch
+      def initialize(repo, range, commit)
+        super repo, range
 
         @additions      = commit.stats.additions
         @authored_date  = commit.authored_date
@@ -34,12 +34,12 @@ module Metior
         @id             = commit.id
         @message        = commit.message
 
-        authors = repo.authors(branch)
+        authors = repo.authors range
         @author = authors[Actor.id_for commit.author]
         @author = Actor.new repo, commit.author if author.nil?
         @author.add_commit self
 
-        committers = repo.committers branch
+        committers = repo.committers range
         @committer = committers[Actor.id_for commit.committer]
         @committer = Actor.new repo, commit.committer if @committer.nil?
         @committer.add_commit self

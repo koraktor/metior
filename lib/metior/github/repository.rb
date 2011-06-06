@@ -59,8 +59,8 @@ module Metior
       # @return [Array<Commit>] All commits in the given commit range
       # @see #load_branch_commits
       def load_commits(range)
-        commits      = load_branch_commits range.last
-        base_commits = load_branch_commits(range.first).map! do |commit|
+        commits      = load_branch_commits(range.last, range)
+        base_commits = load_branch_commits(range.first, range).map! do |commit|
           commit.id
         end
         commits.reject { |commit| base_commits.include? commit.id }
@@ -75,14 +75,16 @@ module Metior
       #       won't be able to query branches with more than 2100 commits
       #       (35 commits per call).
       # @param [String] branch The branch to load commits from
+      # @param [String, Range] range The range of commits to which the loaded
+      #        commits should be assigned
       # @return [Array<Commit>] All commits from the given branch
       # @see Octokit::Commits#commits
-      def load_branch_commits(branch)
+      def load_branch_commits(branch, range)
         commits = []
         page = 1
         begin
           begin
-            commits += Octokit.commits(@path, branch, :page => page)
+            commits += Octokit.commits(@path, range, :page => page)
             page += 1
           end while true
         rescue Octokit::NotFound

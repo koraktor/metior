@@ -22,10 +22,10 @@ module Metior
       # it belongs to and the data parsed from the corresponding JSON data
       #
       # @param [Repository] repo The GitHub repository this commit belongs to
-      # @param [String] branch The branch this commits belongs to
+      # @param [String] range The commit range this commits belongs to
       # @param [Hashie:Mash] commit The commit data parsed from the JSON API
-      def initialize(repo, branch, commit)
-        super repo, branch
+      def initialize(repo, range, commit)
+        super repo, range
 
         @added_files    = []
         @additions      = 0

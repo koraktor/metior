@@ -27,8 +27,8 @@ module Metior
     # @return [Time] The date this commit has been authored
     attr_reader :authored_date
 
-    # @return [String] The branch this commit belongs to
-    attr_reader :branch
+    # @return [Range] The commit range this commit belongs to
+    attr_reader :range
 
     # @return [Time] The date this commit has been committed
     attr_reader :committed_date
@@ -90,10 +90,10 @@ module Metior
     # Creates a new commit instance linked to the given repository and branch
     #
     # @param [Repository] repo The repository this commit belongs to
-    # @param [String] branch The branch this commit belongs to
-    def initialize(repo, branch)
-      @repo   = repo
-      @branch = branch
+    # @param [String] range The commit range this commit belongs to
+    def initialize(repo, range)
+      @repo  = repo
+      @range = range
     end
 
     # Returns the total of changed lines in this commit
