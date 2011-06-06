@@ -4,7 +4,6 @@
 # Copyright (c) 2011, Sebastian Staudt
 
 require 'metior/actor'
-require 'metior/errors'
 
 module Metior
 
