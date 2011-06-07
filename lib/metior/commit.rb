@@ -27,9 +27,6 @@ module Metior
     # @return [Time] The date this commit has been authored
     attr_reader :authored_date
 
-    # @return [Range] The commit range this commit belongs to
-    attr_reader :range
-
     # @return [Time] The date this commit has been committed
     attr_reader :committed_date
 
@@ -47,6 +44,9 @@ module Metior
 
     # @return [Array<String>] A list of file paths modified in this commit
     attr_reader :modified_files
+
+    # @return [Range] The commit range this commit belongs to
+    attr_reader :range
 
     # @return [Repository] The repository this commit belongs to
     attr_reader :repo
