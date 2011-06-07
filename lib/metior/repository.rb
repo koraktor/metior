@@ -62,8 +62,8 @@ module Metior
         @authors[range]    = {}
         @committers[range] = {}
         @commits[range]    = []
-        load_commits(range).each do |git_commit|
-          commit = self.class::Commit.new(self, range, git_commit)
+        load_commits(range).each do |commit|
+          commit = self.class::Commit.new(self, range, commit)
           @commits[range] << commit
           @authors[range][commit.author.id]       = commit.author
           @committers[range][commit.committer.id] = commit.committer
