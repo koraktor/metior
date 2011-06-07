@@ -27,6 +27,9 @@ module Metior
     # @return [Time] The date this commit has been authored
     attr_reader :authored_date
 
+    # @return [Object] A unique identifier of the commit in the repository
+    attr_reader :id
+
     # @return [Time] The date this commit has been committed
     attr_reader :committed_date
 
