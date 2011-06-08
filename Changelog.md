@@ -1,5 +1,15 @@
 # Changelog
 
+## Version 0.1.1
+
+ **June 8<sup>th</sup>, 2011**
+
+ * Fixed gem dependencies
+
+ See the
+ [Git history](https://github.com/koraktor/metior/compare/0.1.0...0.1.1) for
+ version 0.1.1
+
 ## Version 0.1.0
 
  **June 8<sup>th</sup>, 2011**
