@@ -1,0 +1,80 @@
+---
+pages:
+  - name: About
+    url:  index.html
+  - name: Usage
+    url:  usage.html
+  - name: Source
+    url:  http://github.com/koraktor/metior
+  - name: Issue Tracker
+    url:  http://github.com/koraktor/metior/issues
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <link rel="icon" href="graphics/favicon.png" type="image/png">
+    <link rel="stylesheet" href="stylesheets/main.css" type="text/css" />
+    <link rel="stylesheet" href="stylesheets/syntax.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Bevan:regular" type="text/css" >
+
+    <title>Metior - {{ page.title }}</title>
+
+    {% include google_analytics %}
+</head>
+<body>
+    <div id="header">Meti<img src="graphics/metior.png" />r</div>
+    <div id="menu">
+       {% for item in page.pages %}
+          {% if item.name == page.title %}
+              <span>{{ item.name }}</span>
+          {% else %}
+              <a href="{{ item.url }}">{{ item.name }}</a>
+          {% endif %}
+       {% endfor %}
+    </div>
+    <div id="content">
+        {{content}}
+    </div>
+    <div id="footer">
+        © {{ site.time | date: "%Y" }} — Sebastian Staudt
+    </div>
+
+    {% include flattr %}
+
+    <div id="twitter">
+        <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+        <script>
+            new TWTR.Widget({
+              version: 2,
+              type: 'profile',
+              rpp: 4,
+              interval: 6000,
+              width: 250,
+              height: 300,
+              theme: {
+                shell: {
+                  background: '#563412',
+                  color:      '#fff'
+                },
+                tweets: {
+                  background: '#390600',
+                  color:      '#fff',
+                  links:      '#f95'
+                }
+              },
+              features: {
+                scrollbar: true,
+                loop:      false,
+                live:      true,
+                hashtags:  true,
+                timestamp: true,
+                avatars:   false,
+                behavior:  'all'
+              }
+            }).render().setUser('metiorstats').start();
+        </script>
+    </div>
+</body>
+</html>

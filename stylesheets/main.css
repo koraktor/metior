@@ -1,0 +1,146 @@
+html {
+  background: #382211;
+  width:      100%;
+}
+
+body {
+  color:       #ffb;
+  font-family: Helvetica, sans-serif;
+  margin:      0 0 0 5em;
+  width:       780px;
+}
+
+a {
+  font-weight: bold;
+}
+
+a:hover {
+  color: #aa5;
+}
+
+a, em {
+  color:       #f95;
+  font-style:  normal;
+  text-shadow: #000 1px 1px 1px;
+}
+
+div#content {
+  background: #521;
+  padding:    0.1em 1em;
+  text-align: justify;
+}
+
+div#content > p > code {
+  color:       #aa5;
+  text-shadow: #000 1px 1px;
+}
+
+div#content, div#footer, div#menu {
+  box-shadow: #000 4px 4px 4px;
+
+  -moz-box-shadow: #000 4px 4px 4px;
+  -webkit-box-shadow: #000 4px 4px 4px;
+}
+
+div#flattr {
+  position:   absolute;
+  top:        150px;
+  right:      50px;
+  text-align: center;
+  width:      250px;
+}
+
+div#footer {
+  border-top:    1px solid #aa5;
+  border-radius: 0 0 4px 4px;
+  text-align:    center;
+  padding:       0.5em 0;
+}
+
+div#footer, div#menu {
+  background: #563412;
+}
+
+div#header {
+  font-size:    10em;
+  font-weight:  bold;
+  text-align:   right;
+  text-shadow:  #000 10px 10px 1px;
+}
+
+div#header, div#menu a, div#menu span, h2, h3 {
+  font-family: 'Bevan', serif;
+}
+
+div#header img {
+  margin:         -0.2em -0.5em 0 -0.1em;
+  vertical-align: bottom;
+}
+
+div#menu {
+  border-bottom: 2px solid #aa5;
+  border-left:   5px solid #aa5;
+  border-radius: 20px 0 2px 0;
+  font-size:     1.2em;
+  font-weight:   bold;
+  line-height:   30px;
+  margin:        0 auto;
+  padding:       10px 0;
+  text-align:    center;
+
+  -moz-border-radius:    20px 4px 0 0;
+  -webkit-border-radius: 20px 4px 0 0;
+}
+
+div#menu a, div#menu span {
+  margin:      0 2em;
+  text-shadow: #521 4px 4px 1px;
+}
+
+div#menu a, h2, h3 {
+  color:           #f95;
+  text-decoration: none;
+}
+
+div#menu a:hover {
+  color: #ffb;
+}
+
+div#twitter {
+  position: absolute;
+  right:    50px;
+  top:      250px;
+  z-index:  -1;
+}
+
+div#twitter em {
+  font-family: Helvetica, sans-serif;
+}
+
+div.twtr-doc {
+  border: 1px solid #aa5;
+  box-shadow: #000 2px 2px 3px;
+
+  -moz-box-shadow: #000 2px 2px 3px;
+  -webkit-box-shadow: #000 2px 2px 3px;
+}
+
+em {
+  font-family: 'Bevan', serif;
+}
+
+h2 {
+  border-bottom: 2px solid #aa5;
+  font-weight: normal;
+  text-shadow: #000 2px 2px 1px;
+
+  -webkit-box-bottom-shadow: #000 2px 2px;
+}
+
+h3 {
+  font-size:   1.1em;
+  font-weight: normal;
+  text-shadow: #000 2px 2px 1px;
+
+  -webkit-box-bottom-shadow: #000 2px 2px;
+}
