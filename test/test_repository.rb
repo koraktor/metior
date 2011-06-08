@@ -113,14 +113,13 @@ class TestRepository < Test::Unit::TestCase
     end
 
     should 'know the most significant commits of the repository' do
-      commits = @repo.significant_commits
-      assert_equal 10, commits.size
+      commits = @repo.significant_commits('master', 8)
+      assert_equal 8, commits.size
       assert commits.all? { |commit| commit.is_a? Metior::Commit }
 
-      assert_equal [
-        "c0f0b4f", "47ab25c", "f3a24ae", "18ec70e", "242253b", "c87612b",
-        "6bb41e4", "4d9c7be", "756a947", "7569d0d"
-      ], commits.collect { |commit| commit.id }
+      assert_equal %w{
+        c0f0b4f 47ab25c f3a24ae 18ec70e 242253b c87612b 6bb41e4 4d9c7be
+      }, commits.collect { |commit| commit.id }
 
       modifications = commits.first.modifications
       commits[1..-1].each do |commit|
