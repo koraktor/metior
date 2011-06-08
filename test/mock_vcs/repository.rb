@@ -43,11 +43,11 @@ module Metior
             commit[:impact] = line.split("\0")
 
             if commits.empty?
-              if range.first != '' && !commit[:ids].include?(range.first)
+              if range.first != '' && !commit[:ids].include?(range.last)
                 commit = {}
                 next
               end
-            elsif commit[:ids].include? range.last
+            elsif commit[:ids].include? range.first
               break
             end
 
