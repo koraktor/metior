@@ -24,6 +24,7 @@ module Metior
         super path
 
         @file = File.open(File.expand_path(path), 'r')
+        @file.set_encoding 'utf-8' if @file.respond_to? :set_encoding
       end
 
       def load_commits(range)
