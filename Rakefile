@@ -18,7 +18,7 @@ end
 # Rake task for running the test suite
 Rake::TestTask.new do |t|
   t.libs << 'lib' << 'test'
-  t.pattern = 'test/**/test_*.rb'
+  t.test_files = FileList['test/**/test_*.rb']
   t.verbose = true
 end
 
