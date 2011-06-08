@@ -50,16 +50,23 @@ class TestRepository < Test::Unit::TestCase
 
       repo_file = "#{File.dirname(__FILE__)}/fixtures/mojombo-grit-master-1b2fe77.txt"
       @repo = MockVCS::Repository.new repo_file
-      @repo.commits
     end
 
-    should 'be able to load the commits of the repository' do
+    should 'be able to load all commits from the repository' do
       commits = @repo.commits
       assert_equal 415, commits.size
       assert commits.all? { |commit| commit.is_a? Metior::Commit }
 
       head = commits.first
       assert_equal '4c592b4', head.id
+    end
+
+    should 'be able to load a range of commits from the repository' do
+      commits = @repo.commits 'ef2870b'..'4c592b4'
+      assert_equal 5, commits.size
+      assert commits.all? { |commit| commit.is_a? Metior::Commit }
+      assert_equal '4c592b4', commits.first.id
+      assert_equal 'f0cc7f7', commits.last.id
     end
 
     should 'know the authors of the repository' do
