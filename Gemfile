@@ -1,5 +1,7 @@
 source :rubygems
 
+gem 'bundler', '~> 1.0.14'
+
 group :git do
   gem 'grit', '~> 2.4.1'
 end
