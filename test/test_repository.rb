@@ -67,21 +67,20 @@ class TestRepository < Test::Unit::TestCase
       assert_equal 37, authors.size
       assert authors.values.all? { |author| author.is_a? Metior::Actor }
 
-      assert_equal [
-        "wayne@larsen.st", "rsanheim@gmail.com", "jos@catnook.com",
-        "voker57@gmail.com", "bobbywilson0@gmail.com", "tim@dysinger.net",
-        "cho45@lowreal.net", "davetron5000@gmail.com", "chris@ozmm.org",
-        "igor@wiedler.ch", "mtraverso@acm.org", "schacon@gmail.com",
-        "bryce@worldmedia.net", "adam@therealadam.com", "pjhyett@gmail.com",
-        "antonin@hildebrand.cz", "kamal.fariz@gmail.com", "dustin@spy.net",
-        "engel@engel.uk.to", "paul+git@mjr.org", "gram.gibson@uky.edu",
-        "cehoffman@gmail.com", "hiroshi3110@gmail.com", "tom@taco.(none)",
-        "evil@che.lu", "david.kowis@rackspace.com", "tom@mojombo.com",
-        "tim@spork.in", "johan@johansorensen.com", "technoweenie@gmail.com",
-        "scott@railsnewbie.com", "jpriddle@nevercraft.net", "aman@tmm1.net",
-        "rtomayko@gmail.com", "koraktor@gmail.com",
-        "chapados@sciencegeeks.org", "ohnobinki@ohnopublishing.net"
-      ], authors.keys
+      assert_equal %w{
+        adam@therealadam.com aman@tmm1.net antonin@hildebrand.cz
+        bobbywilson0@gmail.com bryce@worldmedia.net cehoffman@gmail.com
+        chapados@sciencegeeks.org cho45@lowreal.net chris@ozmm.org
+        davetron5000@gmail.com david.kowis@rackspace.com dustin@spy.net
+        engel@engel.uk.to evil@che.lu gram.gibson@uky.edu
+        hiroshi3110@gmail.com igor@wiedler.ch johan@johansorensen.com
+        jos@catnook.com jpriddle@nevercraft.net kamal.fariz@gmail.com
+        koraktor@gmail.com mtraverso@acm.org ohnobinki@ohnopublishing.net
+        paul+git@mjr.org pjhyett@gmail.com rsanheim@gmail.com
+        rtomayko@gmail.com schacon@gmail.com scott@railsnewbie.com
+        technoweenie@gmail.com tim@dysinger.net tim@spork.in
+        tom@mojombo.com tom@taco.(none) voker57@gmail.com wayne@larsen.st
+      }, authors.keys.sort
     end
 
     should 'know the committers of the repository' do
@@ -89,18 +88,18 @@ class TestRepository < Test::Unit::TestCase
       assert_equal 29, committers.size
       assert committers.values.all? { |committer| committer.is_a? Metior::Actor }
 
-      assert_equal [
-        "rsanheim@gmail.com", "jos@catnook.com", "voker57@gmail.com",
-        "bobbywilson0@gmail.com", "tim@dysinger.net", "davetron5000@gmail.com",
-        "chris@ozmm.org", "mtraverso@acm.org", "schacon@gmail.com",
-        "bryce@worldmedia.net", "adam@therealadam.com", "pjhyett@gmail.com",
-        "antonin@hildebrand.cz", "kamal.fariz@gmail.com", "dustin@spy.net",
-        "engel@engel.uk.to", "paul+git@mjr.org", "hiroshi3110@gmail.com",
-        "tom@taco.(none)", "evil@che.lu", "david.kowis@rackspace.com",
-        "tom@mojombo.com", "tim@spork.in", "johan@johansorensen.com",
-        "technoweenie@gmail.com", "aman@tmm1.net", "rtomayko@gmail.com",
-        "koraktor@gmail.com", "ohnobinki@ohnopublishing.net"
-      ], committers.keys
+      assert_equal %w{
+         adam@therealadam.com aman@tmm1.net antonin@hildebrand.cz
+         bobbywilson0@gmail.com bryce@worldmedia.net chris@ozmm.org
+         davetron5000@gmail.com david.kowis@rackspace.com dustin@spy.net
+         engel@engel.uk.to evil@che.lu hiroshi3110@gmail.com
+         johan@johansorensen.com jos@catnook.com kamal.fariz@gmail.com
+         koraktor@gmail.com mtraverso@acm.org ohnobinki@ohnopublishing.net
+         paul+git@mjr.org pjhyett@gmail.com rsanheim@gmail.com
+         rtomayko@gmail.com schacon@gmail.com technoweenie@gmail.com
+         tim@dysinger.net tim@spork.in tom@mojombo.com tom@taco.(none)
+         voker57@gmail.com
+      }, committers.keys.sort
     end
 
     should 'know the most significant authors of the repository' do
