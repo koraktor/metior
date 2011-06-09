@@ -62,9 +62,9 @@ module Metior
       # met. Afterwards the `Actor`, `Commit` and `Repository` classes are
       # required.
       #
-      # @see Bundler.setup
+      # @see Bundler.require
       def init
-        Bundler.setup self::NAME
+        Bundler.require self::NAME
 
         path = self::NAME.to_s
         require "metior/#{path}/actor"

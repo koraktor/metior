@@ -3,10 +3,12 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
+require 'bundler'
+
+Bundler.setup
+
 libdir = File.dirname(__FILE__)
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
-
-require 'bundler'
 
 require 'core_ext/object'
 require 'metior/git'
