@@ -7,7 +7,7 @@ title:  About
 statistics about a source code repository and its change over time.
 
 Currently, it provides access to Git repositories using either file system
-access itself or directly on [GitHub][1] using GitHub's HTTP API.
+access or directly on [GitHub][1] using GitHub's HTTP API.
 
 ## About the name
 
