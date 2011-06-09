@@ -1,5 +1,16 @@
 # Changelog
 
+## Version 0.1.2
+
+ **June 10<sup>th</sup>, 2011**
+
+ * Fixed Bundler integration
+ * Fixed Metior.simple_stats with default branch
+
+ See the
+ [Git history](https://github.com/koraktor/metior/compare/0.1.1...0.1.2) for
+ version 0.1.2
+
 ## Version 0.1.1
 
  **June 8<sup>th</sup>, 2011**
