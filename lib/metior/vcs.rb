@@ -48,7 +48,7 @@ module Metior
       # Trying to access either the `Actor`, `Commit` or `Repository` class
       # in a VCS `Module` will trigger auto-loading first.
       #
-      # @param [Symbol] The symbolic name of the missing constant
+      # @param [Symbol] const The symbolic name of the missing constant
       # @see #init
       def const_missing(const)
         init if [:Actor, :Commit, :Repository].include?(const)
