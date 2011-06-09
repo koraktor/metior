@@ -40,7 +40,7 @@ module Metior
   # @return [Hash] The calculated stats for the given repository and branch
   def self.simple_stats(type, path, branch = nil)
     repo = repository type, path
-    branch ||= vcs::DEFAULT_BRANCH
+    branch ||= vcs(type)::DEFAULT_BRANCH
 
     {
       :authors        => repo.authors(branch).values,
