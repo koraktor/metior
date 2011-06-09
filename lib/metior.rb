@@ -5,9 +5,10 @@
 
 require 'bundler'
 
-Bundler.setup
-
 libdir = File.dirname(__FILE__)
+Dir.chdir libdir do
+  Bundler.setup
+end
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
 require 'core_ext/object'
