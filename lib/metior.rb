@@ -36,18 +36,20 @@ module Metior
   #
   # @param [Symbol] type The type of the repository, e.g. `:git`
   # @param [String] path The file system path of the repository
-  # @param [String] branch The repository's 'branch to analyze. `nil` will use
-  #        the VCS's default branch
+  # @param [String, Range] range The range of commits for which the commits
+  #        should be loaded. This may be given as a string
+  #        (`'master..development'`), a range (`'master'..'development'`)
+  #        or as a single ref (`'master'`). A single ref name means all
+  #        commits reachable from that ref.
   # @return [Hash] The calculated stats for the given repository and branch
   def self.simple_stats(type, path, branch = nil)
     repo = repository type, path
     branch ||= vcs(type)::DEFAULT_BRANCH
 
     {
-      :authors        => repo.authors(branch).values,
-      :commit_count   => repo.commits(branch).size,
-      :top_committers => repo.top_contributors(branch, 3)
-    }
+      :commit_count     => repo.commits(branch).size,
+      :top_contributors => repo.top_contributors(branch, 5),
+    }.merge Commit.activity(repo.commits(branch))
   end
 
 end
