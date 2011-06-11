@@ -64,7 +64,9 @@ module Metior
       #
       # @see Bundler.require
       def init
-        Bundler.require self::NAME
+        Metior.runtime.dependencies_for(self::NAME).each do |dep|
+          gem dep.name, dep.requirement
+        end
 
         path = self::NAME.to_s
         require "metior/#{path}/actor"
