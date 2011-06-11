@@ -8,6 +8,7 @@ $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'metior'
 include Metior
 
+Bundler.setup
 Bundler.require :test
 
 # Extends TestCase functionality
