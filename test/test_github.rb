@@ -17,24 +17,29 @@ class TestGitHub < Test::Unit::TestCase
       assert_not Metior::GitHub.supports? :line_stats
     end
 
+  end
+
+  context 'A GitHub repository' do
+
+    setup do
+      @repo = Metior::GitHub::Repository.new 'koraktor', 'metior'
+    end
+
     should 'not be able to get file stats of a repository' do
-      repo = Metior::GitHub::Repository.new 'koraktor', 'rubikon'
       assert_raises UnsupportedError do
-        repo.file_stats
+        @repo.file_stats
       end
     end
 
     should 'not be able to get the most significant authors of a repository' do
-      repo = Metior::GitHub::Repository.new 'koraktor', 'rubikon'
       assert_raises UnsupportedError do
-        repo.significant_authors
+        @repo.significant_authors
       end
     end
 
     should 'not be able to get the most significant commits of a repository' do
-      repo = Metior::GitHub::Repository.new 'koraktor', 'rubikon'
       assert_raises UnsupportedError do
-        repo.significant_commits
+        @repo.significant_commits
       end
     end
 
