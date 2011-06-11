@@ -57,37 +57,39 @@ module Metior
       #        or as a single ref (`'master'`). A single ref name means all
       #        commits reachable from that ref.
       # @return [Array<Commit>] All commits in the given commit range
-      # @see #load_branch_commits
+      # @see #load_ref_commits
       def load_commits(range)
-        commits      = load_branch_commits(range.last, range)
-        base_commits = load_branch_commits(range.first, range).map! do |commit|
-          commit.id
+        commits      = load_ref_commits(range.last)
+        if range.first == ''
+          base_commits = []
+        else
+          base_commits = load_ref_commits(range.first).map! do |commit|
+            commit.id
+          end
         end
         commits.reject { |commit| base_commits.include? commit.id }
       end
 
-      # This method uses Octokit to load all commits from the given branch
+      # This method uses Octokit to load all commits from the given ref
       #
       # Because of GitHub API limitations, the commits have to be loaded in
       # batches.
       #
       # @note GitHub API is currently limited to 60 calls a minute, so you
-      #       won't be able to query branches with more than 2100 commits
-      #       (35 commits per call).
-      # @param [String] branch The branch to load commits from
-      # @param [String, Range] range The range of commits to which the loaded
-      #        commits should be assigned
-      # @return [Array<Commit>] All commits from the given branch
+      #       won't be able to query refs with more than 2100 commits (35
+      #       commits per call).
+      # @param [String] ref The ref to load commits from
+      # @return [Array<Commit>] All commits from the given ref
       # @see Octokit::Commits#commits
-      def load_branch_commits(branch, range)
+      def load_ref_commits(ref)
         commits = []
         page = 1
         begin
-          begin
-            commits += Octokit.commits(@path, range, :page => page)
+          loop do
+            commits += Octokit.commits(@path, ref, :page => page)
             page += 1
-          end while true
-        rescue Octokit::NotFound
+          end
+        rescue Faraday::Error::ResourceNotFound
         end
         commits
       end
