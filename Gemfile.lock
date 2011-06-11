@@ -35,7 +35,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 1.0.14)
   grit (~> 2.4.1)
   mocha (~> 0.9.12)
   octokit (~> 0.6.3)
