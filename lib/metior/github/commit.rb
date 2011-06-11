@@ -29,20 +29,20 @@ module Metior
 
         @added_files    = []
         @additions      = 0
-        @authored_date  = commit.authored_date
-        @committed_date = commit.committed_date
+        @authored_date  = Time.parse commit.authored_date
+        @committed_date = Time.parse commit.committed_date
         @deleted_files  = []
         @deletions      = 0
         @id             = commit.id
         @message        = commit.message
         @modified_files = []
 
-        authors = repo.authors(branch)
+        authors = repo.authors range
         @author = authors[Actor.id_for commit.author]
         @author = Actor.new repo, commit.author if author.nil?
         @author.add_commit self
 
-        committers = repo.committers branch
+        committers = repo.committers range
         @committer = committers[Actor.id_for commit.committer]
         @committer = Actor.new repo, commit.committer if @committer.nil?
         @committer.add_commit self
