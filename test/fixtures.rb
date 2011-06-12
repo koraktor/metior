@@ -67,9 +67,9 @@ module Fixtures
         [],
         nil,
         Grit::Actor.new(commit[:info][4], commit[:info][5]),
-        Time.at(commit[:info][6].to_i).to_s,
+        Time.at(commit[:info][6].to_i),
         Grit::Actor.new(commit[:info][1], commit[:info][2]),
-        Time.at(commit[:info][3].to_i).to_s,
+        Time.at(commit[:info][3].to_i),
         commit[:info].first.lines.to_a
       )
 
