@@ -99,6 +99,17 @@ class TestGit < Test::Unit::TestCase
       ], authors.collect { |author| author.id }
     end
 
+    should 'provide easy access to simple repository statistics' do
+      stats = Metior.simple_stats :git, File.dirname(File.dirname(__FILE__))
+
+      assert_equal 157, stats[:active_days].size
+      assert_equal 460, stats[:commit_count]
+      assert_in_delta 2.92993630573248, stats[:commits_per_active_day], 0.0001
+      assert_equal Time.at(1191997100), stats[:first_commit_date]
+      assert_equal Time.at(1306794294), stats[:last_commit_date]
+      assert_equal 5, stats[:top_contributors].size
+    end
+
   end
 
 end
