@@ -24,8 +24,9 @@ class TestGit < Test::Unit::TestCase
 
     setup do
       @repo = Metior::Git::Repository.new File.dirname(File.dirname(__FILE__))
+      @@grit_commits ||= Fixtures.commits_as_grit_commits(''..'master')
       @commits_stub = Grit::Repo.any_instance.stubs :commits
-      @commits_stub.returns Fixtures.commits_as_grit_commits(''..'master')
+      @commits_stub.returns @@grit_commits
     end
 
     should 'be able to load all commits from the repository\'s default branch' do
