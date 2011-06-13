@@ -24,10 +24,9 @@ module Metior
       # it belongs to and the data parsed from the corresponding JSON data
       #
       # @param [Repository] repo The GitHub repository this commit belongs to
-      # @param [String] range The commit range this commits belongs to
       # @param [Hashie:Mash] commit The commit data parsed from the JSON API
-      def initialize(repo, range, commit)
-        super repo, range
+      def initialize(repo, commit)
+        super repo
 
         @added_files    = []
         @additions      = 0
@@ -39,13 +38,11 @@ module Metior
         @message        = commit.message
         @modified_files = []
 
-        authors = repo.authors range
-        @author = authors[Actor.id_for commit.author]
+        @author = repo.authors[Actor.id_for commit.author]
         @author = Actor.new repo, commit.author if author.nil?
         @author.add_commit self
 
-        committers = repo.committers range
-        @committer = committers[Actor.id_for commit.committer]
+        @committer = repo.committers[Actor.id_for commit.committer]
         @committer = Actor.new repo, commit.committer if @committer.nil?
         @committer.add_commit self
       end

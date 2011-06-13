@@ -48,9 +48,6 @@ module Metior
     # @return [Array<String>] A list of file paths modified in this commit
     attr_reader :modified_files
 
-    # @return [Range] The commit range this commit belongs to
-    attr_reader :range
-
     # @return [Repository] The repository this commit belongs to
     attr_reader :repo
 
@@ -93,10 +90,8 @@ module Metior
     # Creates a new commit instance linked to the given repository and branch
     #
     # @param [Repository] repo The repository this commit belongs to
-    # @param [String] range The commit range this commit belongs to
-    def initialize(repo, range)
+    def initialize(repo)
       @repo  = repo
-      @range = range
     end
 
     # Returns the total of changed lines in this commit
