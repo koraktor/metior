@@ -1,5 +1,17 @@
 # Changelog
 
+## Version 0.1.3
+
+ **June 13<sup>th</sup>, 2011**
+
+ * Fixed several GitHub bugs
+ * Made Metior.simple_stats more informative
+ * Improved Bundler integration
+
+ See the
+ [Git history](https://github.com/koraktor/metior/compare/0.1.2...0.1.3) for
+ version 0.1.3
+
 ## Version 0.1.2
 
  **June 10<sup>th</sup>, 2011**
