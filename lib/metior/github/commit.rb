@@ -3,6 +3,8 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
+require 'time'
+
 require 'metior/commit'
 require 'metior/github'
 require 'metior/github/actor'
