@@ -38,6 +38,11 @@ If you're interested in Metior, feel free to join the discussion on Convore in
 
     Metior::Commit.activity repo.commits
     Metior::Commit.activity repo.authors[author_id].commits
+    
+## Github Invocation
+    repo = Metior::GitHub::Repository.new("amanelis", "3-way-handshake")
+    repo.commits
+    repo.authors
 
 ## Advanced usage
 

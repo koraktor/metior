@@ -8,6 +8,7 @@ require 'time'
 require 'metior/commit'
 require 'metior/github'
 require 'metior/github/actor'
+require 'time'
 
 module Metior
 
