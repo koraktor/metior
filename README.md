@@ -14,10 +14,15 @@ If you're interested in Metior, feel free to join the discussion on Convore in
 ### One-liner for some basic statistics
 
     Metior.simple_stats :git, '~/open-source/metior'
+    Metior.simple_stats :github, 'koraktor', 'metior'
+
+### Create a repository object for different VCSs
+
+    repo = Metior::Git::Repository.new '~/open-source/metior'
+    repo = Metior::GitHub::Repository.new 'koraktor', 'metior'
 
 ### More fine-grained access to repository statistics
 
-    repo = Metior::Git::Repository.new '~/open-source/metior'
     repo.commits 'development'         # Get all commits in development
     repo.file_stats                    # Basic statistics about the files
                                        # contained in a repository
