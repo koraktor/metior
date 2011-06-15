@@ -3,8 +3,6 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-require 'bundler'
-
 require 'core_ext/object'
 require 'metior/git'
 require 'metior/github'
@@ -15,14 +13,6 @@ require 'metior/version'
 #
 # @author Sebastian Staudt
 module Metior
-
-  # Returns the Bundler runtime to access Metior's dependencies
-  #
-  # @return [Bundler::Runtime] The Bundler runtime instance
-  def self.runtime
-    @@runtime ||= Bundler::Runtime.new File.dirname(__FILE__),
-                                       Bundler.definition
-  end
 
   # Creates a new repository for the given repository type and path
   #

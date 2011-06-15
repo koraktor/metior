@@ -58,16 +58,9 @@ module Metior
 
       # This initializes the VCS's implementation `Module`
       #
-      # First the corresponding Bundler group is loaded so all dependencies are
-      # met. Afterwards the `Actor`, `Commit` and `Repository` classes are
-      # required.
-      #
-      # @see Bundler.require
+      # This requires the `Actor`, `Commit` and `Repository` classes for that
+      # VCS implementation.
       def init
-        Metior.runtime.dependencies_for(self::NAME).each do |dep|
-          gem dep.name, dep.requirement
-        end
-
         path = self::NAME.to_s
         require "metior/#{path}/actor"
         require "metior/#{path}/commit"
