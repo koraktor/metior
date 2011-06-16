@@ -89,7 +89,7 @@ module Metior
             commits += Octokit.commits(@path, ref, :page => page)
             page += 1
           end
-        rescue Faraday::Error::ResourceNotFound
+        rescue Octokit::NotFound
         end
         commits
       end

@@ -28,7 +28,7 @@ class TestGitHub < Test::Unit::TestCase
       api_response = Fixtures.commits_as_rashies(''..'master')
       @commits_stub = Octokit.stubs :commits
       14.times { @commits_stub.returns api_response.shift(35) }
-      @commits_stub.then.raises Faraday::Error::ResourceNotFound.new(nil)
+      @commits_stub.then.raises Octokit::NotFound.new(nil)
     end
 
     should 'be able to load all commits from the repository\'s default branch' do
@@ -44,10 +44,10 @@ class TestGitHub < Test::Unit::TestCase
       @commits_stub = Octokit.stubs :commits
       api_response = Fixtures.commits_as_rashies(''..'4c592b4')
       14.times { @commits_stub.returns api_response.shift(35) }
-      @commits_stub.raises Faraday::Error::ResourceNotFound.new(nil)
+      @commits_stub.raises Octokit::NotFound.new(nil)
       api_response = Fixtures.commits_as_rashies(''..'ef2870b')
       13.times { @commits_stub.returns api_response.shift(35) }
-      @commits_stub.then.raises Faraday::Error::ResourceNotFound.new(nil)
+      @commits_stub.then.raises Octokit::NotFound.new(nil)
 
       commits = @repo.commits 'ef2870b'..'4c592b4'
       assert_equal 6, commits.size
