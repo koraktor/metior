@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 0.1.4
+
+ **June 1X<sup>th</th>, 2011**
+
+ * Removed Bundler as a dependency loader
+ * Fixed GitHub::Commit not requiring 'time'
+
 ## Version 0.1.3
 
  **June 13<sup>th</sup>, 2011**
