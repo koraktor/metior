@@ -32,6 +32,7 @@ module Metior
         @deletions      = commit.stats.deletions
         @id             = commit.id
         @message        = commit.message
+        @parents        = commit.parents.map { |parent| parent.id }
 
         @author = repo.authors[Actor.id_for commit.author]
         @author = Actor.new repo, commit.author if author.nil?

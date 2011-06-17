@@ -48,6 +48,10 @@ module Metior
     # @return [Array<String>] A list of file paths modified in this commit
     attr_reader :modified_files
 
+    # @return [Object] The unique identifiers of one or more more parents of
+    #         this commit
+    attr_reader :parents
+
     # @return [Repository] The repository this commit belongs to
     attr_reader :repo
 

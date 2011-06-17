@@ -37,6 +37,7 @@ module Metior
         @id             = commit.id
         @message        = commit.message
         @modified_files = []
+        @parents        = commit.parents.map { |parent| parent.id }
 
         @author = repo.authors[Actor.id_for commit.author]
         @author = Actor.new repo, commit.author if author.nil?
