@@ -30,6 +30,10 @@ module Metior
     # @return [Object] A unique identifier of the commit in the repository
     attr_reader :id
 
+    # @return [Array<Object>] The unique identifiers of the children of this
+    #         commit
+    attr_reader :children
+
     # @return [Time] The date this commit has been committed
     attr_reader :committed_date
 
@@ -95,7 +99,16 @@ module Metior
     #
     # @param [Repository] repo The repository this commit belongs to
     def initialize(repo)
-      @repo  = repo
+      @children = []
+      @repo     = repo
+    end
+
+    # Adds the unique identifier of a child of this commit to the list of child
+    # commits
+    #
+    # @param [Object] child The unique identifier of the child commit to add
+    def add_child(child)
+      @children << child
     end
 
     # Returns the total of changed lines in this commit
