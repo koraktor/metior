@@ -31,7 +31,9 @@ module Metior
       #
       # @param [String] user The GitHub username of repository's owner
       # @param [String] project The name of the project
-      def initialize(user, project)
+      def initialize(user, project = nil)
+        user, project = user.split('/') if user.include? '/'
+
         super "#{user}/#{project}"
 
         @project = project
