@@ -32,6 +32,8 @@ class TestGitHub < Test::Unit::TestCase
     end
 
     should 'be able to load all commits from the repository\'s default branch' do
+      @repo.expects(:id_for_ref).with('master').once.returns('1b2fe77')
+
       commits = @repo.commits
       assert_equal 460, commits.size
       assert commits.all? { |commit| commit.is_a? Metior::GitHub::Commit }
@@ -42,12 +44,9 @@ class TestGitHub < Test::Unit::TestCase
 
     should 'be able to load a range of commits from the repository' do
       @commits_stub = Octokit.stubs :commits
-      api_response = Fixtures.commits_as_rashies(''..'4c592b4')
-      14.times { @commits_stub.returns api_response.shift(35) }
+      api_response = Fixtures.commits_as_rashies('ef2870b'..'4c592b4')
+      @commits_stub.returns api_response
       @commits_stub.raises Octokit::NotFound.new(nil)
-      api_response = Fixtures.commits_as_rashies(''..'ef2870b')
-      13.times { @commits_stub.returns api_response.shift(35) }
-      @commits_stub.then.raises Octokit::NotFound.new(nil)
 
       commits = @repo.commits 'ef2870b'..'4c592b4'
       assert_equal 6, commits.size
@@ -57,6 +56,8 @@ class TestGitHub < Test::Unit::TestCase
     end
 
     should 'know the authors of the repository' do
+      @repo.expects(:id_for_ref).with('master').once.returns('1b2fe77')
+
       authors = @repo.authors
       assert_equal 37, authors.size
       assert authors.values.all? { |author| author.is_a? Metior::GitHub::Actor }
@@ -78,6 +79,8 @@ class TestGitHub < Test::Unit::TestCase
     end
 
     should 'know the committers of the repository' do
+      @repo.expects(:id_for_ref).with('master').once.returns('1b2fe77')
+
       committers = @repo.committers
       assert_equal 29, committers.size
       assert committers.values.all? { |committer| committer.is_a? Metior::GitHub::Actor }
@@ -97,6 +100,8 @@ class TestGitHub < Test::Unit::TestCase
     end
 
     should 'know the top authors of the repository' do
+      @repo.expects(:id_for_ref).with('master').once.returns('1b2fe77')
+
       authors = @repo.top_authors
       assert_equal 3, authors.size
       assert authors.all? { |author| author.is_a? Metior::GitHub::Actor }
@@ -125,6 +130,9 @@ class TestGitHub < Test::Unit::TestCase
     end
 
     should 'provide easy access to simple repository statistics' do
+      Metior::GitHub::Repository.any_instance.expects(:id_for_ref).twice.
+        with('master').returns('1b2fe77')
+
       stats = Metior.simple_stats :github, 'mojombo', 'grit'
 
       assert_equal 157, stats[:active_days].size

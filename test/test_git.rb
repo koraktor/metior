@@ -101,6 +101,9 @@ class TestGit < Test::Unit::TestCase
     end
 
     should 'provide easy access to simple repository statistics' do
+      Metior::Git::Repository.any_instance.expects(:id_for_ref).twice.
+        with('master').returns('1b2fe77')
+
       stats = Metior.simple_stats :git, File.dirname(File.dirname(__FILE__))
 
       assert_equal 157, stats[:active_days].size

@@ -41,14 +41,6 @@ class TestRepository < Test::Unit::TestCase
       assert_equal ''..'abc', @repo.send(:parse_range, 'master')
     end
 
-    should 'hit the cache when loading the same commit range' do
-      @repo.expects(:id_for_ref).twice.returns('abc')
-      @repo.expects(:load_commits).once.returns([nil, []])
-
-      @repo.commits 'master'
-      @repo.commits 'master'
-    end
-
     should 'miss the cache when loading a different commit range' do
       @repo.expects(:id_for_ref).with('master').returns('abc')
       @repo.expects(:id_for_ref).with('HEAD').returns('abc')
