@@ -35,7 +35,7 @@ module Metior
   #        commits reachable from that ref.
   # @return [Hash] The calculated stats for the given repository and branch
   def self.simple_stats(type, *options)
-    arity  = vcs(type)::Repository.instance_method(:initialize).arity
+    arity  = vcs(type)::Repository.instance_method(:initialize).arity.abs
     branch = options.delete_at arity
     branch = vcs(type)::DEFAULT_BRANCH if branch.nil?
     repo   = repository type, *options
