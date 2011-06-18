@@ -18,6 +18,7 @@ module Fixtures
       commits = []
 
       commit = {}
+      last_commit = nil
       file.lines.each do |line|
         line.strip!
 
@@ -45,7 +46,9 @@ module Fixtures
           end
 
           if commit != {}
+            last_commit[:parent] = commit unless last_commit.nil?
             commits << commit
+            last_commit = commit
             commit = {}
           end
         end
@@ -61,11 +64,13 @@ module Fixtures
     commits = commits(range)
 
     commits.map do |commit|
+      parents = commit[:parent].nil? ? [] : [commit[:parent][:ids].first]
+
       grit_commit = Grit::Commit.new(
         nil,
         commit[:ids].first,
-        [],
-        nil,
+        parents,
+        [nil],
         Grit::Actor.new(commit[:info][4], commit[:info][5]),
         Time.at(commit[:info][6].to_i),
         Grit::Actor.new(commit[:info][1], commit[:info][2]),
@@ -108,6 +113,7 @@ module Fixtures
         },
         :id             => commit[:ids].first,
         :message        => commit[:info].first,
+        :parents        => ([{ :id => commit[:parent][:ids].first }] rescue [])
       })
     end
   end
