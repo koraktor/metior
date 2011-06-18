@@ -27,6 +27,11 @@ module Metior
       @path       = path
     end
 
+    def author(author)
+      id = self.class::Actor.id_for(author)
+      @authors[id] ||= self.class::Actor.new(self, author)
+    end
+
     # Returns all authors from the given commit range in a hash where the IDs
     # of the authors are the keys and the authors are the values
     #
@@ -66,19 +71,41 @@ module Metior
     # @return [Array<Commit>] All commits from the given commit range
     def commits(range = self.class::DEFAULT_BRANCH)
       range = parse_range range
-      if @commits[range].nil?
-        @authors[range]    = {}
-        @committers[range] = {}
-        @commits[range]    = []
-        load_commits(range).each do |commit|
-          commit = self.class::Commit.new(self, commit)
-          @commits[range] << commit
-          @authors[range][commit.author.id]       = commit.author
-          @committers[range][commit.committer.id] = commit.committer
+      commits = cached_commits range
+
+      if commits.empty?
+        base_commit, raw_commits = load_commits(range)
+        commits = commits + build_commits(raw_commits)
+        unless base_commit.nil?
+          base_commit = self.class::Commit.new(self, base_commit)
+          base_commit.add_child commits.last.id
+          @commits[base_commit.id] = base_commit
+        end
+      else
+        commits.pop if range.first != ''
+        if range.first == ''
+          unless commits.last.parents.empty?
+            raw_commits = load_commits(''..commits.last.id).last
+            commits += build_commits raw_commits[0..-2]
+          end
+        else
+          if commits.first.id != range.last
+            raw_commits = load_commits(commits.first.id..range.last).last
+            commits = build_commits(raw_commits) + commits
+          end
+          unless commits.last.parents.include? range.first
+            raw_commits = load_commits(range.first..commits.last.id).last
+            commits += build_commits raw_commits
+          end
         end
       end
 
-      @commits[range]
+      commits
+    end
+
+    def committer(committer)
+      id = self.class::Actor.id_for(committer)
+      @committers[id] ||= self.class::Actor.new(self, committer)
     end
 
     # Returns all committers from the given commit range in a hash where the
@@ -148,6 +175,10 @@ module Metior
       end
 
       stats
+    end
+
+    def id_for_ref(ref)
+      raise NotImplementedError
     end
 
     # This evaluates the changed lines in each commit of the given commit
@@ -246,6 +277,41 @@ module Metior
 
     private
 
+    def build_commits(raw_commits)
+      child_commit_id = nil
+      commits = []
+      raw_commits.each do |commit|
+        commit = self.class::Commit.new(self, commit)
+        commit.add_child child_commit_id
+        child_commit_id = commit.id
+        @commits[commit.id] = commit
+        commits << commit
+        @authors[commit.author.id] = commit.author
+        @committers[commit.committer.id] = commit.committer
+      end
+      commits
+    end
+
+    def cached_commits(range)
+      commits = []
+      if @commits.key? range.last
+        commit = @commits[range.last]
+        commits << commit
+        commit.parents.each do |parent|
+          return [] if parent == range.first
+          commits += cached_commits range.first..parent
+        end
+      elsif @commits.key? range.first
+        commit = @commits[range.first]
+        commits.unshift commit
+        commit.childs.each do |child|
+          return [@commits[child]] if child == range.last
+          commits = cached_commits(child..range.last) + commits
+        end
+      end
+      commits
+    end
+
     # Loads all commits from the given commit range
     #
     # @abstract It has to be implemented by VCS specific subclasses
@@ -268,12 +334,13 @@ module Metior
     # @return [Range] The range parsed from a string or unchanged from the
     #         given parameter
     def parse_range(range)
-      if range.is_a? Range
-        range
-      else
+      unless range.is_a? Range
         range = range.to_s.split '..'
-        ((range.size == 1) ? '' : range.first)..range.last
+        range = ((range.size == 1) ? '' : range.first)..range.last
       end
+
+      range = id_for_ref(range.first)..range.last if range.first != ''
+      range.first..id_for_ref(range.last)
     end
 
   end

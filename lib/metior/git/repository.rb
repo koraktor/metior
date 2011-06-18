@@ -42,6 +42,11 @@ module Metior
 
       private
 
+      def id_for_ref(ref)
+        return ref if ref.match /[0-9a-f]{40}/
+        (ref == '') ? '' : @grit_repo.git.rev_parse({}, "#{ref}^{}")
+      end
+
       # This method uses Grit to load all commits from the given commit range
       #
       # Because of some Grit internal limitations, the commits have to be
@@ -55,12 +60,16 @@ module Metior
       #        (`'master..development'`), a range (`'master'..'development'`)
       #        or as a single ref (`'master'`). A single ref name means all
       #        commits reachable from that ref.
-      # @return [Array<Commit>] All commits in the given commit range
+      # @return [Grit::Commit, nil] The base commit of the requested range or
+      #         `nil` if the the range starts at the beginning of the history
+      # @return [Array<Grit::Commit>] All commits in the given commit range
       # @see Grit::Repo#commits
       def load_commits(range)
         if range.first == ''
+          base_commit = nil
           range = range.last
         else
+          base_commit = @grit_repo.commit(range.first)
           range = '%s..%s' % [range.first, range.last]
         end
 
@@ -70,7 +79,8 @@ module Metior
           commits += @grit_repo.commits(range, 500, skip)
           skip += 500
         end while commits.size == skip
-        commits
+
+        [base_commit, commits]
       end
 
     end

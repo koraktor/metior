@@ -39,12 +39,9 @@ module Metior
         @modified_files = []
         @parents        = commit.parents.map { |parent| parent.id }
 
-        @author = repo.authors[Actor.id_for commit.author]
-        @author = Actor.new repo, commit.author if author.nil?
+        @author = repo.author(commit.author)
         @author.add_commit self
-
-        @committer = repo.committers[Actor.id_for commit.committer]
-        @committer = Actor.new repo, commit.committer if @committer.nil?
+        @committer = repo.committer(commit.committer)
         @committer.add_commit self
       end
 

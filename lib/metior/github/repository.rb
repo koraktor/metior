@@ -50,13 +50,14 @@ module Metior
 
       private
 
+      def id_for_ref(ref)
+        return ref if ref.match /[0-9a-f]{40}/
+        commit = Octokit.get("api/v2/json/commits/show/#{@path}/#{ref}")['commit']
+        commit.id
+      end
+
       # This method uses Octokit to load all commits from the given commit
       # range
-      #
-      # If you want to compare a branch with another (i.e. if you supply a
-      # range of commits), it needs two calls to the GitHub API to get all
-      # commits of each branch. The comparison is done in the code, so the
-      # limits (see below) will be effectively cut in half.
       #
       # @note GitHub API is currently limited to 60 calls a minute, so you
       #       won't be able to query branches with more than 2100 commits
@@ -66,42 +67,32 @@ module Metior
       #        (`'master..development'`), a range (`'master'..'development'`)
       #        or as a single ref (`'master'`). A single ref name means all
       #        commits reachable from that ref.
-      # @return [Array<Commit>] All commits in the given commit range
-      # @see #load_ref_commits
-      def load_commits(range)
-        commits      = load_ref_commits(range.last)
-        if range.first == ''
-          base_commits = []
-        else
-          base_commits = load_ref_commits(range.first).map! do |commit|
-            commit.id
-          end
-        end
-        commits.reject { |commit| base_commits.include? commit.id }
-      end
-
-      # This method uses Octokit to load all commits from the given ref
-      #
-      # Because of GitHub API limitations, the commits have to be loaded in
-      # batches.
-      #
-      # @note GitHub API is currently limited to 60 calls a minute, so you
-      #       won't be able to query refs with more than 2100 commits (35
-      #       commits per call).
-      # @param [String] ref The ref to load commits from
-      # @return [Array<Commit>] All commits from the given ref
+      # @return [Hashie::Rash, nil] The base commit of the requested range or
+      #         `nil` if the the range starts at the beginning of the history
+      # @return [Array<Hashie::Rash>] All commits in the given commit range
       # @see Octokit::Commits#commits
-      def load_ref_commits(ref)
+      def load_commits(range)
+        base_commit = nil
         commits = []
         page = 1
         begin
           loop do
-            commits += Octokit.commits(@path, ref, :page => page)
+            new_commits = Octokit.commits(@path, range.last, :page => page)
+            base_commit_index = new_commits.find_index do |commit|
+              commit.id == range.first
+            end
+            unless base_commit_index.nil?
+              commits += new_commits[0..base_commit_index-1]
+              base_commit = new_commits[base_commit_index]
+              break
+            end
+            commits += new_commits
             page += 1
           end
         rescue Octokit::NotFound, Faraday::Error::ResourceNotFound
         end
-        commits
+
+        [base_commit, commits]
       end
 
     end
