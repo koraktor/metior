@@ -40,10 +40,11 @@ module Metior
     branch = vcs(type)::DEFAULT_BRANCH if branch.nil?
     repo   = repository type, *options
 
+    commits = repo.commits(branch)
     {
-      :commit_count     => repo.commits(branch).size,
+      :commit_count     => commits.size,
       :top_contributors => repo.top_contributors(branch, 5),
-    }.merge Commit.activity(repo.commits(branch))
+    }.merge Commit.activity(commits)
   end
 
 end
