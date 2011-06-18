@@ -3,6 +3,9 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
+require 'rubygems'
+require 'bundler'
+
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'metior'
