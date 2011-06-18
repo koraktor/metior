@@ -46,9 +46,8 @@ module Metior
     # @return [Hash<String, Actor>] All authors from the given commit range
     # @see #commits
     def authors(range = self.class::DEFAULT_BRANCH)
-      range = parse_range range
-      commits(range) if @authors[range].nil?
-      @authors[range]
+      author_ids = commits(range).map { |commit| commit.author.id }.uniq
+      Hash[@authors.select { |id, author| author_ids.include? id }]
     end
     alias_method :contributors, :authors
 
@@ -122,9 +121,8 @@ module Metior
     # @return [Hash<String, Actor>] All committers from the given commit range
     # @see #commits
     def committers(range = self.class::DEFAULT_BRANCH)
-      range = parse_range range
-      commits(range) if @committers[range].nil?
-      @committers[range]
+      committer_ids = commits(range).map { |commit| commit.committer.id }.uniq
+      Hash[@committers.select { |id, committer| committer_ids.include? id }]
     end
     alias_method :collaborators, :committers
 
