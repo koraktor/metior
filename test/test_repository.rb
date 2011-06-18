@@ -21,6 +21,12 @@ class TestRepository < Test::Unit::TestCase
       end
     end
 
+    should 'not implement the #id_for_ref method' do
+      assert_raise NotImplementedError do
+        @repo.send :id_for_ref, nil
+      end
+    end
+
     should 'not implement the #load_commits method' do
       assert_raise NotImplementedError do
         @repo.send(:load_commits, nil)
@@ -28,20 +34,25 @@ class TestRepository < Test::Unit::TestCase
     end
 
     should 'parse commit ranges correctly' do
-      assert_equal 'master'..'development', @repo.send(:parse_range, 'master'..'development')
-      assert_equal 'master'..'development', @repo.send(:parse_range, 'master..development')
-      assert_equal ''..'master', @repo.send(:parse_range, 'master')
+      @repo.expects(:id_for_ref).with('master').times(3).returns('abc')
+      @repo.expects(:id_for_ref).with('development').twice.returns('def')
+      assert_equal 'abc'..'def', @repo.send(:parse_range, 'master'..'development')
+      assert_equal 'abc'..'def', @repo.send(:parse_range, 'master..development')
+      assert_equal ''..'abc', @repo.send(:parse_range, 'master')
     end
 
     should 'hit the cache when loading the same commit range' do
-      @repo.expects(:load_commits).once.returns([])
+      @repo.expects(:id_for_ref).twice.returns('abc')
+      @repo.expects(:load_commits).once.returns([nil, []])
 
       @repo.commits 'master'
       @repo.commits 'master'
     end
 
     should 'miss the cache when loading a different commit range' do
-      @repo.expects(:load_commits).twice.returns([])
+      @repo.expects(:id_for_ref).with('master').returns('abc')
+      @repo.expects(:id_for_ref).with('HEAD').returns('abc')
+      @repo.expects(:load_commits).twice.returns([nil, []])
 
       @repo.commits 'master'
       @repo.commits 'HEAD'
