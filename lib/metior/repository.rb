@@ -280,7 +280,7 @@ module Metior
       commits = []
       raw_commits.each do |commit|
         commit = self.class::Commit.new(self, commit)
-        commit.add_child child_commit_id
+        commit.add_child child_commit_id unless child_commit_id.nil?
         child_commit_id = commit.id
         @commits[commit.id] = commit
         commits << commit
@@ -302,7 +302,7 @@ module Metior
       elsif @commits.key? range.first
         commit = @commits[range.first]
         commits.unshift commit
-        commit.childs.each do |child|
+        commit.children.each do |child|
           return [@commits[child]] if child == range.last
           commits = cached_commits(child..range.last) + commits
         end
