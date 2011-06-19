@@ -27,15 +27,15 @@ module Metior
   # Calculates simplistic stats for the given repository and branch
   #
   # @param [Symbol] type The type of the repository, e.g. `:git`
-  # @param [Array<Object>] options The options for the repository
-  # @param [String, Range] range The range of commits for which the commits
-  #        should be loaded. This may be given as a string
-  #        (`'master..development'`), a range (`'master'..'development'`)
-  #        or as a single ref (`'master'`). A single ref name means all
-  #        commits reachable from that ref.
+  # @param [Array<Object>] options The options for the repository. The last one
+  #        should be the range of commits for which the commits should be
+  #        loaded. This may be given as a string (`'master..development'`), a
+  #        range (`'master'..'development'`) or as a single ref (`'master'`). A
+  #        single ref name means all commits reachable from that ref.
   # @return [Hash] The calculated stats for the given repository and branch
   def self.simple_stats(type, *options)
-    arity  = vcs(type)::Repository.instance_method(:initialize).arity.abs
+    arity  = vcs(type)::Repository.instance_method(:initialize).arity
+    arity = (arity < 0) ? -(arity + 1) : arity
     branch = options.delete_at arity
     branch = vcs(type)::DEFAULT_BRANCH if branch.nil?
     repo   = repository type, *options
