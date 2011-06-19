@@ -25,6 +25,7 @@ module Metior
       @commits    = {}
       @committers = {}
       @path       = path
+      @refs       = {}
     end
 
     # Returns a single VCS specific actor object from the raw data of the
@@ -357,7 +358,7 @@ module Metior
     #
     # @abstract Has to be implemented by VCS subclasses
     # @param [String] ref A symbolic reference name
-    # @return [Object] The unique identifier of the commit the reference is
+    # @return [Object] The unique identifier of the commit the reference is
     #         pointing to
     def id_for_ref(ref)
       raise NotImplementedError

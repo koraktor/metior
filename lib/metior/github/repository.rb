@@ -56,12 +56,14 @@ module Metior
       # Returns the given ref name immediately if it is a full SHA1 commit ID.
       #
       # @param [String] ref A symbolic reference name
-      # @return [Object] The unique identifier of the commit the reference is
-      #         pointing to
+      # @return [String] The SHA1 ID of the commit the reference is pointing to
       def id_for_ref(ref)
         return ref if ref.match /[0-9a-f]{40}/
-        commit = Octokit.get("api/v2/json/commits/show/#{@path}/#{ref}")['commit']
-        commit.id
+        unless @refs.key? ref
+          commit = Octokit.get("api/v2/json/commits/show/#{@path}/#{ref}")['commit']
+          @refs[ref] = commit.id
+        end
+        @refs[ref]
       end
 
       # This method uses Octokit to load all commits from the given commit
