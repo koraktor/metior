@@ -27,6 +27,16 @@ module Metior
       @path       = path
     end
 
+    # Returns a single VCS specific actor object from the raw data of the
+    # author provided by the VCS implementation
+    #
+    # The author object is either created from the given raw data or retrieved
+    # from the cache using the VCS specific unique identifier of the
+    # author.
+    #
+    # @param [Object] author The raw data of the author provided by the VCS
+    # @return [Actor] A object representing the author
+    # @see Actor.id_for
     def author(author)
       id = self.class::Actor.id_for(author)
       @authors[id] ||= self.class::Actor.new(self, author)
@@ -102,6 +112,17 @@ module Metior
       commits
     end
 
+    # Returns a single VCS specific actor object from the raw data of the
+    # committer provided by the VCS implementation
+    #
+    # The committer object is either created from the given raw data or
+    # retrieved from the cache using the VCS specific unique identifier of the
+    # committer
+    #
+    # @param [Object] committer The raw data of the committer provided by the
+    #        VCS
+    # @return [Actor] A object representing the committer
+    # @see Actor.id_for
     def committer(committer)
       id = self.class::Actor.id_for(committer)
       @committers[id] ||= self.class::Actor.new(self, committer)
@@ -173,10 +194,6 @@ module Metior
       end
 
       stats
-    end
-
-    def id_for_ref(ref)
-      raise NotImplementedError
     end
 
     # This evaluates the changed lines in each commit of the given commit
@@ -275,6 +292,20 @@ module Metior
 
     private
 
+    # Builds VCS specific commit objects for each given commit's raw data that
+    # is provided by the VCS implementation
+    #
+    # The raw data will be transformed into commit objects that will also be
+    # saved into the commit cache. Authors and committers of the given commits
+    # will be created and stored into the cache or loaded from the cache if
+    # they already exist. Additionally this method will establish an
+    # association between the commits and their children.
+    #
+    # @param [Array<Object>] raw_commits The commits' raw data provided by the
+    #        VCS implementation
+    # @return [Array<Commit>] The commit objects representing the given commits
+    # @see Commit
+    # @see Commit#add_child
     def build_commits(raw_commits)
       child_commit_id = nil
       raw_commits.map do |commit|
@@ -288,6 +319,19 @@ module Metior
       end
     end
 
+    # Tries to retrieve as many commits as possible in the given commit range
+    # from the commit cache
+    #
+    # This method calls itself recursively to walk the given commit range
+    # either from the start to the end or vice versa depending on which commit
+    # could be found in the cache.
+    #
+    # @param [Range] range The range of commits which should be retrieved from
+    #        the cache. This may be given a range of commit IDs
+    #        (`'master'..'development'`).
+    # @return [Array<Commit>] A list of commit objects that could be retrieved
+    #         from the cache
+    # @see Commit#children
     def cached_commits(range)
       commits = []
       if @commits.key? range.last
@@ -308,9 +352,20 @@ module Metior
       commits
     end
 
+    # Returns the unique identifier for the commit the given reference – like a
+    # branch name – is pointing to
+    #
+    # @abstract Has to be implemented by VCS subclasses
+    # @param [String] ref A symbolic reference name
+    # @return [Object] The unique identifier of the commit the reference is
+    #         pointing to
+    def id_for_ref(ref)
+      raise NotImplementedError
+    end
+
     # Loads all commits from the given commit range
     #
-    # @abstract It has to be implemented by VCS specific subclasses
+    # @abstract Has to be implemented by VCS specific subclasses
     # @param [String, Range] range The range of commits for which the commits
     #        should be retrieved. This may be given as a string
     #        (`'master..development'`), a range (`'master'..'development'`) or
@@ -321,14 +376,13 @@ module Metior
       raise NotImplementedError
     end
 
-    # Parses a string with a single ref name into
-    #
-    # If a range is given it will be returned as-is.
+    # Parses a string or range of commit IDs or ref names into the coresponding
+    # range of unique commit IDs
     #
     # @param [String, Range] range The string that should be parsed for a range
     #        or an existing range
-    # @return [Range] The range parsed from a string or unchanged from the
-    #         given parameter
+    # @return [Range] The range of commit IDs parsed from the given parameter
+    # @see #id_for_ref
     def parse_range(range)
       unless range.is_a? Range
         range = range.to_s.split '..'
