@@ -277,17 +277,15 @@ module Metior
 
     def build_commits(raw_commits)
       child_commit_id = nil
-      commits = []
-      raw_commits.each do |commit|
+      raw_commits.map do |commit|
         commit = self.class::Commit.new(self, commit)
         commit.add_child child_commit_id unless child_commit_id.nil?
         child_commit_id = commit.id
         @commits[commit.id] = commit
-        commits << commit
         @authors[commit.author.id] = commit.author
         @committers[commit.committer.id] = commit.committer
+        commit
       end
-      commits
     end
 
     def cached_commits(range)
