@@ -39,6 +39,9 @@ class TestGit < Test::Unit::TestCase
     end
 
     should 'be able to load a range of commits from the repository' do
+      @repo.expects(:id_for_ref).with('ef2870b').once.returns('ef2870b')
+      @repo.expects(:id_for_ref).with('4c592b4').once.returns('4c592b4')
+
       @commits_stub = Grit::Repo.any_instance.stubs :commits
       api_response = Fixtures.commits_as_grit_commits('ef2870b'..'4c592b4')
       @commits_stub.returns api_response
