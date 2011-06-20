@@ -133,7 +133,7 @@ class TestGitHub < Test::Unit::TestCase
       Metior::GitHub::Repository.any_instance.expects(:id_for_ref).twice.
         with('master').returns('1b2fe77')
 
-      stats = Metior.simple_stats :github, 'mojombo', 'grit'
+      stats = Metior.simple_stats :github, 'mojombo/grit'
 
       assert_equal 157, stats[:active_days].size
       assert_equal 460, stats[:commit_count]
