@@ -14,12 +14,12 @@ If you're interested in Metior, feel free to join the discussion on Convore in
 ### One-liner for some basic statistics
 
     Metior.simple_stats :git, '~/open-source/metior'
-    Metior.simple_stats :github, 'koraktor', 'metior'
+    Metior.simple_stats :github, 'koraktor/metior'
 
 ### Create a repository object for different VCSs
 
     repo = Metior::Git::Repository.new '~/open-source/metior'
-    repo = Metior::GitHub::Repository.new 'koraktor', 'metior'
+    repo = Metior::GitHub::Repository.new 'koraktor/metior'
 
 ### More fine-grained access to repository statistics
 
@@ -105,6 +105,7 @@ LICENSE file.
 ## Credits
 
 * Sebastian Staudt – koraktor(at)gmail.com
+* Alex Manelis - amanelis(at)gmail.com
 
 ## See Also
 
