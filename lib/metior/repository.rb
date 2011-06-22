@@ -92,7 +92,6 @@ module Metior
           @commits[base_commit.id] = base_commit
         end
       else
-        commits.pop if range.first != ''
         if range.first == ''
           unless commits.last.parents.empty?
             raw_commits = load_commits(''..commits.last.id).last
@@ -339,8 +338,9 @@ module Metior
         commit = @commits[range.last]
         commits << commit
         commit.parents.each do |parent|
-          return [] if parent == range.first
-          commits += cached_commits range.first..parent
+          if parent != range.first
+            commits += cached_commits range.first..parent
+          end
         end
       elsif @commits.key? range.first
         commit = @commits[range.first]
