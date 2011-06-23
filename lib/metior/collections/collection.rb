@@ -26,6 +26,18 @@ module Metior
   # @see OrderedHash
   class Collection < HASH_CLASS
 
+    # Adds an object to this collection
+    #
+    # The object should provide a `#id` method to generate a key for this
+    # object.
+    #
+    # @param [Object] object The object to add to the collection
+    # @return [Collection] The collection itself
+    def <<(object)
+      self[object.id] = object
+      self
+    end
+
     # Evaluates the block for each value of the collection and returns whether
     # the block returned `true` for all of them.
     #

@@ -61,7 +61,7 @@ module Metior
     # @param [Commit] commit The commit to add to the list
     def add_commit(commit)
       @additions += commit.additions
-      @commits[commit.id] = commit
+      @commits << commit
       @deletions += commit.deletions
     end
 

@@ -24,12 +24,9 @@ module Metior
     def authors(commit_id = nil)
       authors = ActorCollection.new
       if commit_id.nil?
-        each_value do |commit|
-          authors[commit.author.id] = commit.author
-        end
+        each_value { |commit| authors << commit.author }
       elsif key? commit_id
-        author = commit.author
-        authors[author.id] = author
+        authors << commit.author
       end
       authors
     end
@@ -43,12 +40,9 @@ module Metior
     def committers(commit_id = nil)
       committers = ActorCollection.new
       if commit_id.nil?
-        each_value do |commit|
-          committers[commit.committer.id] = commit.committer
-        end
+        each_value { |commit| committers << commit.committer }
       elsif key? commit_id
-        committer = commit.committer
-        committers[committer.id] = committer
+        committers << commit.committer
       end
       committers
     end
