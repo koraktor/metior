@@ -66,9 +66,11 @@ module Metior
     # Calculate some predefined activity statistics for the given set of
     # commits
     #
-    # @param [Array<Commit>] commits The commits to analyze
+    # @param [CommitCollection, Array<Commit>] commits The commits to analyze
     # @return [Hash<Symbol, Object>] The calculated statistics for the commits
     def self.activity(commits)
+      commits = commits.values if commits.is_a? Hash
+
       activity = {}
 
       commit_count = commits.size

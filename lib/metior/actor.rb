@@ -22,8 +22,8 @@ module Metior
     # @return [Fixnum] The lines of code that have been added by this actor
     attr_reader :additions
 
-    # @return [Array<Commit>] The list of commits this actor has contributed to
-    #         the source code repository
+    # @return [CommitCollection] The list of commits this actor has contributed
+    #         to the source code repository
     attr_reader :commits
 
     # @return [Fixnum] The lines of code that have been deleted by this actor
@@ -50,7 +50,7 @@ module Metior
     # @param [Repository] repo The repository this actor belongs to
     def initialize(repo)
       @additions = 0
-      @commits   = []
+      @commits   = CommitCollection.new
       @deletions = 0
       @repo      = repo
     end
@@ -61,7 +61,7 @@ module Metior
     # @param [Commit] commit The commit to add to the list
     def add_commit(commit)
       @additions += commit.additions
-      @commits << commit
+      @commits[commit.id] = commit
       @deletions += commit.deletions
     end
 

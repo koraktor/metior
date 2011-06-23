@@ -4,6 +4,8 @@
 # Copyright (c) 2011, Sebastian Staudt
 
 require 'metior/auto_include_vcs'
+require 'metior/collections/actor_collection'
+require 'metior/collections/commit_collection'
 
 module Metior
 
@@ -58,11 +60,10 @@ module Metior
     #        (`'master..development'`), a range (`'master'..'development'`) or
     #        as a single ref (`'master'`). A single ref name means all commits
     #        reachable from that ref.
-    # @return [Hash<String, Actor>] All authors from the given commit range
+    # @return [ActorCollection] All authors from the given commit range
     # @see #commits
     def authors(range = self.class::DEFAULT_BRANCH)
-      author_ids = commits(range).map { |commit| commit.author.id }.uniq
-      Hash[@authors.select { |id, author| author_ids.include? id }]
+      commits(range).authors
     end
     alias_method :contributors, :authors
 
@@ -81,7 +82,7 @@ module Metior
     #        (`'master..development'`), a range (`'master'..'development'`) or
     #        as a single ref (`'master'`). A single ref name means all commits
     #        reachable from that ref.
-    # @return [Array<Commit>] All commits from the given commit range
+    # @return [CommitCollection] All commits from the given commit range
     def commits(range = self.class::DEFAULT_BRANCH)
       range = parse_range range
       commits = cached_commits range
@@ -112,7 +113,7 @@ module Metior
         end
       end
 
-      commits
+      CommitCollection[commits.map { |commit| [commit.id, commit] }]
     end
 
     # Returns a single VCS specific actor object from the raw data of the
@@ -142,11 +143,10 @@ module Metior
     #        (`'master..development'`), a range (`'master'..'development'`) or
     #        as a single ref (`'master'`). A single ref name means all commits
     #        reachable from that ref.
-    # @return [Hash<String, Actor>] All committers from the given commit range
+    # @return [ActorCollection] All committers from the given commit range
     # @see #commits
     def committers(range = self.class::DEFAULT_BRANCH)
-      committer_ids = commits(range).map { |commit| commit.committer.id }.uniq
-      Hash[@committers.select { |id, committer| committer_ids.include? id }]
+      commits(range).committers
     end
     alias_method :collaborators, :committers
 

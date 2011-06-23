@@ -1,5 +1,7 @@
 source :rubygems
 
+gem 'hashery', '~> 1.4.0', :platforms => [:jruby, :ruby_18]
+
 group :git do
   gem 'grit', '~> 2.4.1'
 end
