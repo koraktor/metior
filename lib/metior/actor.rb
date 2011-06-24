@@ -66,10 +66,10 @@ module Metior
     #
     # @return [String] A minimal string representation for this actor
     def inspect
-      '#<%s:0x%x: @commits=%d @id="%s" @name="%s" @repo=<#%s:0x%x ...>>' %
+      '#<%s:0x%x: @commits=%d @id="%s" @name="%s" @repo="%s"' %
         [
           self.class.name, __id__ * 2, @commits.size, @id, @name,
-          @repo.class.name, @repo.__id__ * 2
+          @repo.path
         ]
     end
 

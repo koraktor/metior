@@ -118,10 +118,10 @@ module Metior
     #
     # @return [String] A minimal string representation for this commit
     def inspect
-      '#<%s:0x%x: @author="%s" @committer="%s" @id="%s" @repo=<#%s:0x%x ...> @subject="%s">' %
+      '#<%s:0x%x: @author="%s" @committer="%s" @id="%s" @repo="%s" @subject="%s">' %
         [
           self.class.name, __id__ * 2, @author.id, @committer.id, @id,
-          @repo.class.name, @repo.__id__ * 2, subject
+          @repo.path, subject
         ]
     end
 
