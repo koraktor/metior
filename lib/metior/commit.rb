@@ -113,6 +113,18 @@ module Metior
       @message.split(/$/).first
     end
 
+    # Creates a string representation for this commit without recursing into
+    # actor and repository details
+    #
+    # @return [String] A minimal string representation for this commit
+    def inspect
+      '#<%s:0x%x: @author="%s" @committer="%s" @id="%s" @repo=<#%s:0x%x ...> @subject="%s">' %
+        [
+          self.class.name, __id__ * 2, @author.id, @committer.id, @id,
+          @repo.class.name, @repo.__id__ * 2, subject
+        ]
+    end
+
   end
 
 end
