@@ -40,6 +40,14 @@ module Metior
         @user    = user
       end
 
+      # Returns the names of all branches of this repository
+      #
+      # @return [Array<String>] The names of all branches
+      # @see Octokit#branches
+      def branches
+        Octokit.branches(@path).keys
+      end
+
       private
 
       # This method uses Octokit to load all commits from the given commit

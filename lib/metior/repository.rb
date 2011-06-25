@@ -47,6 +47,14 @@ module Metior
     end
     alias_method :contributors, :authors
 
+    # Returns the names of all branches of this repository
+    #
+    # @abstract Has to be implemented by VCS specific subclasses
+    # @return [Array<String>] The names of all branches
+    def branches
+      raise NotImplementedError
+    end
+
     # Loads all commits including their committers and authors from the given
     # commit range
     #

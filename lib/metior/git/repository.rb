@@ -32,6 +32,14 @@ module Metior
         @grit_repo = Grit::Repo.new(path)
       end
 
+      # Returns the names of all branches of this repository
+      #
+      # @return [Array<String>] The names of all branches
+      # @see Grit::Repo#branches
+      def branches
+        @grit_repo.branches.map { |branch| branch.name }
+      end
+
       private
 
       # This method uses Grit to load all commits from the given commit range
