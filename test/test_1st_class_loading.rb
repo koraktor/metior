@@ -5,7 +5,7 @@
 
 require 'helper'
 
-class TestClassLoading < Test::Unit::TestCase
+class Test1stClassLoading < Test::Unit::TestCase
 
   context 'Metior' do
 
