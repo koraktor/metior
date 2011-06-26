@@ -39,12 +39,12 @@ module Metior
     # @return [CommitCollection] The commits that have been authored by the
     #         given authors
     def by(*author_ids)
+      author_ids = author_ids.flatten.map do |author_id|
+        author_id.is_a?(Actor) ? author_id.id : author_id
+      end
       commits = CommitCollection.new
-      author_ids.flatten.each do |author_id|
-        author_id = author_id.id if author_id.is_a? Actor
-        each_value do |commit|
-          commits << commit if commit.author.id == author_id
-        end
+      each_value do |commit|
+        commits << commit if author_ids.include? commit.author.id
       end
       commits
     end
