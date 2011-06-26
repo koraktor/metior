@@ -30,7 +30,7 @@ If you're interested in Metior, feel free to join the discussion on Convore in
                                        # removed in each commit
     repo.significant_authors           # Get up to 3 of the most important
                                        # authors
-    repo.significant_commits, 20       # Get up to 20 of the commits changing
+    repo.significant_commits           # Get up to 3 of the commits changing
                                        # the most lines
     repo.top_authors 'master', 5       # Get the top 5 authors in master
 
@@ -89,7 +89,7 @@ There are several ways of contributing to Metior's development:
 * Report problems and request features using the [issue tracker][2].
 * Write patches yourself to fix bugs and implement new functionality.
 * Create a Metior fork on [GitHub][1] and start hacking. Extra points for using
-  Metior pull requests and feature branches.
+  feature branches and GitHub's pull requests.
 
 ## About the name
 
