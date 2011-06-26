@@ -37,7 +37,9 @@ module Metior
       # @return [Array<String>] The names of all branches
       # @see Grit::Repo#branches
       def branches
-        @grit_repo.branches.map { |branch| branch.name }
+        branches = @grit_repo.branches
+        branches.each { |branch| @refs[branch.name] = branch.commit.id }
+        branches.map { |branch| branch.name }
       end
 
       private

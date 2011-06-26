@@ -45,7 +45,9 @@ module Metior
       # @return [Array<String>] The names of all branches
       # @see Octokit#branches
       def branches
-        Octokit.branches(@path).keys
+        branches = Octokit.branches(@path)
+        branches.each { |name, id| @refs[name] = id }
+        branches.keys
       end
 
       private
