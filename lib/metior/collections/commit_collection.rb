@@ -3,6 +3,8 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
+require 'time'
+
 require 'metior/collections/actor_collection'
 require 'metior/collections/collection'
 
@@ -14,6 +16,22 @@ module Metior
   # @author Sebastian Staudt
   # @see Commit
   class CommitCollection < Collection
+
+    # Returns the commits in this collection that have been committed after the
+    # given time
+    #
+    # @param [Time, Date, DateTime, String] date The time to use as the lower
+    #        limit to filter the commits
+    # @return [CommitCollection] The commits that have been committed after the
+    #         given date
+    def after(date)
+      date = Time.parse date if date.is_a? String
+      commits = CommitCollection.new
+      each_value do |commit|
+        commits << commit if commit.committed_date > date
+      end
+      commits
+    end
 
     # Returns the authors of all or a specific commit in this collection
     #
@@ -29,6 +47,22 @@ module Metior
         authors << self[commit_id].author
       end
       authors
+    end
+
+    # Returns the commits in this collection that have been committed before
+    # the given time
+    #
+    # @param [Time, Date, DateTime, String] date The time to use as the upper
+    #        limit to filter the commits
+    # @return [CommitCollection] The commits that have been committed after the
+    #         given date
+    def before(date)
+      date = Time.parse date if date.is_a? String
+      commits = CommitCollection.new
+      each_value do |commit|
+        commits << commit if commit.committed_date < date
+      end
+      commits
     end
 
     # Returns the list of commits that have been authored by the given authors
