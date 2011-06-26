@@ -26,6 +26,16 @@ module Metior
   # @see OrderedHash
   class Collection < HASH_CLASS
 
+    # Creates a new collection with the given objects
+    #
+    # @param [Array<Object>] objects The objects that should be initially
+    #        inserted into the collection
+    def initialize(objects = [])
+      super()
+
+      objects.each { |obj| self[obj.id] = obj }
+    end
+
     # Adds an object to this collection
     #
     # The object should provide a `#id` method to generate a key for this

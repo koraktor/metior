@@ -26,6 +26,14 @@ class TestCollections < Test::Unit::TestCase
       @collection << @object3
     end
 
+    should 'have a simple constructor' do
+      collection = Collection.new [@object1, @object2, @object3]
+      assert_equal [@object1.id, @object2.id, @object3.id], collection.keys
+      assert_equal @object1, collection[@object1.id]
+      assert_equal @object2, collection[@object2.id]
+      assert_equal @object3, collection[@object3.id]
+    end
+
     should 'be a subclass of Hash' do
       assert @collection.is_a? Hash
       assert @collection.is_a? OrderedHash if RUBY_VERSION.match(/^1\.8/)

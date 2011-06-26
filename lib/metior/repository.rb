@@ -113,7 +113,7 @@ module Metior
         end
       end
 
-      CommitCollection[commits.map { |commit| [commit.id, commit] }]
+      CommitCollection.new commits
     end
 
     # Returns a single VCS specific actor object from the raw data of the
