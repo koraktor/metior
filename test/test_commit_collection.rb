@@ -54,7 +54,7 @@ class TestCommitCollection < Test::Unit::TestCase
     end
 
     should 'allow to get all commits after a given date' do
-      commits = @commits.after '12/31/2010'
+      commits = @commits.after '31-12-2010'
       assert commits.is_a? CommitCollection
       assert_equal 29, commits.size
       assert_equal '1b2fe77', commits.first.id
@@ -62,7 +62,7 @@ class TestCommitCollection < Test::Unit::TestCase
     end
 
     should 'allow to get all commits before a given date' do
-      commits = @commits.before '12/31/2009'
+      commits = @commits.before '31-12-2009'
       assert commits.is_a? CommitCollection
       assert_equal 325, commits.size
       assert_equal '2f1f63e', commits.first.id
