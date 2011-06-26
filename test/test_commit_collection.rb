@@ -69,6 +69,21 @@ class TestCommitCollection < Test::Unit::TestCase
       assert_equal '634396b', commits.last.id
     end
 
+    should 'allow to get all the committers of those commits' do
+      committers = @commits.committers
+      assert committers.is_a? ActorCollection
+      assert_equal 29, committers.size
+      assert_equal 'rtomayko@gmail.com', committers.first.id
+      assert_equal 'tom@taco.(none)', committers.last.id
+    end
+
+    should 'allow to get the committers of a single of those commits' do
+      committers = @commits.committers '4c592b4'
+      assert committers.is_a? ActorCollection
+      assert_equal 1, committers.size
+      assert_equal 'bobbywilson0@gmail.com', committers.first.id
+    end
+
   end
 
 end
