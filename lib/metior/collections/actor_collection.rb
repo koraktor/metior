@@ -26,7 +26,7 @@ module Metior
       if actor_id.nil?
         each_value { |actor| commits.merge! actor.commits }
       elsif key? actor_id
-        commits = actor.commits
+        commits = self[actor_id].commits
       end
       commits
     end

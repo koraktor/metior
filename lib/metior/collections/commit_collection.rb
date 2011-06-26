@@ -26,7 +26,7 @@ module Metior
       if commit_id.nil?
         each_value { |commit| authors << commit.author }
       elsif key? commit_id
-        authors << commit.author
+        authors << self[commit_id].author
       end
       authors
     end
@@ -60,7 +60,7 @@ module Metior
       if commit_id.nil?
         each_value { |commit| committers << commit.committer }
       elsif key? commit_id
-        committers << commit.committer
+        committers << self[commit_id].committer
       end
       committers
     end
