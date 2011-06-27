@@ -52,8 +52,8 @@ module Metior
     # @return [Array<String>] A list of file paths modified in this commit
     attr_reader :modified_files
 
-    # @return [Object] The unique identifiers of one or more more parents of
-    #         this commit
+    # @return [Array<Object>] The unique identifiers of one or more more
+    #         parents of this commit
     attr_reader :parents
 
     # @return [Repository] The repository this commit belongs to
@@ -109,6 +109,13 @@ module Metior
     # @param [Object] child The unique identifier of the child commit to add
     def add_child(child)
       @children << child
+    end
+
+    # Returns whether this commits is a merge commit
+    #
+    # @return [Boolean] `true` if this commit is a merge commit
+    def merge?
+      @parents.size > 1
     end
 
     # Returns the total of changed lines in this commit
