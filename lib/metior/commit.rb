@@ -63,44 +63,6 @@ module Metior
     # @return [Repository] The repository this commit belongs to
     attr_reader :repo
 
-    # Calculate some predefined activity statistics for the given set of
-    # commits
-    #
-    # @param [CommitCollection, Array<Commit>] commits The commits to analyze
-    # @return [Hash<Symbol, Object>] The calculated statistics for the commits
-    def self.activity(commits)
-      commits = commits.values if commits.is_a? Hash
-
-      activity = {}
-
-      commit_count = commits.size
-
-      active_days = {}
-      commits.each do |commit|
-        date = commit.committed_date.utc
-        day  = Time.utc(date.year, date.month, date.day)
-        if active_days.key? day
-          active_days[day] += 1
-        else
-          active_days[day] = 1
-        end
-      end
-
-      most_active_day = active_days.sort_by { |day, count| count }.last.first
-
-      activity[:first_commit_date] = commits.last.committed_date
-      activity[:last_commit_date]  = commits.first.committed_date
-
-      age_in_days = (Time.now - activity[:first_commit_date]) / 86400.0
-
-      activity[:active_days]            = active_days
-      activity[:most_active_day]        = most_active_day
-      activity[:commits_per_day]        = commit_count / age_in_days
-      activity[:commits_per_active_day] = commit_count.to_f / active_days.size
-
-      activity
-    end
-
     # Creates a new commit instance linked to the given repository and branch
     #
     # @param [Repository] repo The repository this commit belongs to

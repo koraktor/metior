@@ -44,7 +44,7 @@ module Metior
     {
       :commit_count     => commits.size,
       :top_contributors => repo.top_contributors(range, 5),
-    }.merge Commit.activity(commits)
+    }.merge commits.activity
   end
 
 end

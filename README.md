@@ -36,8 +36,8 @@ If you're interested in Metior, feel free to join the discussion on Convore in
 
 ### Get statistics about a set of commits
 
-    Metior::Commit.activity repo.commits
-    Metior::Commit.activity repo.authors[author_id].commits
+    repo.commits.activity
+    repo.authors[author_id].commits.activity
 
 ## Advanced usage
 

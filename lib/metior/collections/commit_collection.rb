@@ -17,6 +17,41 @@ module Metior
   # @see Commit
   class CommitCollection < Collection
 
+    # Calculate some predefined activity statistics for the commits in this
+    # collection
+    #
+    # @return [Hash<Symbol, Object>] The calculated statistics for the commits
+    #         in this collection
+    def activity
+      activity = {}
+      commit_count = values.size
+
+      active_days = {}
+      values.each do |commit|
+        date = commit.committed_date.utc
+        day  = Time.utc(date.year, date.month, date.day)
+        if active_days.key? day
+          active_days[day] += 1
+        else
+          active_days[day] = 1
+        end
+      end
+
+      most_active_day = active_days.sort_by { |day, count| count }.last.first
+
+      activity[:first_commit_date] = last.committed_date
+      activity[:last_commit_date]  = first.committed_date
+
+      age_in_days = (Time.now - activity[:first_commit_date]) / 86400.0
+
+      activity[:active_days]            = active_days
+      activity[:most_active_day]        = most_active_day
+      activity[:commits_per_day]        = commit_count / age_in_days
+      activity[:commits_per_active_day] = commit_count.to_f / active_days.size
+
+      activity
+    end
+
     # Returns the commits in this collection that have been committed after the
     # given time
     #
