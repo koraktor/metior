@@ -191,7 +191,7 @@ module Metior
       support! :line_stats
 
       stats = {}
-      commits(range).each do |commit|
+      commits(range).each_value do |commit|
         commit.added_files.each do |file|
           stats[file] = { :modifications => 0 } unless stats.key? file
           stats[file][:added_date] = commit.authored_date
@@ -290,7 +290,7 @@ module Metior
     def significant_commits(range = self.class::DEFAULT_BRANCH, count = 10)
       support! :line_stats
 
-      commits = commits(range).sort_by { |commit| commit.modifications }
+      commits = commits(range).values.sort_by { |commit| commit.modifications }
       count = [count, commits.size].min
       commits[-count..-1].reverse
     end
