@@ -111,6 +111,22 @@ class TestGit < Test::Unit::TestCase
       assert_equal 5, stats[:top_contributors].size
     end
 
+    should 'be able to load all the branches of a repository' do
+      branches = {
+        'master' => '1b2fe77',
+        'branch1' => '1234567',
+        'branch2' => '0abcdef'
+      }
+      grit_branches = branches.map do |branch|
+        commit = Grit::Commit.new(nil, branch.last, [], nil, nil, nil, nil, nil, [])
+        Grit::Head.new branch.first, commit
+      end
+      Grit::Repo.any_instance.expects(:branches).once.returns(grit_branches)
+
+      assert_equal %w{master branch1 branch2}, @repo.branches
+      assert_equal branches, @repo.instance_variable_get(:@refs)
+    end
+
   end
 
 end

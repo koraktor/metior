@@ -15,6 +15,12 @@ class TestRepository < Test::Unit::TestCase
       @repo = Metior::Repository.new('dummy')
     end
 
+    should 'not implement the #branches method' do
+      assert_raise NotImplementedError do
+        @repo.send :branches
+      end
+    end
+
     should 'not implement the #load_commits method' do
       assert_raise NotImplementedError do
         @repo.send(:load_commits, nil)

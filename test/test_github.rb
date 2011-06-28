@@ -135,6 +135,18 @@ class TestGitHub < Test::Unit::TestCase
       assert_equal 5, stats[:top_contributors].size
     end
 
+    should 'be able to load all the branches of a repository' do
+      branches = {
+        'master' => '1b2fe77',
+        'branch1' => '1234567',
+        'branch2' => '0abcdef'
+      }
+      Octokit.expects(:branches).with('mojombo/grit').once.returns(branches)
+
+      assert_equal %w{master branch1 branch2}, @repo.branches
+      assert_equal branches, @repo.instance_variable_get(:@refs)
+    end
+
   end
 
 end
