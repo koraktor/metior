@@ -39,7 +39,7 @@ module Metior
       def branches
         branches = @grit_repo.branches
         branches.each { |branch| @refs[branch.name] = branch.commit.id }
-        branches.map { |branch| branch.name }
+        branches.map { |branch| branch.name }.sort
       end
 
       private

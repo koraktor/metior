@@ -47,7 +47,7 @@ module Metior
       def branches
         branches = Octokit.branches(@path)
         branches.each { |name, id| @refs[name] = id }
-        branches.keys
+        branches.keys.sort
       end
 
       private

@@ -154,7 +154,7 @@ class TestGitHub < Test::Unit::TestCase
       }
       Octokit.expects(:branches).with('mojombo/grit').once.returns(branches)
 
-      assert_equal %w{master branch1 branch2}, @repo.branches
+      assert_equal %w{branch1 branch2 master}, @repo.branches
       assert_equal branches, @repo.instance_variable_get(:@refs)
     end
 
