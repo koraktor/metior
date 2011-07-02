@@ -61,11 +61,7 @@ module Metior
       # @return [String] The SHA1 ID of the commit the reference is pointing to
       def id_for_ref(ref)
         return ref if ref.match /[0-9a-f]{40}/
-        unless @refs.key? ref
-          commit = Octokit.get("api/v2/json/commits/show/#{@path}/#{ref}")['commit']
-          @refs[ref] = commit.id
-        end
-        @refs[ref]
+        @refs[ref] = Octokit.commit(@path, ref).id unless @refs.key? ref
       end
 
       # This method uses Octokit to load all commits from the given commit

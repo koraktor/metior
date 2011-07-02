@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-require 'rash'
+require 'hashie/mash'
 require 'time'
 
 module Fixtures
@@ -80,7 +80,7 @@ module Fixtures
 
       grit_commit.stubs(:diffs).returns []
 
-      stats = Hashie::Rash.new
+      stats = Hashie::Mash.new
       if commit.key? :impact
         stats.additions = commit[:impact].first.to_i
         stats.deletions = commit[:impact].last.to_i
@@ -98,7 +98,7 @@ module Fixtures
     commits = commits(range)
 
     commits.map do |commit|
-      Hashie::Rash.new({
+      Hashie::Mash.new({
         :author         => {
           :email => commit[:info][4],
           :login => commit[:info][5],
