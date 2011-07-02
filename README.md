@@ -50,15 +50,15 @@ to specify a commit range. Specifying a commit range works just like in Git:
 
     'master..development'
     'master'..'development'
-    'master..HEAD'
     'master'..'HEAD'
+    'master..HEAD'
     'deadbeef..HEAD'
 
 Given that your currently checked out branch is `development` and `master`
 points to commit `deadbeef`, the above statements are equal. Please also note
-the different syntaxes: The first, third and fifth example are standards string
-which will be parsed by Metior. The second and fourth example are Ruby `Range`
-objects which can be used by Metior right away.
+the different syntaxes: The first three example are standard strings which
+will be parsed by Metior. The others are Ruby `Range` objects which can be
+used by Metior right away.
 
 ## Requirements
 
