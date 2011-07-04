@@ -97,7 +97,7 @@ module Metior
             commits += new_commits
             page += 1
           end
-        rescue Octokit::NotFound, Faraday::Error::ResourceNotFound
+        rescue Octokit::NotFound
         end
 
         [base_commit, commits]
