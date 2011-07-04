@@ -75,9 +75,9 @@ module Metior
       #        (`'master..development'`), a range (`'master'..'development'`)
       #        or as a single ref (`'master'`). A single ref name means all
       #        commits reachable from that ref.
-      # @return [Hashie::Rash, nil] The base commit of the requested range or
+      # @return [Hashie::Mash, nil] The base commit of the requested range or
       #         `nil` if the the range starts at the beginning of the history
-      # @return [Array<Hashie::Rash>] All commits in the given commit range
+      # @return [Array<Hashie::Mash>] All commits in the given commit range
       # @see Octokit::Commits#commits
       def load_commits(range)
         base_commit = nil
