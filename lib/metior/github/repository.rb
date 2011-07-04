@@ -40,16 +40,6 @@ module Metior
         @user    = user
       end
 
-      # Returns the names of all branches of this repository
-      #
-      # @return [Array<String>] The names of all branches
-      # @see Octokit#branches
-      def branches
-        branches = Octokit.branches(@path)
-        branches.each { |name, id| @refs[name] = id }
-        branches.keys.sort
-      end
-
       private
 
       # Returns the unique identifier for the commit the given reference – like
@@ -62,6 +52,15 @@ module Metior
       def id_for_ref(ref)
         return ref if ref.match /[0-9a-f]{40}/
         @refs[ref] = Octokit.commit(@path, ref).id unless @refs.key? ref
+      end
+
+      # Loads all branches and the corresponding commit IDs of this repository
+      #
+      # @return [Hash<String, String>] The names of all branches and the
+      #         corresponding commit IDs
+      # @see Octokit#branches
+      def load_branches
+        Octokit.branches(@path)
       end
 
       # This method uses Octokit to load all commits from the given commit

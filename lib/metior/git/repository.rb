@@ -32,16 +32,6 @@ module Metior
         @grit_repo = Grit::Repo.new(path)
       end
 
-      # Returns the names of all branches of this repository
-      #
-      # @return [Array<String>] The names of all branches
-      # @see Grit::Repo#branches
-      def branches
-        branches = @grit_repo.branches
-        branches.each { |branch| @refs[branch.name] = branch.commit.id }
-        branches.map { |branch| branch.name }.sort
-      end
-
       private
 
       # Returns the unique identifier for the commit the given reference – like
@@ -57,6 +47,15 @@ module Metior
           @refs[ref] = @grit_repo.git.rev_parse({}, "#{ref}^{}")
         end
         @refs[ref]
+      end
+
+      # Loads all branches and the corresponding commit IDs of this repository
+      #
+      # @return [Hash<String, String>] The names of all branches and the
+      #         corresponding commit IDs
+      # @see Grit::Repo#branches
+      def load_branches
+        Hash[@grit_repo.branches.map { |b| [b.name, b.commit.id] }]
       end
 
       # This method uses Grit to load all commits from the given commit range

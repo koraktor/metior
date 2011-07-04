@@ -67,7 +67,7 @@ module Metior
     # @abstract Has to be implemented by VCS specific subclasses
     # @return [Array<String>] The names of all branches
     def branches
-      raise NotImplementedError
+      load_branches.each { |name, id| @refs[name] = id }.keys.sort
     end
 
     # Loads all commits including their committers and authors from the given
@@ -361,6 +361,15 @@ module Metior
     # @return [Object] The unique identifier of the commit the reference is
     #         pointing to
     def id_for_ref(ref)
+      raise NotImplementedError
+    end
+
+    # Loads all branches and the corresponding commit IDs of this repository
+    #
+    # @abstract Has to be implemented by VCS specific subclasses
+    # @return [Hash<String, Object>] The names of all branches and the
+    #         corresponding commit IDs
+    def load_branches
       raise NotImplementedError
     end
 
