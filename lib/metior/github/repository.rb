@@ -95,6 +95,7 @@ module Metior
               break
             end
             commits += new_commits
+            break if new_commits.size < 35
             page += 1
           end
         rescue Octokit::NotFound
