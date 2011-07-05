@@ -13,6 +13,7 @@ include Metior
 
 Bundler.setup
 Bundler.require :test
+require 'mocha'
 
 # Extends TestCase functionality
 class Test::Unit::TestCase

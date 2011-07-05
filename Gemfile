@@ -14,6 +14,6 @@ group :development do
 end
 
 group :test do
-  gem 'mocha', '~> 0.9.12'
+  gem 'mocha', '~> 0.9.12', :require => false
   gem 'shoulda', '~> 2.11.3'
 end
