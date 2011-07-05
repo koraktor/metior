@@ -137,7 +137,15 @@ module Metior
     # @return [true, false] `true` if the feature is supported
     # @see ClassMethods#supports?
     def supports?(feature)
-      singleton_class.included_modules.first.supports? feature
+      vcs.supports? feature
+    end
+
+    # Returns the VCS module that is included by this object
+    #
+    # @return [Metior::VCS] The VCS implementation module of this object
+    # @see Metior.vcs_types
+    def vcs
+      Metior.vcs_types[singleton_class::NAME.to_sym]
     end
 
   end

@@ -4,34 +4,53 @@
 # Copyright (c) 2011, Sebastian Staudt
 
 require 'helper'
+require 'metior/vcs'
+
+module MockVCS
+  NAME = :mock
+  include VCS
+  not_supported :some_feature
+end
+Metior.module_exec { @@vcs_types.delete :mock }
 
 class TestVCS < Test::Unit::TestCase
 
   context 'The VCS module' do
 
     setup do
-      require 'metior/vcs'
+      Metior.module_exec { @@vcs_types[:mock] = MockVCS }
 
-      module MockVCS
-        NAME = :mock
-        include VCS
-        not_supported :some_feature
-      end
-
-      @vcs = Object.new
-      @vcs.extend MockVCS
+      @vcs_object = Object.new
+      @vcs_object.extend MockVCS
     end
 
     should 'allow access to the features of a VCS' do
       assert_not MockVCS.supports? :some_feature
-      assert_not @vcs.supports? :some_feature
+    end
+
+    should 'automatically try to load the VCS implementation files' do
+      MockVCS.expects(:require).with('metior/mock/actor').once
+      MockVCS.expects(:require).with('metior/mock/commit').once
+      MockVCS.expects(:require).with('metior/mock/repository').once
+
+      begin
+        MockVCS::Commit
+      rescue NameError
+      end
+    end
+
+    should 'allow an object of a specific VCS to access the VCS module' do
+      assert_equal MockVCS, @vcs_object.vcs
+    end
+
+    should 'allow an object of a specific VCS to access the VCS features' do
+      assert_not @vcs_object.supports? :some_feature
       assert_raise UnsupportedError do
-        @vcs.support! :some_feature
+        @vcs_object.support! :some_feature
       end
     end
 
     teardown do
-      @vcs = nil
       Metior.module_exec { @@vcs_types.delete :mock }
     end
 
