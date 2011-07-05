@@ -150,6 +150,23 @@ module Metior
       committers
     end
 
+    # Returns the commits in this collection that change at least the given
+    # number of lines
+    #
+    # @param [Numeric] line_count The number of lines that should be
+    #        changed at least by the commits
+    # @return [CommitCollection] The commits that change at least the given
+    #         number of lines
+    def with_impact(line_count)
+      first.support! :line_stats
+
+      commits = CommitCollection.new
+      each_value do |commit|
+        commits << commit if commit.modifications >= line_count
+      end
+      commits
+    end
+
   end
 
 end

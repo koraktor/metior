@@ -105,6 +105,14 @@ class TestCommitCollection < Test::Unit::TestCase
       assert_equal '634396b', commits.last.id
     end
 
+    should 'allow to get all commits with a minimum impact' do
+      commits = @commits.with_impact(100)
+      assert commits.is_a? CommitCollection
+      assert_equal 55, commits.size
+      assert_equal 'ef2870b', commits.first.id
+      assert_equal 'a47fd41', commits.last.id
+    end
+
   end
 
 end
