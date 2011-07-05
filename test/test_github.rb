@@ -158,6 +158,18 @@ class TestGitHub < Test::Unit::TestCase
       assert_equal branches, @repo.instance_variable_get(:@refs)
     end
 
+    should 'be able to load all tags of a repository' do
+      tags = {
+        'v2.3.1' => '034fc81',
+        'v2.4.0' => 'a3c5139',
+        'v2.4.1' => '91940c2'
+      }
+      Octokit.expects(:tags).with('mojombo/grit').once.returns(tags)
+
+      assert_equal %w{v2.3.1 v2.4.0 v2.4.1}, @repo.tags
+      assert_equal tags, @repo.instance_variable_get(:@refs)
+    end
+
   end
 
 end

@@ -64,7 +64,6 @@ module Metior
 
     # Returns the names of all branches of this repository
     #
-    # @abstract Has to be implemented by VCS specific subclasses
     # @return [Array<String>] The names of all branches
     def branches
       load_branches.each { |name, id| @refs[name] = id }.keys.sort
@@ -269,6 +268,13 @@ module Metior
       commits[-count..-1].reverse
     end
 
+    # Returns the names of all tags of this repository
+    #
+    # @return [Array<String>] The names of all tags
+    def tags
+      load_tags.each { |name, id| @refs[name] = id }.keys.sort
+    end
+
     # Returns a list of top contributors in the given commit range
     #
     # This will first have to load all authors (and i.e. commits) from the
@@ -383,6 +389,15 @@ module Metior
     #        reachable from that ref.
     # @return [Array<Commit>] All commits from the given commit range
     def load_commits(range = self.class::DEFAULT_BRANCH)
+      raise NotImplementedError
+    end
+
+    # Loads all tags and the corresponding commit IDs of this repository
+    #
+    # @abstract Has to be implemented by VCS specific subclasses
+    # @return [Hash<String, Object>] The names of all tags and the
+    #         corresponding commit IDs
+    def load_tags
       raise NotImplementedError
     end
 

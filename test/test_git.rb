@@ -133,6 +133,22 @@ class TestGit < Test::Unit::TestCase
       assert_equal branches, @repo.instance_variable_get(:@refs)
     end
 
+    should 'be able to load all tags of a repository' do
+      tags = {
+        'v2.3.1' => '034fc81',
+        'v2.4.0' => 'a3c5139',
+        'v2.4.1' => '91940c2'
+      }
+      grit_tags = tags.map do |tag|
+        commit = Grit::Commit.new(nil, tag.last, [], nil, nil, nil, nil, nil, [])
+        Grit::Tag.new tag.first, commit
+      end
+      Grit::Repo.any_instance.expects(:tags).once.returns(grit_tags)
+
+      assert_equal %w{v2.3.1 v2.4.0 v2.4.1}, @repo.tags
+      assert_equal tags, @repo.instance_variable_get(:@refs)
+    end
+
   end
 
 end

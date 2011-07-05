@@ -103,6 +103,15 @@ module Metior
         [base_commit, commits]
       end
 
+      # Loads all tags and the corresponding commit IDs of this repository
+      #
+      # @return [Hash<String, String>] The names of all tags and the
+      #         corresponding commit IDs
+      # @see Octokit#tags
+      def load_tags
+        Octokit.tags @path
+      end
+
     end
 
   end

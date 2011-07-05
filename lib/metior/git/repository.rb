@@ -94,6 +94,15 @@ module Metior
         [base_commit, commits]
       end
 
+      # Loads all tags and the corresponding commit IDs of this repository
+      #
+      # @return [Hash<String, String>] The names of all tags and the
+      #         corresponding commit IDs
+      # @see Grit::Repo#tags
+      def load_tags
+        Hash[@grit_repo.tags.map { |b| [b.name, b.commit.id] }]
+      end
+
     end
 
   end
