@@ -64,33 +64,31 @@ module Fixtures
     commits = commits(range)
 
     commits.map do |commit|
-      parents = commit[:parent].nil? ? [] : [commit[:parent][:ids].first]
+      parents = commit[:parent].nil? ? [] : [commit[:parent]]
 
-      grit_commit = Grit::Commit.new(
-        nil,
-        commit[:ids].first,
-        parents,
-        [nil],
-        Grit::Actor.new(commit[:info][4], commit[:info][5]),
-        Time.at(commit[:info][6].to_i),
-        Grit::Actor.new(commit[:info][1], commit[:info][2]),
-        Time.at(commit[:info][3].to_i),
-        commit[:info].first.lines.to_a
-      )
-
-      grit_commit.stubs(:diffs).returns []
-
-      stats = Hashie::Mash.new
-      if commit.key? :impact
-        stats.additions = commit[:impact].first.to_i
-        stats.deletions = commit[:impact].last.to_i
-      else
-        stats.additions = 0
-        stats.deletions = 0
-      end
-      grit_commit.stubs(:stats).returns stats
-
-      grit_commit
+      Hashie::Mash.new({
+        :added_files   => [],
+        :author        => {
+          :email => commit[:info][5],
+          :name  => commit[:info][4]
+        },
+        :authored_data => Time.at(commit[:info][6].to_i),
+        :committer     => {
+          :email => commit[:info][2],
+          :name  => commit[:info][1]
+        },
+        :committed_date => Time.at(commit[:info][3].to_i),
+        :deleted_files  => [],
+        :diffs          => [],
+        :id             => commit[:ids].first,
+        :message        => commit[:info].first.lines.to_a,
+        :modified_files => [],
+        :parents        => parents.map { |p| { :id => p[:ids].first } },
+        :stats          => {
+          :additions => commit.key?(:impact) ? commit[:impact].first.to_i : 0,
+          :deletions => commit.key?(:impact) ? commit[:impact].last.to_i : 0
+        }
+      })
     end
   end
 
