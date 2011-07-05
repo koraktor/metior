@@ -128,7 +128,7 @@ module Metior
     #        its implementation)
     # @see #supports?
     def support!(feature)
-      raise UnsupportedError unless supports? feature
+      raise UnsupportedError.new(vcs) unless supports? feature
     end
 
     # Checks if a specific feature is supported by the VCS (or its

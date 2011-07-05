@@ -45,8 +45,12 @@ class TestVCS < Test::Unit::TestCase
 
     should 'allow an object of a specific VCS to access the VCS features' do
       assert_not @vcs_object.supports? :some_feature
-      assert_raise UnsupportedError do
+      begin
         @vcs_object.support! :some_feature
+        fail
+      rescue
+        assert_instance_of UnsupportedError, $!
+        assert_equal "Operation not supported by the current VCS (:mock).", $!.message
       end
     end
 

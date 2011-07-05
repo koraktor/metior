@@ -10,8 +10,8 @@ module Metior
   class UnsupportedError < RuntimeError
 
     # Creates a new instance of this error
-    def initialize
-      super 'Operation not supported by the current VCS.'
+    def initialize(vcs)
+      super 'Operation not supported by the current VCS (:%s).' % vcs::NAME
     end
 
   end
