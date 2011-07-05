@@ -118,6 +118,22 @@ module Metior
       commits
     end
 
+    # Returns the commits in this collection that change any of the given files
+    #
+    # @param [Array<String>] files The path of the files to filter commits by
+    # @return [CommitCollection] The commits that contain changes to the given
+    #         files
+    def changing(*files)
+      first.support! :file_stats
+
+      commits = CommitCollection.new
+      each_value do |commit|
+        commit_files = commit.added_files + commit.deleted_files + commit.modified_files
+        commits << commit unless (commit_files & files).empty?
+      end
+      commits
+    end
+
     # Returns the committers of all or a specific commit in this collection
     #
     # @param [Object] commit_id The ID of the commit, if only the committer of

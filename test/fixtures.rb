@@ -24,9 +24,15 @@ module Fixtures
 
         next if line.empty?
 
-        if line.match /^[AMD]\0/
-          commit[:files] = [] unless commit.key? :files
-          commit[:files] << line.split("\0")
+        if line.match /^[A]\0/
+          commit[:added_files] = [] unless commit.key? :added_files
+          commit[:added_files] << line.split("\0").last.strip
+        elsif line.match /^[D]\0/
+          commit[:modified_files] = [] unless commit.key? :modified_files
+          commit[:modified_files] << line.split("\0").last.strip
+        elsif line.match /^[M]\0/
+          commit[:deleted_files] = [] unless commit.key? :deleted_files
+          commit[:deleted_files] << line.split("\0").last.strip
         elsif line.match /\d+\0\d+$/
           commit[:impact] = line.split("\0")
         else
@@ -66,23 +72,31 @@ module Fixtures
     commits.map do |commit|
       parents = commit[:parent].nil? ? [] : [commit[:parent]]
 
+      diffs = []
+      commit[:added_files].each do |added_file|
+        diffs << { :new_file => true, :b_path => added_file }
+      end if commit.key? :added_files
+      commit[:deleted_files].each do |deleted_file|
+        diffs << { :deleted_file => true, :b_path => deleted_file }
+      end if commit.key? :deleted_files
+      commit[:modified_files].each do |modified_file|
+        diffs << { :b_path => modified_file }
+      end if commit.key? :modified_files
+
       Hashie::Mash.new({
-        :added_files   => [],
-        :author        => {
+        :author         => {
           :email => commit[:info][5],
           :name  => commit[:info][4]
         },
-        :authored_data => Time.at(commit[:info][6].to_i),
-        :committer     => {
+        :authored_data  => Time.at(commit[:info][6].to_i),
+        :committer      => {
           :email => commit[:info][2],
           :name  => commit[:info][1]
         },
         :committed_date => Time.at(commit[:info][3].to_i),
-        :deleted_files  => [],
-        :diffs          => [],
+        :diffs          => diffs,
         :id             => commit[:ids].first,
         :message        => commit[:info].first.lines.to_a,
-        :modified_files => [],
         :parents        => parents.map { |p| { :id => p[:ids].first } },
         :stats          => {
           :additions => commit.key?(:impact) ? commit[:impact].first.to_i : 0,

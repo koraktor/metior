@@ -97,6 +97,14 @@ class TestCommitCollection < Test::Unit::TestCase
       assert_equal Time.parse('14-02-2009 00:00 +0000'), activity[:most_active_day]
     end
 
+    should 'allow to get all commits changing specified files' do
+      commits = @commits.changing('lib/grit.rb')
+      assert commits.is_a? CommitCollection
+      assert_equal 57, commits.size
+      assert_equal '18bfda9', commits.first.id
+      assert_equal '634396b', commits.last.id
+    end
+
   end
 
 end
