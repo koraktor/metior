@@ -3,6 +3,8 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
+require 'metior/auto_include_vcs'
+
 module Metior
 
   # Represents an actor in a source code repository
@@ -14,6 +16,8 @@ module Metior
   #           specific VCS.
   # @author Sebastian Staudt
   class Actor
+
+    include AutoIncludeVCS
 
     # @return [Fixnum] The lines of code that have been added by this actor
     attr_reader :additions

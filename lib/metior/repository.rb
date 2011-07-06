@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-require 'metior/actor'
+require 'metior/auto_include_vcs'
 
 module Metior
 
@@ -13,6 +13,8 @@ module Metior
   #           for a specific VCS.
   # @author Sebastian Staudt
   class Repository
+
+    include AutoIncludeVCS
 
     # @return [String] The file system path of this repository
     attr_reader :path

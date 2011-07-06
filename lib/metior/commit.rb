@@ -3,6 +3,8 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
+require 'metior/auto_include_vcs'
+
 module Metior
 
   # This class represents a commit in a source code repository
@@ -14,6 +16,8 @@ module Metior
   #           a specific VCS.
   # @author Sebastian Staudt
   class Commit
+
+    include AutoIncludeVCS
 
     # @return [Array<String>] A list of file paths added in this commit
     attr_reader :added_files

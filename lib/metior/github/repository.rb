@@ -5,8 +5,6 @@
 
 require 'octokit'
 
-require 'metior/github'
-require 'metior/github/commit'
 require 'metior/repository'
 
 module Metior
@@ -17,8 +15,6 @@ module Metior
     #
     # @author Sebastian Staudt
     class Repository < Metior::Repository
-
-      include Metior::GitHub
 
       # @return [String] The project name of the repository
       attr_reader :project

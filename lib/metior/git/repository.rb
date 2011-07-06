@@ -5,8 +5,6 @@
 
 require 'grit'
 
-require 'metior/git'
-require 'metior/git/commit'
 require 'metior/repository'
 
 module Metior
@@ -17,8 +15,6 @@ module Metior
     #
     # @author Sebastian Staudt
     class Repository < Metior::Repository
-
-      include Metior::Git
 
       # Creates a new Git repository based on the given path
       #

@@ -41,6 +41,8 @@ module Metior
 
     # This module provided class methods for VCS implementation `Module`s that
     # implement smart auto-loading of dependencies and classes.
+    #
+    # @author Sebastian Staudt
     module ClassMethods
 
       # Missing constants may indicate

@@ -6,8 +6,6 @@
 require 'time'
 
 require 'metior/commit'
-require 'metior/github'
-require 'metior/github/actor'
 
 module Metior
 
@@ -17,8 +15,6 @@ module Metior
     #
     # @author Sebastian Staudt
     class Commit < Metior::Commit
-
-      include Metior::GitHub
 
       # Creates a new GitHub commit object linked to the repository and branch
       # it belongs to and the data parsed from the corresponding JSON data

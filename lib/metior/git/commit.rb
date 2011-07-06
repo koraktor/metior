@@ -4,8 +4,6 @@
 # Copyright (c) 2011, Sebastian Staudt
 
 require 'metior/commit'
-require 'metior/git'
-require 'metior/git/actor'
 
 module Metior
 
@@ -15,8 +13,6 @@ module Metior
     #
     # @author Sebastian Staudt
     class Commit < Metior::Commit
-
-      include Metior::Git
 
       # Creates a new Git commit object linked to the repository and branch it
       # belongs to and the data from the corresponding `Grit::Commit` object
