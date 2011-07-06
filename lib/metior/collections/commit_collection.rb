@@ -70,6 +70,7 @@ module Metior
       end
       commits
     end
+    alias_method :newer, :after
 
     # Returns the authors of all or a specific commit in this collection
     #
@@ -105,6 +106,7 @@ module Metior
       end
       commits
     end
+    alias_method :older, :before
 
     # Returns the list of commits that have been authored by the given authors
     #
@@ -143,6 +145,7 @@ module Metior
       end
       commits
     end
+    alias_method :touching, :changing
 
     # Returns the committers of all or a specific commit in this collection
     #
@@ -177,6 +180,7 @@ module Metior
       end
       commits
     end
+    alias_method :top, :most_significant
 
     # Returns the commits in this collection that change at least the given
     # number of lines
