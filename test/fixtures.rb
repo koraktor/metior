@@ -96,7 +96,7 @@ module Fixtures
         :committed_date => Time.at(commit[:info][3].to_i),
         :diffs          => diffs,
         :id             => commit[:ids].first,
-        :message        => commit[:info].first.lines.to_a,
+        :message        => commit[:info].first,
         :parents        => parents.map { |p| { :id => p[:ids].first } },
         :stats          => {
           :additions => commit.key?(:impact) ? commit[:impact].first.to_i : 0,

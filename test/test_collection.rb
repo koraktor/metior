@@ -35,8 +35,8 @@ class TestCollections < Test::Unit::TestCase
     end
 
     should 'be a subclass of Hash' do
-      assert @collection.is_a? Hash
-      assert @collection.is_a? OrderedHash if RUBY_VERSION.match(/^1\.8/)
+      assert_kind_of Hash, @collection
+      assert_kind_of OrderedHash, @collection if RUBY_VERSION.match(/^1\.8/)
     end
 
     should 'have a working << operator' do

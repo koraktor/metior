@@ -19,12 +19,12 @@ class TestActorCollection < Test::Unit::TestCase
     end
 
     should 'be an instance of Collection' do
-      assert @authors.is_a? Collection
+      assert_kind_of Collection, @authors
     end
 
     should 'allow to get all the commits of those actors' do
       commits = @authors.commits
-      assert commits.is_a? CommitCollection
+      assert_instance_of CommitCollection, commits
       assert_equal 460, commits.size
       assert_equal '1b2fe77', commits.first.id
       assert_equal '80f136f', commits.last.id
@@ -32,7 +32,7 @@ class TestActorCollection < Test::Unit::TestCase
 
     should 'allow to get the commits of a single of those actors' do
       commits = @authors.commits 'tom@mojombo.com'
-      assert commits.is_a? CommitCollection
+      assert_instance_of CommitCollection, commits
       assert_equal 173, commits.size
       assert_equal 'a3c5139', commits.first.id
       assert_equal '634396b', commits.last.id

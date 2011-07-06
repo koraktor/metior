@@ -19,7 +19,7 @@ class TestMetior < Test::Unit::TestCase
         Metior.vcs :unknown
         assert false
       rescue
-        assert $!.is_a? RuntimeError
+        assert_instance_of RuntimeError, $!
         assert_equal 'No VCS registered for :unknown', $!.message
       end
     end

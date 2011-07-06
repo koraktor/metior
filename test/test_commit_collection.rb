@@ -19,12 +19,12 @@ class TestCommitCollection < Test::Unit::TestCase
     end
 
     should 'be an instance of Collection' do
-      assert @commits.is_a? Collection
+      assert_kind_of Collection, @commits
     end
 
     should 'allow to get all the authors of those commits' do
       authors = @commits.authors
-      assert authors.is_a? ActorCollection
+      assert_instance_of ActorCollection, authors
       assert_equal 37, authors.size
       assert_equal 'rtomayko@gmail.com', authors.first.id
       assert_equal 'tom@taco.(none)', authors.last.id
@@ -32,14 +32,14 @@ class TestCommitCollection < Test::Unit::TestCase
 
     should 'allow to get the author of a single of those commits' do
       authors = @commits.authors '4c592b4'
-      assert authors.is_a? ActorCollection
+      assert_instance_of ActorCollection, authors
       assert_equal 1, authors.size
       assert_equal 'bobbywilson0@gmail.com', authors.first.id
     end
 
     should 'allow to get all commits of a specific author' do
       commits = @commits.by 'rtomayko@gmail.com'
-      assert commits.is_a? CommitCollection
+      assert_instance_of CommitCollection, commits
       assert_equal 47, commits.size
       assert_equal '1b2fe77', commits.first.id
       assert_equal 'd731f85', commits.last.id
@@ -47,7 +47,7 @@ class TestCommitCollection < Test::Unit::TestCase
 
     should 'allow to get all commits of a some authors' do
       commits = @commits.by 'tom@mojombo.com', 'rtomayko@gmail.com'
-      assert commits.is_a? CommitCollection
+      assert_instance_of CommitCollection, commits
       assert_equal 220, commits.size
       assert_equal '1b2fe77', commits.first.id
       assert_equal '634396b', commits.last.id
@@ -55,7 +55,7 @@ class TestCommitCollection < Test::Unit::TestCase
 
     should 'allow to get all commits after a given date' do
       commits = @commits.after '31-12-2010'
-      assert commits.is_a? CommitCollection
+      assert_instance_of CommitCollection, commits
       assert_equal 29, commits.size
       assert_equal '1b2fe77', commits.first.id
       assert_equal '696761d', commits.last.id
@@ -63,7 +63,7 @@ class TestCommitCollection < Test::Unit::TestCase
 
     should 'allow to get all commits before a given date' do
       commits = @commits.before '31-12-2009'
-      assert commits.is_a? CommitCollection
+      assert_instance_of CommitCollection, commits
       assert_equal 325, commits.size
       assert_equal '2f1f63e', commits.first.id
       assert_equal '634396b', commits.last.id
@@ -71,7 +71,7 @@ class TestCommitCollection < Test::Unit::TestCase
 
     should 'allow to get all the committers of those commits' do
       committers = @commits.committers
-      assert committers.is_a? ActorCollection
+      assert_instance_of ActorCollection, committers
       assert_equal 29, committers.size
       assert_equal 'rtomayko@gmail.com', committers.first.id
       assert_equal 'tom@taco.(none)', committers.last.id
@@ -79,7 +79,7 @@ class TestCommitCollection < Test::Unit::TestCase
 
     should 'allow to get the committers of a single of those commits' do
       committers = @commits.committers '4c592b4'
-      assert committers.is_a? ActorCollection
+      assert_instance_of ActorCollection, committers
       assert_equal 1, committers.size
       assert_equal 'bobbywilson0@gmail.com', committers.first.id
     end
@@ -99,7 +99,7 @@ class TestCommitCollection < Test::Unit::TestCase
 
     should 'allow to get all commits changing specified files' do
       commits = @commits.changing('lib/grit.rb')
-      assert commits.is_a? CommitCollection
+      assert_instance_of CommitCollection, commits
       assert_equal 57, commits.size
       assert_equal '18bfda9', commits.first.id
       assert_equal '634396b', commits.last.id
@@ -107,7 +107,7 @@ class TestCommitCollection < Test::Unit::TestCase
 
     should 'allow to get all commits with a minimum impact' do
       commits = @commits.with_impact(100)
-      assert commits.is_a? CommitCollection
+      assert_instance_of CommitCollection, commits
       assert_equal 55, commits.size
       assert_equal 'ef2870b', commits.first.id
       assert_equal 'a47fd41', commits.last.id

@@ -47,7 +47,7 @@ class TestVCS < Test::Unit::TestCase
       assert_not @vcs_object.supports? :some_feature
       begin
         @vcs_object.support! :some_feature
-        fail
+        assert false
       rescue
         assert_instance_of UnsupportedError, $!
         assert_equal "Operation not supported by the current VCS (:mock).", $!.message
