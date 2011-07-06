@@ -29,6 +29,8 @@ class TestGitHub < Test::Unit::TestCase
       @commits_stub = Octokit.stubs :commits
       14.times { @commits_stub.returns api_response.shift(35) }
       @commits_stub.then.raises Octokit::NotFound.new(nil)
+
+      @repo.stubs(:id_for_ref).with('master').returns('1b2fe77')
     end
 
     should 'be able to load all commits from the repository\'s default branch' do
@@ -58,8 +60,6 @@ class TestGitHub < Test::Unit::TestCase
     end
 
     should 'know the authors of the repository' do
-      @repo.expects(:id_for_ref).with('master').once.returns('1b2fe77')
-
       authors = @repo.authors
       assert_equal 37, authors.size
       assert authors.values.all? { |author| author.is_a? Metior::GitHub::Actor }
@@ -81,8 +81,6 @@ class TestGitHub < Test::Unit::TestCase
     end
 
     should 'know the committers of the repository' do
-      @repo.expects(:id_for_ref).with('master').once.returns('1b2fe77')
-
       committers = @repo.committers
       assert_equal 29, committers.size
       assert committers.values.all? { |committer| committer.is_a? Metior::GitHub::Actor }
@@ -102,8 +100,6 @@ class TestGitHub < Test::Unit::TestCase
     end
 
     should 'know the top authors of the repository' do
-      @repo.expects(:id_for_ref).with('master').once.returns('1b2fe77')
-
       authors = @repo.top_authors
       assert_equal 3, authors.size
       assert authors.all? { |author| author.is_a? Metior::GitHub::Actor }
