@@ -31,6 +31,23 @@ module Metior
       commits
     end
 
+    # Returns up to the given number of actors in this collection with the
+    # biggest impact on the repository, i.e. changing the most code
+    #
+    # @param [Numeric] count The number of actors to return
+    # @return [ActorCollection] The given number of actors ordered by impact
+    # @see Actor#modifications
+    def most_significant(count = 3)
+      first.support! :line_stats
+
+      authors = ActorCollection.new
+      values.sort_by { |author| -author.modifications }.each do |author|
+        authors << author
+        break if authors.size == count
+      end
+      authors
+    end
+
   end
 
 end

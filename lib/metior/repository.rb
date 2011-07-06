@@ -267,11 +267,7 @@ module Metior
     # @return [Array<Actor>] An array of the given number of the most
     #         significant authors in the given commit range
     def significant_authors(range = self.class::DEFAULT_BRANCH, count = 3)
-      support! :line_stats
-
-      authors = authors(range).values.sort_by { |author| author.modifications }
-      count = [count, authors.size].min
-      authors[-count..-1].reverse
+      authors(range).most_significant(count)
     end
     alias_method :significant_contributors, :significant_authors
 

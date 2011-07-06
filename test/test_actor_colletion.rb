@@ -38,6 +38,14 @@ class TestActorCollection < Test::Unit::TestCase
       assert_equal '634396b', commits.last.id
     end
 
+    should 'allow to get the most significant actors' do
+      authors = @authors.most_significant
+      assert_instance_of ActorCollection, authors
+      assert_equal 3, authors.size
+      assert_equal 'tom@mojombo.com', authors.first.id
+      assert_equal 'rsanheim@gmail.com', authors.last.id
+    end
+
   end
 
 end
