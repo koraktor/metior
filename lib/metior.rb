@@ -21,7 +21,7 @@ module Metior
   #        repository, e.g. a file system path
   # @return [Repository] A VCS specific `Repository` instance
   def self.repository(type, *options)
-    vcs(type)::Repository.new *options
+    vcs(type)::Repository.new(*options)
   end
 
   # Calculates simplistic stats for the given repository and branch
