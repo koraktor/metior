@@ -113,6 +113,14 @@ class TestCommitCollection < Test::Unit::TestCase
       assert_equal 'a47fd41', commits.last.id
     end
 
+    should 'allow to get the most significant commits' do
+      commits = @commits.most_significant(5)
+      assert_instance_of CommitCollection, commits
+      assert_equal 5, commits.size
+      assert_equal 'f91f3c8', commits.first.id
+      assert_equal '3c230a3', commits.last.id
+    end
+
   end
 
 end

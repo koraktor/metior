@@ -288,11 +288,7 @@ module Metior
     # @return [Array<Actor>] An array of the given number of the most
     #         significant commits in the given commit range
     def significant_commits(range = self.class::DEFAULT_BRANCH, count = 10)
-      support! :line_stats
-
-      commits = commits(range).values.sort_by { |commit| commit.modifications }
-      count = [count, commits.size].min
-      commits[-count..-1].reverse
+      commits(range).most_significant(count)
     end
 
     # Returns the names of all tags of this repository

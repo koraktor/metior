@@ -150,6 +150,23 @@ module Metior
       committers
     end
 
+    # Returns the given number of commits with most line changes on the
+    # repository
+    #
+    # @param [Numeric] count The number of commits to return
+    # @return [CommitCollection] The given number of commits ordered by impact
+    # @see Commit#modifications
+    def most_significant(count = 10)
+      first.support! :line_stats
+
+      commits = CommitCollection.new
+      values.sort_by { |commit| -commit.modifications }.each do |commit|
+        commits << commit
+        break if commits.size == count
+      end
+      commits
+    end
+
     # Returns the commits in this collection that change at least the given
     # number of lines
     #
