@@ -46,6 +46,14 @@ class TestActorCollection < Test::Unit::TestCase
       assert_equal 'rsanheim@gmail.com', authors.last.id
     end
 
+    should 'allow to get the top contributing actors' do
+      authors = @authors.top
+      assert_instance_of ActorCollection, authors
+      assert_equal 3, authors.size
+      assert_equal 'tom@mojombo.com', authors.first.id
+      assert_equal 'technoweenie@gmail.com', authors.last.id
+    end
+
   end
 
 end

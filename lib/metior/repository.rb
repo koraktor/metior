@@ -309,9 +309,7 @@ module Metior
     #         in the given commit range
     # @see #authors
     def top_authors(range = self.class::DEFAULT_BRANCH, count = 3)
-      authors = authors(range).values.sort_by { |author| author.commits.size }
-      count = [count, authors.size].min
-      authors[-count..-1].reverse
+      authors(range).top(count)
     end
     alias_method :top_contributors, :top_authors
 

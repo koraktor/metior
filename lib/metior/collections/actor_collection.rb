@@ -48,6 +48,22 @@ module Metior
       authors
     end
 
+    # Returns up to the given number of actors in this collection with the
+    # most commits
+    #
+    # @param [Numeric] count The number of actors to return
+    # @return [ActorCollection] The given number of actors ordered by commit
+    #         count
+    # @see Actor#commits
+    def top(count = 3)
+      authors = ActorCollection.new
+      values.sort_by { |author| -author.commits.size }.each do |author|
+        authors << author
+        break if authors.size == count
+      end
+      authors
+    end
+
   end
 
 end
