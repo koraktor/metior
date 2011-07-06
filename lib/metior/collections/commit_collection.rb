@@ -22,6 +22,7 @@ module Metior
     #
     # @return [Hash<Symbol, Object>] The calculated statistics for the commits
     #         in this collection
+    # @see Commit#committed_date
     def activity
       activity = {}
       commit_count = values.size
@@ -59,6 +60,8 @@ module Metior
     #        limit to filter the commits
     # @return [CommitCollection] The commits that have been committed after the
     #         given date
+    # @see Commit#committed_date
+    # @see Time.parse
     def after(date)
       date = Time.parse date if date.is_a? String
       commits = CommitCollection.new
@@ -74,6 +77,7 @@ module Metior
     #        specific commit should be returned
     # @return [ActorCollection] All authors of the commits in this collection
     #         or the author of a specific commit
+    # @see Commit#author
     def authors(commit_id = nil)
       authors = ActorCollection.new
       if commit_id.nil?
@@ -91,6 +95,8 @@ module Metior
     #        limit to filter the commits
     # @return [CommitCollection] The commits that have been committed after the
     #         given date
+    # @see Commit#committed_date
+    # @see Time.parse
     def before(date)
       date = Time.parse date if date.is_a? String
       commits = CommitCollection.new
@@ -107,6 +113,7 @@ module Metior
     #        filtered by
     # @return [CommitCollection] The commits that have been authored by the
     #         given authors
+    # @see Commit#author
     def by(*author_ids)
       author_ids = author_ids.flatten.map do |author_id|
         author_id.is_a?(Actor) ? author_id.id : author_id
@@ -123,6 +130,9 @@ module Metior
     # @param [Array<String>] files The path of the files to filter commits by
     # @return [CommitCollection] The commits that contain changes to the given
     #         files
+    # @see Commit#added_files
+    # @see Commit#deleted_files
+    # @see Commit#modified_files
     def changing(*files)
       first.support! :file_stats
 
@@ -140,6 +150,7 @@ module Metior
     #        a specific commit should be returned
     # @return [ActorCollection] All committers of the commits in this
     #         collection or the committer of a specific commit
+    # @see Commit#committer
     def committers(commit_id = nil)
       committers = ActorCollection.new
       if commit_id.nil?
@@ -174,6 +185,7 @@ module Metior
     #        changed at least by the commits
     # @return [CommitCollection] The commits that change at least the given
     #         number of lines
+    # @see Commit#modifications
     def with_impact(line_count)
       first.support! :line_stats
 
