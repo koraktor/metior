@@ -43,6 +43,7 @@ module Metior
     #
     # @param [Object] object The object to add to the collection
     # @return [Collection] The collection itself
+    # @see Array#<<
     def <<(object)
       self[object.id] = object
       self
@@ -52,7 +53,9 @@ module Metior
     # the block returned `true` for all of them.
     #
     # @return [Boolean] Whether the block returns `true` for all values
-    # @see Enumerable#all?
+    # @see Enumerable#last
+    # @yield [element] Each of the elements of this collection
+    # @yieldparam [Object] element The current element of the collection
     def all?(&block)
       values.all?(&block)
     end
@@ -60,7 +63,7 @@ module Metior
     # Returns the value that has been added first to this collection
     #
     # @return [Object] The first value of the collection
-    # @see Array#first
+    # @see Enumerable#first
     def first
       values.first
     end
@@ -68,10 +71,23 @@ module Metior
     # Returns the value that has been added last to this collection
     #
     # @return [Object] The last value of the collection
-    # @see Array#last
+    # @see Enumerable#last
     def last
       values.last
     end
+
+    # Returns an array of objects returned by evaluating the given block for
+    # all
+    #
+    # @return [Array<Object>] The objects resulting from the evaluated
+    #         block
+    # @see Enumerable#last
+    # @yield [element] Each of the elements of this collection
+    # @yieldparam [Object] element The current element of the collection
+    def map(&block)
+      values.map(&block)
+    end
+    alias_method :collect, :map
 
   end
 
