@@ -342,23 +342,39 @@ module Metior
     # @see Commit#children
     def cached_commits(range)
       commits = []
-      if @commits.key? range.last
-        commit = @commits[range.last]
-        commits << commit
+      select_commit = nil
+
+      walk_history_down = lambda do |commit, sub_range|
         commit.parents.each do |parent|
-          if parent != range.first
-            commits += cached_commits range.first..parent
+          if parent != sub_range.first
+            select_commit.call sub_range.first..parent
           end
         end
-      elsif @commits.key? range.first
-        commit = @commits[range.first]
-        commits.unshift commit
+      end
+
+      walk_history_up = lambda do |commit, sub_range|
         commit.children.each do |child|
-          return [@commits[child]] if child == range.last
-          commits = cached_commits(child..range.last) + commits
+          select_commit.call child..sub_range.last
         end
       end
-      commits
+
+      select_commit = lambda do |sub_range|
+        if @commits.key? sub_range.last
+          commit = @commits[sub_range.last]
+          return if commits.include? commit
+          commits << commit
+          walk_history_down.call commit, sub_range
+        elsif @commits.key? sub_range.first
+          commit = @commits[sub_range.first]
+          return if commits.include? commit
+          commits.unshift commit
+          walk_history_up.call commit, sub_range
+        end
+      end
+
+      select_commit.call range
+
+      commits.sort_by { |c| c.committed_date }.reverse
     end
 
     # Returns the unique identifier for the commit the given reference – like a
