@@ -28,7 +28,7 @@ module Metior
       commit_count = values.size
 
       active_days = {}
-      values.each do |commit|
+      each do |commit|
         date = commit.committed_date.utc
         day  = Time.utc(date.year, date.month, date.day)
         if active_days.key? day
@@ -65,7 +65,7 @@ module Metior
     def after(date)
       date = Time.parse date if date.is_a? String
       commits = CommitCollection.new
-      each_value do |commit|
+      each do |commit|
         commits << commit if commit.committed_date > date
       end
       commits
@@ -82,7 +82,7 @@ module Metior
     def authors(commit_id = nil)
       authors = ActorCollection.new
       if commit_id.nil?
-        each_value { |commit| authors << commit.author }
+        each { |commit| authors << commit.author }
       elsif key? commit_id
         authors << self[commit_id].author
       end
@@ -101,7 +101,7 @@ module Metior
     def before(date)
       date = Time.parse date if date.is_a? String
       commits = CommitCollection.new
-      each_value do |commit|
+      each do |commit|
         commits << commit if commit.committed_date < date
       end
       commits
@@ -121,7 +121,7 @@ module Metior
         author_id.is_a?(Actor) ? author_id.id : author_id
       end
       commits = CommitCollection.new
-      each_value do |commit|
+      each do |commit|
         commits << commit if author_ids.include? commit.author.id
       end
       commits
@@ -139,7 +139,7 @@ module Metior
       first.support! :file_stats
 
       commits = CommitCollection.new
-      each_value do |commit|
+      each do |commit|
         commit_files = commit.added_files + commit.deleted_files + commit.modified_files
         commits << commit unless (commit_files & files).empty?
       end
@@ -157,7 +157,7 @@ module Metior
     def committers(commit_id = nil)
       committers = ActorCollection.new
       if commit_id.nil?
-        each_value { |commit| committers << commit.committer }
+        each { |commit| committers << commit.committer }
       elsif key? commit_id
         committers << self[commit_id].committer
       end
@@ -174,7 +174,7 @@ module Metior
       first.support! :line_stats
 
       commits = CommitCollection.new
-      values.sort_by { |commit| -commit.modifications }.each do |commit|
+      sort_by { |commit| -commit.modifications }.each do |commit|
         commits << commit
         break if commits.size == count
       end
@@ -194,7 +194,7 @@ module Metior
       first.support! :line_stats
 
       commits = CommitCollection.new
-      each_value do |commit|
+      each do |commit|
         commits << commit if commit.modifications >= line_count
       end
       commits

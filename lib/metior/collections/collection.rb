@@ -49,45 +49,35 @@ module Metior
       self
     end
 
-    # Evaluates the block for each value of the collection and returns whether
-    # the block returned `true` for all of them.
+    # Evaluates the block for each element of the collection
     #
-    # @return [Boolean] Whether the block returns `true` for all values
-    # @see Enumerable#last
+    # @return [Collection] The collection itself
     # @yield [element] Each of the elements of this collection
     # @yieldparam [Object] element The current element of the collection
-    def all?(&block)
-      values.all?(&block)
+    def each(&block)
+      each_value(&block)
+      self
     end
 
-    # Returns the value that has been added first to this collection
+    # Returns the element that has been added last to this collection
     #
-    # @return [Object] The first value of the collection
-    # @see Enumerable#first
-    def first
-      values.first
-    end
-
-    # Returns the value that has been added last to this collection
-    #
-    # @return [Object] The last value of the collection
+    # @return [Object] The last element of the collection
     # @see Enumerable#last
     def last
       values.last
     end
 
-    # Returns an array of objects returned by evaluating the given block for
-    # all
-    #
-    # @return [Array<Object>] The objects resulting from the evaluated
-    #         block
-    # @see Enumerable#last
-    # @yield [element] Each of the elements of this collection
-    # @yieldparam [Object] element The current element of the collection
-    def map(&block)
-      values.map(&block)
+    if superclass != Hash
+      # Adds all elements of another collection to this one
+      #
+      # @param [Collection] other_collection The collection to merge into this
+      #        one
+      # @return [Collection] The merged collection
+      def merge!(other_collection)
+        other_collection.each_pair { |k, v| self[k] = v }
+        self
+      end
     end
-    alias_method :collect, :map
 
   end
 

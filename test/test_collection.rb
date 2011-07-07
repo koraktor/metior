@@ -45,13 +45,11 @@ class TestCollections < Test::Unit::TestCase
       assert_equal object, @collection[object.id]
     end
 
-    should 'have a working #all? method' do
-      assert @collection.all? { |obj| obj.is_a? Dummy }
-      assert_not @collection.all? { |obj| obj == @object1 }
-    end
-
-    should 'have a working #first method' do
-      assert_equal @object1, @collection.first
+    should 'have a working #each method' do
+      objects = []
+      result = @collection.each { |obj| objects << obj }
+      assert_equal @collection, result
+      assert_equal [@object1, @object2, @object3], objects
     end
 
     should 'have a working #last method' do
