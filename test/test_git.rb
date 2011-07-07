@@ -25,8 +25,7 @@ class TestGit < Test::Unit::TestCase
     setup do
       @repo = Metior::Git::Repository.new File.dirname(File.dirname(__FILE__))
       @@grit_commits ||= Fixtures.commits_as_grit_commits(''..'master')
-      @commits_stub = Grit::Repo.any_instance.stubs :commits
-      @commits_stub.returns @@grit_commits
+      Grit::Repo.any_instance.stubs(:commits).returns @@grit_commits
     end
 
     should 'be able to load all commits from the repository\'s default branch' do
@@ -39,12 +38,11 @@ class TestGit < Test::Unit::TestCase
     end
 
     should 'be able to load a range of commits from the repository' do
+      api_response = Fixtures.commits_as_grit_commits('ef2870b'..'4c592b4')
+      Grit::Repo.any_instance.stubs(:commits).once.returns(api_response)
+
       @repo.expects(:id_for_ref).with('ef2870b').once.returns('ef2870b')
       @repo.expects(:id_for_ref).with('4c592b4').once.returns('4c592b4')
-
-      @commits_stub = Grit::Repo.any_instance.stubs :commits
-      api_response = Fixtures.commits_as_grit_commits('ef2870b'..'4c592b4')
-      @commits_stub.returns api_response
 
       commits = @repo.commits 'ef2870b'..'4c592b4'
       assert_equal 6, commits.size

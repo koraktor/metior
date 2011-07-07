@@ -43,13 +43,12 @@ class TestGitHub < Test::Unit::TestCase
     end
 
     should 'be able to load a range of commits from the repository' do
+      api_response = Fixtures.commits_as_rashies('ef2870b'..'4c592b4')
+      Octokit.stubs(:commits).returns(api_response).
+        raises(Octokit::NotFound.new nil)
+
       @repo.expects(:id_for_ref).with('ef2870b').once.returns('ef2870b')
       @repo.expects(:id_for_ref).with('4c592b4').once.returns('4c592b4')
-
-      @commits_stub = Octokit.stubs :commits
-      api_response = Fixtures.commits_as_rashies('ef2870b'..'4c592b4')
-      @commits_stub.returns api_response
-      @commits_stub.raises Octokit::NotFound.new(nil)
 
       commits = @repo.commits 'ef2870b'..'4c592b4'
       assert_equal 6, commits.size
