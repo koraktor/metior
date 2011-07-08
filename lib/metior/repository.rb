@@ -23,11 +23,13 @@ module Metior
     #
     # @param [String] path The file system path of the repository
     def initialize(path)
-      @authors    = {}
-      @commits    = {}
-      @committers = {}
-      @path       = path
-      @refs       = {}
+      @authors     = {}
+      @commits     = {}
+      @committers  = {}
+      @description = nil
+      @name        = nil
+      @path        = path
+      @refs        = {}
     end
 
     # Returns a single VCS specific actor object from the raw data of the
@@ -148,6 +150,18 @@ module Metior
     end
     alias_method :collaborators, :committers
 
+    # Returns the description of the project contained in the repository
+    #
+    # This will load the description through a VCS specific mechanism if
+    # required.
+    #
+    # @return [String] The description of the project in the repository
+    # @see #load_description
+    def description
+      load_description if @description.nil?
+      @description
+    end
+
     # This evaluates basic statistics about the files in a given commit range.
     #
     # @example
@@ -227,6 +241,17 @@ module Metior
       end
 
       history
+    end
+
+    # Returns the name of the project contained in the repository
+    #
+    # This will load the name through a VCS specific mechanism if required.
+    #
+    # @return [String] The name of the project in the repository
+    # @see #load_name
+    def name
+      load_name if @name.nil?
+      @name
     end
 
     # Returns a list of authors with the biggest impact on the repository, i.e.
@@ -407,6 +432,22 @@ module Metior
     #        reachable from that ref.
     # @return [Array<Commit>] All commits from the given commit range
     def load_commits(range = self.class::DEFAULT_BRANCH)
+      raise NotImplementedError
+    end
+
+    # Loads the description of the project contained in the repository
+    #
+    # @abstract Has to be implemented by VCS specific subclasses
+    # @see #description
+    def load_description
+      raise NotImplementedError
+    end
+
+    # Loads the name of the project contained in the repository
+    #
+    # @abstract Has to be implemented by VCS specific subclasses
+    # @see #description
+    def load_name
       raise NotImplementedError
     end
 

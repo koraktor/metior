@@ -15,6 +15,16 @@ class TestRepository < Test::Unit::TestCase
       @repo = Metior::Repository.new('dummy')
     end
 
+    should 'load the description of the project on demand' do
+      @repo.expects(:load_description).once
+      @repo.description
+    end
+
+    should 'load the name of the project on demand' do
+      @repo.expects(:load_name).once
+      @repo.name
+    end
+
     should 'not implement the #id_for_ref method' do
       assert_raise NotImplementedError do
         @repo.send :id_for_ref, nil
@@ -30,6 +40,18 @@ class TestRepository < Test::Unit::TestCase
     should 'not implement the #load_commits method' do
       assert_raise NotImplementedError do
         @repo.send(:load_commits, nil)
+      end
+    end
+
+    should 'not implement the #load_description' do
+      assert_raise NotImplementedError do
+        @repo.send :load_description
+      end
+    end
+
+    should 'not implement the #load_name method' do
+      assert_raise NotImplementedError do
+        @repo.send :load_name
       end
     end
 

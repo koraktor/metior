@@ -25,7 +25,7 @@ module Metior
       def initialize(path)
         super path
 
-        @grit_repo = Grit::Repo.new(path)
+        @grit_repo   = Grit::Repo.new(path)
       end
 
       private
@@ -89,6 +89,28 @@ module Metior
 
         [base_commit, commits]
       end
+
+      # Loads both the name and description of the project contained in the
+      # repository from the description file in `GIT_DIR`. The first line of
+      # that file is used as the project's name, the remaining text is used as
+      # a description of the project.
+      #
+      # @see #description
+      # @see #name
+      # @see Grit::Repo#name
+      def load_name_and_description
+        description = @grit_repo.description
+        if description.start_with? 'Unnamed repository'
+          @name        = ''
+          @description = ''
+        else
+          description  = description.lines.to_a
+          @name        = description.shift.strip
+          @description = description.join("\n").strip
+        end
+      end
+      alias_method :load_description, :load_name_and_description
+      alias_method :load_name, :load_name_and_description
 
       # Loads all tags and the corresponding commit IDs of this repository
       #

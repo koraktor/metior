@@ -147,6 +147,23 @@ class TestGit < Test::Unit::TestCase
       assert_equal tags, @repo.instance_variable_get(:@refs)
     end
 
+    should 'be able to load the name and description of the project' do
+      description = "grit\n\nGrit gives you object oriented read/write access to Git repositories via Ruby."
+      Grit::Repo.any_instance.expects(:description).once.returns description
+      @repo.expects(:load_description).never
+
+      assert_equal 'grit', @repo.name
+      assert_equal 'Grit gives you object oriented read/write access to Git repositories via Ruby.', @repo.description
+    end
+
+    should 'ignore the default Git description file' do
+      description = "Unnamed repository; edit this file 'description' to name the repository."
+      Grit::Repo.any_instance.expects(:description).once.returns description
+
+      assert_equal '', @repo.name
+      assert_equal '', @repo.description
+    end
+
   end
 
 end

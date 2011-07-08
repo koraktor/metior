@@ -32,8 +32,8 @@ module Metior
 
         super "#{user}/#{project}"
 
-        @project = project
-        @user    = user
+        @project     = project
+        @user        = user
       end
 
       private
@@ -99,6 +99,20 @@ module Metior
 
         [base_commit, commits]
       end
+
+      # Loads both the name and description of the project contained in the
+      # repository from GitHub
+      #
+      # @see #description
+      # @see #name
+      # @see Octokit.repo
+      def load_name_and_description
+        github_repo  = Octokit.repo @path
+        @description = github_repo.description
+        @name        = github_repo.name
+      end
+      alias_method :load_description, :load_name_and_description
+      alias_method :load_name, :load_name_and_description
 
       # Loads all tags and the corresponding commit IDs of this repository
       #

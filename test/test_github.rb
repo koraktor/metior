@@ -169,6 +169,18 @@ class TestGitHub < Test::Unit::TestCase
       assert_equal tags, @repo.instance_variable_get(:@refs)
     end
 
+    should 'be able to load the name and description of the project' do
+      repo = Hashie::Mash.new({
+        :name        => 'grit',
+        :description => 'Grit gives you object oriented read/write access to Git repositories via Ruby.'
+      })
+      Octokit.expects(:repo).with('mojombo/grit').once.returns repo
+      @repo.expects(:load_description).never
+
+      assert_equal repo.name, @repo.name
+      assert_equal repo.description, @repo.description
+    end
+
   end
 
 end
