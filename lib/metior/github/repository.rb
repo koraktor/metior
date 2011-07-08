@@ -48,6 +48,7 @@ module Metior
       def id_for_ref(ref)
         return ref if ref.match /[0-9a-f]{40}/
         @refs[ref] = Octokit.commit(@path, ref).id unless @refs.key? ref
+        @refs[ref]
       end
 
       # Loads all branches and the corresponding commit IDs of this repository
