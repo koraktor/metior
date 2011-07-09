@@ -1,0 +1,8 @@
+<div id="top_committers">
+    <h3>Top committers</h3>
+    <ul>
+        {{#committers}}
+          <li>{{> actor/minimal}} ({{commit_count}})</li>
+        {{/committers}}
+    </ul>
+</div>

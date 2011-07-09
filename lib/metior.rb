@@ -6,6 +6,7 @@
 require 'core_ext/object'
 require 'metior/git'
 require 'metior/github'
+require 'metior/reports/report'
 require 'metior/version'
 
 # Metior is a source code history analyzer that provides various statistics

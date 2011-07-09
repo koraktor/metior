@@ -1,0 +1,13 @@
+body {
+  font-family: Helvetica, sans-serif;
+}
+
+div#most_significant_authors, div#repository_information, div#top_committers {
+  border:  1px solid #ccc;
+  padding: 5px;
+  width:   40em;
+}
+
+div#repository_information strong {
+  margin-left: 2em;
+}
