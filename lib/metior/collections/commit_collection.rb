@@ -164,6 +164,32 @@ module Metior
       committers
     end
 
+    # This evaluates the changed lines in each commit of this collection
+    #
+    # For easier use, the values are stored in separate arrays where each
+    # number represents the number of changed (i.e. added or deleted) lines in
+    # one commit.
+    #
+    # @example
+    #  commits.line_history
+    #  => { :additions => [10, 5, 0], :deletions => [0, -2, -1] }
+    # @return [Hash<Symbol, Array>] Added lines are returned in an `Array`
+    #         assigned to key `:additions`, deleted lines are assigned to
+    #         `:deletions`
+    # @see Commit#additions
+    # @see Commit#deletions
+    def line_history
+      first.support! :line_stats
+
+      history = { :additions => [], :deletions => [] }
+      values.reverse.each do |commit|
+        history[:additions] <<  commit.additions
+        history[:deletions] << -commit.deletions
+      end
+
+      history
+    end
+
     # Returns the given number of commits with most line changes on the
     # repository
     #

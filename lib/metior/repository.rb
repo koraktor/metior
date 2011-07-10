@@ -229,18 +229,9 @@ module Metior
     # @return [Hash<Symbol, Array>] Added lines are returned in an `Array`
     #         assigned to key `:additions`, deleted lines are assigned to
     #         `:deletions`
-    # @see Commit#additions
-    # @see Commit#deletions
+    # @see CommitCollection#line_history
     def line_history(range = self.class::DEFAULT_BRANCH)
-      support! :line_stats
-
-      history = { :additions => [], :deletions => [] }
-      commits(range).reverse.each do |commit|
-        history[:additions] <<  commit.additions
-        history[:deletions] << -commit.deletions
-      end
-
-      history
+      commits(range).line_history
     end
 
     # Returns the name of the project contained in the repository
