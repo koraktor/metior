@@ -23,7 +23,7 @@ If you're interested in Metior, feel free to join the discussion on Convore in
 
 ### More fine-grained access to repository statistics
 
-    repo.commits 'development'         # Get all commits in development
+    repo.commits 'development'         # Get all commits in branch development
     repo.file_stats                    # Basic statistics about the files
                                        # contained in a repository
     repo.line_history                  # Quick access to lines added and
@@ -32,14 +32,34 @@ If you're interested in Metior, feel free to join the discussion on Convore in
                                        # authors
     repo.significant_commits           # Get up to 3 of the commits changing
                                        # the most lines
-    repo.top_authors 'master', 5       # Get the top 5 authors in master
+    repo.authors('master').top(5)      # Get the top 5 authors in master
 
-### Get statistics about a set of commits
+### Query a collection of commits
 
     repo.commits.activity
-    repo.authors[author_id].commits.activity
+    repo.commits.after('05/29/2010')
+    repo.commits.authors
+    repo.commits.before('05/29/2010')
+    repo.commits.by('koraktor')
+    repo.commits.changing('lib/metior.rb')
+    repo.commits.most_significant(10)
+    repo.commits.with_impact(100)
+
+### Query a collection of actors
+
+    repo.authors.commits
+    repo.authors.most_significant(10)
+    repo.authors.top(10)
 
 ## Advanced usage
+
+### Chain collection querys
+
+Querys on a collection of commits or actors can be easily chained to achieve
+complex filters on the available data.
+
+    repo.commits.by('koraktor').after('05/29/2010').with_impact(100)
+    repo.authors.top(10).commits.changing('lib/metior.rb')
 
 ### Specifying commit ranges
 
@@ -49,15 +69,13 @@ from the last released version to the latest code. In that case you will have
 to specify a commit range. Specifying a commit range works just like in Git:
 
     'master..development'
-    'master'..'development'
-    'master'..'HEAD'
-    'master..HEAD'
     'deadbeef..HEAD'
+    'master'..'development'
 
 Given that your currently checked out branch is `development` and `master`
 points to commit `deadbeef`, the above statements are equal. Please also note
-the different syntaxes: The first three example are standard strings which
-will be parsed by Metior. The others are Ruby `Range` objects which can be
+the different syntaxes: The first two example are standard strings which
+will be parsed by Metior. The other one is a Ruby `Range` object which can be
 used by Metior right away.
 
 ## Requirements
