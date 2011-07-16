@@ -14,7 +14,8 @@ Gem::Specification.new do |s|
 
   Bundler.with_clean_env do
     ENV['BUNDLE_GEMFILE'] = File.expand_path(File.dirname(__FILE__) + '/Gemfile')
-    Bundler.definition(true).dependencies.each do |dep|
+    gemfile, lockfile = Bundler.default_gemfile, Bundler.default_lockfile
+    Bundler::Definition.build(gemfile, lockfile, nil).dependencies.each do |dep|
       if dep.groups.include?(:development) || dep.groups.include?(:test)
         s.add_development_dependency(dep.name, dep.requirement.to_s)
       else
@@ -22,7 +23,6 @@ Gem::Specification.new do |s|
       end
     end
   end
-  Bundler.definition true
 
   s.files              = `git ls-files`.split("\n")
   s.test_files         = `git ls-files -- test/*`.split("\n")
