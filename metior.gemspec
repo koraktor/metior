@@ -12,19 +12,16 @@ Gem::Specification.new do |s|
   s.summary     = 'A source code history analyzer API'
   s.description = 'Metior is a source code history analyzer that provides various statistics about a source code repository and its change over time.'
 
-  Bundler.with_clean_env do
-    ENV['BUNDLE_GEMFILE'] = File.expand_path(File.dirname(__FILE__) + '/Gemfile')
-    gemfile, lockfile = Bundler.default_gemfile, Bundler.default_lockfile
-    Bundler::Definition.build(gemfile, lockfile, nil).dependencies.each do |dep|
-      if dep.groups.include?(:development) || dep.groups.include?(:test)
-        s.add_development_dependency(dep.name, dep.requirement.to_s)
-      else
-        s.add_dependency(dep.name, dep.requirement.to_s)
-      end
-    end
-  end
+  s.add_dependency 'grit', '~> 2.4.1'
+  s.add_dependency 'hashery', '~> 1.4.0' if RUBY_VERSION.match(/^1\.8/)
+  s.add_dependency 'octokit', '~> 0.6.4'
 
-  s.files              = `git ls-files`.split("\n")
-  s.test_files         = `git ls-files -- test/*`.split("\n")
-  s.require_paths      = [ 'lib' ]
+  s.add_development_dependency 'mocha', '~> 0.9.12'
+  s.add_development_dependency 'rake', '~> 0.9.2'
+  s.add_development_dependency 'shoulda', '~> 2.11.3'
+  s.add_development_dependency 'yard', '~> 0.7.2'
+
+  s.files         = `git ls-files`.split("\n")
+  s.test_files    = `git ls-files -- test/*`.split("\n")
+  s.require_paths = [ 'lib' ]
 end
