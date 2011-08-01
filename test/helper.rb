@@ -3,17 +3,20 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
+require 'test/unit'
+
 require 'rubygems'
 require 'bundler'
+
+Bundler.setup
+
+require 'mocha'
+require 'shoulda'
 
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'metior'
 include Metior
-
-Bundler.setup
-Bundler.require :test
-require 'mocha'
 
 # Extends TestCase functionality
 class Test::Unit::TestCase
