@@ -50,9 +50,9 @@ If you have questions, problems, or suggestions feel free to get in touch:
 
 ## Further information
 
-* Source code repository at [GitHub][8]
-* Project statistic at [Ohloh][9]
-* Continuous integration at [Travis CI][10]
+* Source code repository at [GitHub][9]
+* Project statistic at [Ohloh][10]
+* Continuous integration at [Travis CI][11]
 
 Thanks for these great services.
 
