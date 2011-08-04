@@ -25,28 +25,26 @@ module Metior
     #
     # @param [String] path The file system path of the repository
     def initialize(path)
-      @authors     = {}
+      @actors      = {}
       @commits     = {}
-      @committers  = {}
       @description = nil
       @name        = nil
       @path        = path
       @refs        = {}
     end
 
-    # Returns a single VCS specific actor object from the raw data of the
-    # author provided by the VCS implementation
+    # Returns a single VCS specific actor object from the raw data of the actor
+    # provided by the VCS implementation
     #
-    # The author object is either created from the given raw data or retrieved
-    # from the cache using the VCS specific unique identifier of the
-    # author.
+    # The actor object is either created from the given raw data or retrieved
+    # from the cache using the VCS specific unique identifier of the actor.
     #
-    # @param [Object] author The raw data of the author provided by the VCS
-    # @return [Actor] A object representing the author
+    # @param [Object] actor The raw data of the actor provided by the VCS
+    # @return [Actor] A object representing the actor
     # @see Actor.id_for
-    def author(author)
-      id = self.class::Actor.id_for(author)
-      @authors[id] ||= self.class::Actor.new(self, author)
+    def actor(actor)
+      id = self.class::Actor.id_for(actor)
+      @actors[id] ||= self.class::Actor.new(self, actor)
     end
 
     # Returns all authors from the given commit range in a hash where the IDs
@@ -114,22 +112,6 @@ module Metior
       end
 
       CommitCollection.new commits
-    end
-
-    # Returns a single VCS specific actor object from the raw data of the
-    # committer provided by the VCS implementation
-    #
-    # The committer object is either created from the given raw data or
-    # retrieved from the cache using the VCS specific unique identifier of the
-    # committer
-    #
-    # @param [Object] committer The raw data of the committer provided by the
-    #        VCS
-    # @return [Actor] A object representing the committer
-    # @see Actor.id_for
-    def committer(committer)
-      id = self.class::Actor.id_for(committer)
-      @committers[id] ||= self.class::Actor.new(self, committer)
     end
 
     # Returns all committers from the given commit range in a hash where the
@@ -327,8 +309,7 @@ module Metior
         commit.add_child child_commit_id unless child_commit_id.nil?
         child_commit_id = commit.id
         @commits[commit.id] = commit
-        @authors[commit.author.id] = commit.author
-        @committers[commit.committer.id] = commit.committer
+        @actors[commit.author.id] ||= commit.author
         commit
       end
     end

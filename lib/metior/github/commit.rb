@@ -35,10 +35,10 @@ module Metior
         @modified_files = []
         @parents        = commit.parents.map { |parent| parent.id }
 
-        @author = repo.author(commit.author)
-        @author.add_commit self
-        @committer = repo.committer(commit.committer)
-        @committer.add_commit self
+        @author = repo.actor commit.author
+        @author.add_authored_commit self
+        @committer = repo.actor commit.committer
+        @committer.committed_commits << self
       end
 
     end

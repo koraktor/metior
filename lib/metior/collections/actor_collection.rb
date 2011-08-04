@@ -24,9 +24,9 @@ module Metior
     def commits(actor_id = nil)
       commits = CommitCollection.new
       if actor_id.nil?
-        each { |actor| commits.merge! actor.commits }
+        each { |actor| commits.merge! actor.authored_commits }
       elsif key? actor_id
-        commits = self[actor_id].commits
+        commits = self[actor_id].authored_commits
       end
       commits
     end
@@ -57,7 +57,7 @@ module Metior
     # @see Actor#commits
     def top(count = 3)
       authors = ActorCollection.new
-      sort_by { |author| -author.commits.size }.each do |author|
+      sort_by { |author| -author.authored_commits.size }.each do |author|
         authors << author
         break if authors.size == count
       end
