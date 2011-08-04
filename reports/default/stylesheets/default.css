@@ -1,13 +1,45 @@
-body {
-  font-family: Helvetica, sans-serif;
+html {
+  background: #382211;
+  width:      100%;
 }
 
-div#most_significant_authors, div#repository_information, div#top_committers {
-  border:  1px solid #ccc;
-  padding: 5px;
-  width:   40em;
+body {
+  color:       #ffb;
+  font-family: Helvetica, sans-serif;
+  margin:      2em 0 0 5em;
+  width:       980px;
+}
+
+div#content {
+  border:        2px solid #ffb;
+  border-radius: 5px;
+  box-shadow:    #000 4px 4px 4px;
+
+  -moz-border-radius:    5px;
+  -moz-box-shadow:       #000 4px 4px 4px;
+  -webkit-border-radius: 5px;
+  -webkit-box-shadow:    #000 4px 4px 4px;
+}
+
+div#content div {
+  padding: 0.5em;
+}
+
+div#most_significant_authors, div#repository_information {
+  border-bottom: 2px solid #ffb;
 }
 
 div#repository_information strong {
   margin-left: 2em;
+}
+
+em {
+  color: #f95;
+  font-family: Bevan, serif;
+}
+
+h4 {
+  color:      #aa5;
+  font-size:  10pt;
+  text-align: right;
 }
