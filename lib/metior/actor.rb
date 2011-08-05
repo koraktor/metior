@@ -25,11 +25,11 @@ module Metior
     # @return [CommitCollection] The list of commits this actor has contributed
     #         to the source code repository
     attr_reader :authored_commits
+    alias_method :commits, :authored_commits
 
     # @return [CommitCollection] The list of commits this actor has committed
     #         to the source code repository
     attr_reader :committed_commits
-    alias_method :commits, :committed_commits
 
     # @return [Fixnum] The lines of code that have been deleted by this actor
     attr_reader :deletions
