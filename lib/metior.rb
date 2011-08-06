@@ -25,6 +25,18 @@ module Metior
     vcs(type)::Repository.new(*options)
   end
 
+  # Generates a report for the given repository
+  #
+  # @param [Symbol] type The type of the repository, e.g. `:git`
+  # @param [Array<Object>] options The options to use for creating the new
+  #        repository, e.g. a file system path
+  # @param [String] target_dir The target directory to save the report to
+  # @param [String] report The name of the report template to use
+  def self.generate_report(type, repo_options, target_dir, report = 'default')
+    repo = repository type, *repo_options
+    Reports::Report.create(report, repo).generate target_dir
+  end
+
   # Calculates simplistic stats for the given repository and branch
   #
   # @param [Symbol] type The type of the repository, e.g. `:git`
