@@ -17,6 +17,42 @@ module Metior
   # @see Commit
   class CommitCollection < Collection
 
+    # Returns the lines of code that have been added by the commits in this
+    # collection
+    #
+    # @return [Fixnum] The lines of code that have been added
+    attr_reader :additions
+
+    # Returns the lines of code that have been deleted by the commits in this
+    # collection
+    #
+    # @return [Fixnum] The lines of code that have been deleted
+    attr_reader :deletions
+
+    # Creates a new collection with the given commits
+    #
+    # @param [Array<Commit>] commits The commits that should be initially
+    #        inserted into the collection
+    def initialize(commits = [])
+      @additions = 0
+      @deletions = 0
+
+      super
+    end
+
+    # Adds a commit to this collection
+    #
+    # @param [Commit] commit The commit to add to this collection
+    # @return [CommitCollection] The collection itself
+    def <<(commit)
+      return self if key? commit.id
+
+      @additions += commit.additions
+      @deletions += commit.deletions
+
+      super
+    end
+
     # Calculate some predefined activity statistics for the commits in this
     # collection
     #
@@ -188,6 +224,13 @@ module Metior
       end
 
       history
+    end
+
+    # Returns the total of lines changed by the commits in this collection
+    #
+    # @return [Fixnum] The total number of lines changed
+    def modifications
+      @additions + @deletions
     end
 
     # Returns the given number of commits with most line changes on the

@@ -31,7 +31,7 @@ module Metior
         @parents        = commit.parents.map { |parent| parent.id }
 
         @author = repo.actor commit.author
-        @author.add_authored_commit self
+        @author.authored_commits << self
         @committer = repo.actor commit.committer
         @committer.committed_commits << self
 

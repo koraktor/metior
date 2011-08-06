@@ -19,9 +19,6 @@ module Metior
 
     include AutoIncludeVCS
 
-    # @return [Fixnum] The lines of code that have been added by this actor
-    attr_reader :additions
-
     # @return [CommitCollection] The list of commits this actor has contributed
     #         to the source code repository
     attr_reader :authored_commits
@@ -30,9 +27,6 @@ module Metior
     # @return [CommitCollection] The list of commits this actor has committed
     #         to the source code repository
     attr_reader :committed_commits
-
-    # @return [Fixnum] The lines of code that have been deleted by this actor
-    attr_reader :deletions
 
     # @return [String] The full name of the actor
     attr_reader :name
@@ -54,21 +48,23 @@ module Metior
     #
     # @param [Repository] repo The repository this actor belongs to
     def initialize(repo)
-      @additions         = 0
       @authored_commits  = CommitCollection.new
       @committed_commits = CommitCollection.new
-      @deletions         = 0
       @repo              = repo
     end
 
-    # Adds a new commit to the list of commits this actor has contributed to
-    # the analyzed source code repository
+    # Returns the lines of code that have been added by this actor
     #
-    # @param [Commit] commit The commit to add to the list
-    def add_authored_commit(commit)
-      @additions += commit.additions
-      @authored_commits << commit
-      @deletions += commit.deletions
+    # @return [Fixnum] The lines of code that have been added
+    def additions
+      @authored_commits.additions
+    end
+
+    # Returns the lines of code that have been deleted by this actor
+    #
+    # @return [Fixnum] The lines of code that have been deleted
+    def deletions
+      @authored_commits.deletions
     end
 
     # Creates a string representation for this actor without recursing into
@@ -87,7 +83,7 @@ module Metior
     #
     # @return [Fixnum] The total number of changed lines
     def modifications
-      additions + deletions
+      @authored_commits.modifications
     end
 
   end
