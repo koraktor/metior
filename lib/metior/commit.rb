@@ -71,12 +71,36 @@ module Metior
       @repo     = repo
     end
 
+    # Sets the author of this commit
+    #
+    # This also adds the commit to the commits this actor has authored.
+    #
+    # @param [Object] author The data of the author of this commit
+    # @see Actor#authored_commits
+    # @see Repository#actor
+    def author=(author)
+      @author = @repo.actor author
+      @author.authored_commits << self
+    end
+
     # Adds the unique identifier of a child of this commit to the list of child
     # commits
     #
     # @param [Object] child The unique identifier of the child commit to add
     def add_child(child)
       @children << child
+    end
+
+    # Sets the comitter of this commit
+    #
+    # This also adds the commit to the commits this actor has comitted.
+    #
+    # @param [Object] committer The data of the comitter of this commit
+    # @see Actor#committed_commits
+    # @see Repository#actor
+    def committer=(committer)
+      @committer = @repo.actor committer
+      @committer.committed_commits << self
     end
 
     # Returns whether this commits is a merge commit
