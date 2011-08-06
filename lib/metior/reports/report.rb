@@ -20,6 +20,12 @@ module Metior
 
       attr_reader :repository
 
+      def self.create(name, repository)
+        require File.join(REPORTS_PATH, name.to_s)
+        name = name.to_s.split('_').map { |n| n.capitalize }.join('')
+        Metior::Reports.const_get(name.to_sym).new(repository)
+      end
+
       def self.name
         class_variable_get(:@@name).to_s
       end
