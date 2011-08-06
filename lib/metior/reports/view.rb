@@ -10,6 +10,16 @@ module Metior
     # @author Sebastian Staudt
     class View < Mustache
 
+      def self.inherited(subclass)
+        subclass.send :class_variable_set, :@@required_features, []
+      end
+
+      def self.requires(*features)
+        required_features = class_variable_get :@@required_features
+        required_features += features
+        class_variable_set :@@required_features, required_features
+      end
+
       def initialize(report)
         @report = report
       end
@@ -23,6 +33,12 @@ module Metior
         return view_class.new(@report).render if view_class != Mustache
 
         repository.send name, *args, &block
+      end
+
+      def render(*args)
+        required_features = self.class.send :class_variable_get, :@@required_features
+        return unless required_features.all? { |f| repository.supports? f }
+        super
       end
 
       def repository
