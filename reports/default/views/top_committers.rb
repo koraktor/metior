@@ -9,7 +9,7 @@ module Metior::Reports
   class Default::TopCommitters < View
 
     def committers
-      @repository.committers.top(5).values
+      repository.authors.top(5).values
     end
 
     def commit_count

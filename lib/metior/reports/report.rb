@@ -18,6 +18,8 @@ module Metior
 
       REPORTS_PATH = File.expand_path File.join File.dirname(__FILE__), '..', '..', '..', 'reports'
 
+      attr_reader :repository
+
       def self.name
         class_variable_get(:@@name).to_s
       end
@@ -51,7 +53,7 @@ module Metior
         Mustache.view_namespace = self.class
 
         self.class.views.each do |view_name|
-          output = Mustache.view_class(view_name).new(self, @repository).render
+          output = Mustache.view_class(view_name).new(self).render
           output_file = File.open File.join(target_dir, view_name.to_s.downcase + '.html'), 'w'
           output_file.write output
           output_file.close

@@ -10,30 +10,33 @@ module Metior
     # @author Sebastian Staudt
     class View < Mustache
 
-      def initialize(report, repository)
-        @report     = report
-        @repository = repository
+      def initialize(report)
+        @report = report
       end
 
       def method_missing(name, *args, &block)
         view_class = Mustache.view_class name
-        return view_class.new(@report, @repository).render if view_class != Mustache
+        return view_class.new(@report).render if view_class != Mustache
 
         Mustache.view_namespace = Metior::Reports::Default
         view_class = Mustache.view_class name
-        return view_class.new(@report, @repository).render if view_class != Mustache
+        return view_class.new(@report).render if view_class != Mustache
 
-        @repository.send name, *args, &block
+        repository.send name, *args, &block
+      end
+
+      def repository
+        @report.repository
       end
 
       def respond_to?(name)
         methods.include?(name.to_s) ||
         Mustache.view_class(name) != Mustache ||
-        @repository.respond_to?(name)
+        repository.respond_to?(name)
       end
 
       def vcs_name
-        @repository.vcs::NAME
+        repository.vcs::NAME
       end
 
     end

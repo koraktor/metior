@@ -9,7 +9,7 @@ module Metior::Reports
   class Default::MostSignificantAuthors < View
 
     def authors
-      @repository.authors.most_significant(5).values
+      repository.authors.most_significant(5).values
     end
 
     def modification_count

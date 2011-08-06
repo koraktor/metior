@@ -8,12 +8,12 @@ module Metior::Reports
   # @author Sebastian Staudt
   class Default::Index < View
 
-    def repository
-      @repository.name.empty? ? @repository.path : @repository.name
+    def repo_name
+      repository.name.empty? ? repository.path : repository.name
     end
 
     def title
-      "Stats for #{repository}"
+      "Stats for #{repo_name}"
     end
 
     def version
