@@ -6,12 +6,12 @@
 module Metior::Reports
 
   # @author Sebastian Staudt
-  class Default::MostSignificantAuthors < View
+  class Default::MostSignificantCommits < View
 
     requires :line_stats
 
-    def authors
-      repository.authors.most_significant(5).values
+    def commits
+      repository.commits.most_significant(5).values
     end
 
   end

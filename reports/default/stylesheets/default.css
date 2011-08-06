@@ -35,7 +35,7 @@ div#footer, h4 {
   font-size:  10pt;
 }
 
-div#most_significant_authors, div#repository_information {
+div#most_significant_authors, div#repository_information, div#top_committers {
   border-bottom: 2px solid #ffb;
 }
 
