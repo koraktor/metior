@@ -22,10 +22,8 @@ module Metior
       def initialize(repo, commit)
         super repo
 
-        @additions      = commit.stats.additions
         @authored_date  = commit.authored_date
         @committed_date = commit.committed_date
-        @deletions      = commit.stats.deletions
         @id             = commit.id
         @message        = commit.message
         @parents        = commit.parents.map { |parent| parent.id }
@@ -55,7 +53,15 @@ module Metior
           @modified_files << diff.b_path
         end
       end
+    end
 
+    # Loads the line stats for this commit from the repository
+    #
+    # @see Repository#raw_commit
+    def load_line_stats
+      commit = @repo.raw_commit @id
+      @additions = commit.stats.additions
+      @deletions = commit.stats.deletions
     end
 
   end

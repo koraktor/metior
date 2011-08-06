@@ -19,9 +19,6 @@ module Metior
 
     include AutoIncludeVCS
 
-    # @return [Fixnum] The lines of code that have been added in this commit
-    attr_reader :additions
-
     # @return [Actor] This commit's author
     attr_reader :author
 
@@ -40,9 +37,6 @@ module Metior
 
     # @return [Actor] This commit's committer
     attr_reader :committer
-
-    # @return [Fixnum] The lines of code that have been deleted in this commit
-    attr_reader :deletions
 
     # @return [String] The commit message of this commit
     attr_reader :message
@@ -93,6 +87,15 @@ module Metior
       @added_files
     end
 
+    # Returnes the number of lines of code added in this commit
+    #
+    # @return [Fixnum] The lines of code that have been added
+    # @see #load_line_stats
+    def additions
+      load_line_stats if @additions.nil?
+      @additions
+    end
+
     # Sets the comitter of this commit
     #
     # This also adds the commit to the commits this actor has comitted.
@@ -114,6 +117,15 @@ module Metior
     def deleted_files
       load_file_stats if @deleted_files.nil?
       @deleted_files
+    end
+
+    # Returnes the number of lines of code deleted in this commit
+    #
+    # @return [Fixnum] The lines of code that have been deleted
+    # @see #load_line_stats
+    def deletions
+      load_line_stats if @deletions.nil?
+      @deletions
     end
 
     # Returns whether this commits is a merge commit
@@ -166,6 +178,13 @@ module Metior
     #
     # @abstract Has to be implemented by VCS specific subclasses
     def load_file_stats
+      raise NotImplementedError
+    end
+
+    # Loads the line stats for this commit from the repository
+    #
+    # @abstract Has to be implemented by VCS specific subclasses
+    def load_line_stats
       raise NotImplementedError
     end
 

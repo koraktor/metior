@@ -17,25 +17,13 @@ module Metior
   # @see Commit
   class CommitCollection < Collection
 
-    # Returns the lines of code that have been added by the commits in this
-    # collection
-    #
-    # @return [Fixnum] The lines of code that have been added
-    attr_reader :additions
-
-    # Returns the lines of code that have been deleted by the commits in this
-    # collection
-    #
-    # @return [Fixnum] The lines of code that have been deleted
-    attr_reader :deletions
-
     # Creates a new collection with the given commits
     #
     # @param [Array<Commit>] commits The commits that should be initially
     #        inserted into the collection
     def initialize(commits = [])
-      @additions = 0
-      @deletions = 0
+      @additions = nil
+      @deletions = nil
 
       super
     end
@@ -47,8 +35,10 @@ module Metior
     def <<(commit)
       return self if key? commit.id
 
-      @additions += commit.additions
-      @deletions += commit.deletions
+      unless @additions.nil?
+        @additions += commit.additions
+        @deletions += commit.deletions
+      end
 
       super
     end
@@ -87,6 +77,20 @@ module Metior
       activity[:commits_per_active_day] = commit_count.to_f / active_days.size
 
       activity
+    end
+
+    # Returns the lines of code that have been added by the commits in this
+    # collection
+    #
+    # This will load the line stats from the commits if not done yet.
+    #
+    # @return [Fixnum] The lines of code that have been added
+    # @see #load_line_stats
+    def additions
+      first.support! :line_stats
+
+      load_line_stats if @additions.nil?
+      @additions
     end
 
     # Returns the commits in this collection that have been committed after the
@@ -200,6 +204,20 @@ module Metior
       committers
     end
 
+    # Returns the lines of code that have been deleted by the commits in this
+    # collection
+    #
+    # This will load the line stats from the commits if not done yet.
+    #
+    # @return [Fixnum] The lines of code that have been deleted
+    # @see #load_line_stats
+    def deletions
+      first.support! :line_stats
+
+      load_line_stats if @deletions.nil?
+      @deletions
+    end
+
     # This evaluates the changed lines in each commit of this collection
     #
     # For easier use, the values are stored in separate arrays where each
@@ -229,8 +247,10 @@ module Metior
     # Returns the total of lines changed by the commits in this collection
     #
     # @return [Fixnum] The total number of lines changed
+    # @see #additions
+    # @see #deletions
     def modifications
-      @additions + @deletions
+      additions + deletions
     end
 
     # Returns the given number of commits with most line changes on the
@@ -267,6 +287,21 @@ module Metior
         commits << commit if commit.modifications >= line_count
       end
       commits
+    end
+
+    private
+
+    # Loads the line stats for all commits in this collection
+    #
+    # @see Commit#additions
+    # @see Commit#deletions
+    def load_line_stats
+      @additions = 0
+      @deletions = 0
+      each do |commit|
+        @additions += commit.additions
+        @deletions += commit.deletions
+      end
     end
 
   end
