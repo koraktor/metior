@@ -329,37 +329,35 @@ module Metior
     # @see Commit#children
     def cached_commits(range)
       commits = []
-      select_commit = nil
 
-      walk_history_down = lambda do |commit, sub_range|
-        commit.parents.each do |parent|
-          if parent != sub_range.first
-            select_commit.call sub_range.first..parent
+      direction = nil
+      if @commits.key? range.last
+        current_commits = [@commits[range.last]]
+        direction = :parents
+      elsif @commits.key? range.first
+        current_commits = [@commits[range.first]]
+        direction = :children
+      end
+
+      unless direction.nil?
+        while !current_commits.empty? do
+          new_commits = []
+          current_commits.each do |commit|
+            new_commits += commit.send direction
+            commits << commit if commit.id != range.first
+            if direction == :parents && new_commits.include?(range.first)
+              new_commits = []
+              break
+            end
+          end
+          unless new_commits.include? range.first
+            current_commits = new_commits.uniq.map do |commit|
+              commit = @commits[commit]
+              commits.include?(commit) ? nil : commit
+            end.compact
           end
         end
       end
-
-      walk_history_up = lambda do |commit, sub_range|
-        commit.children.each do |child|
-          select_commit.call child..sub_range.last
-        end
-      end
-
-      select_commit = lambda do |sub_range|
-        if @commits.key? sub_range.last
-          commit = @commits[sub_range.last]
-          return if commits.include? commit
-          commits << commit
-          walk_history_down.call commit, sub_range
-        elsif @commits.key? sub_range.first
-          commit = @commits[sub_range.first]
-          return if commits.include? commit
-          commits.unshift commit
-          walk_history_up.call commit, sub_range
-        end
-      end
-
-      select_commit.call range
 
       commits.sort_by { |c| c.committed_date }.reverse
     end
