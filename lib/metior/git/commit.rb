@@ -32,21 +32,27 @@ module Metior
 
         self.author    = commit.author
         self.committer = commit.committer
+      end
 
-        @added_files    = []
-        @modified_files = []
-        @deleted_files  = []
-        commit.diffs.each do |diff|
-          if diff.new_file
-            @added_files    << diff.b_path
-          elsif diff.deleted_file
-            @deleted_files  << diff.b_path
-          elsif diff.renamed_file
-            @added_files    << diff.b_path
-            @deleted_files  << diff.a_path
-          else
-            @modified_files << diff.b_path
-          end
+    end
+
+    # Loads the file stats for this commit from the repository
+    #
+    # @see Repository#raw_commit
+    def load_file_stats
+      @added_files    = []
+      @modified_files = []
+      @deleted_files  = []
+      @repo.raw_commit(@id).diffs.each do |diff|
+        if diff.new_file
+          @added_files    << diff.b_path
+        elsif diff.deleted_file
+          @deleted_files  << diff.b_path
+        elsif diff.renamed_file
+          @added_files    << diff.b_path
+          @deleted_files  << diff.a_path
+        else
+          @modified_files << diff.b_path
         end
       end
 

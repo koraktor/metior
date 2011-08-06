@@ -25,7 +25,16 @@ module Metior
       def initialize(path)
         super path
 
-        @grit_repo   = Grit::Repo.new(path)
+        @grit_repo = Grit::Repo.new(path)
+      end
+
+      # Retrieves a raw commit object for the given commit ID
+      #
+      # @param [String] id The ID of the commit
+      # @return [Grit::Commit] The commit object
+      # @see Grit::Repo#commit
+      def raw_commit(id)
+        @grit_repo.commit(id)
       end
 
       private

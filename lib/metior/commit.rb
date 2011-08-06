@@ -19,9 +19,6 @@ module Metior
 
     include AutoIncludeVCS
 
-    # @return [Array<String>] A list of file paths added in this commit
-    attr_reader :added_files
-
     # @return [Fixnum] The lines of code that have been added in this commit
     attr_reader :additions
 
@@ -44,17 +41,11 @@ module Metior
     # @return [Actor] This commit's committer
     attr_reader :committer
 
-    # @return [Array<String>] A list of file paths deleted in this commit
-    attr_reader :deleted_files
-
     # @return [Fixnum] The lines of code that have been deleted in this commit
     attr_reader :deletions
 
     # @return [String] The commit message of this commit
     attr_reader :message
-
-    # @return [Array<String>] A list of file paths modified in this commit
-    attr_reader :modified_files
 
     # @return [Array<Object>] The unique identifiers of one or more more
     #         parents of this commit
@@ -91,6 +82,17 @@ module Metior
       @children << child
     end
 
+    # Returns the paths of all files that have been modified in this commit
+    #
+    # This will load the file stats from the repository if not done yet.
+    #
+    # @return [Array<String>] A list of file paths added in this commit
+    # @see #load_file_stats
+    def added_files
+      load_file_stats if @added_files.nil?
+      @added_files
+    end
+
     # Sets the comitter of this commit
     #
     # This also adds the commit to the commits this actor has comitted.
@@ -101,6 +103,17 @@ module Metior
     def committer=(committer)
       @committer = @repo.actor committer
       @committer.committed_commits << self
+    end
+
+    # Returns the paths of all files that have been modified in this commit
+    #
+    # This will load the file stats from the repository if not done yet.
+    #
+    # @return [Array<String>] A list of file paths deleted in this commit
+    # @see #load_file_stats
+    def deleted_files
+      load_file_stats if @deleted_files.nil?
+      @deleted_files
     end
 
     # Returns whether this commits is a merge commit
@@ -115,6 +128,17 @@ module Metior
     # @return [Fixnum] The total number of changed lines
     def modifications
       additions + deletions
+    end
+
+    # Returns the paths of all files that have been modified in this commit
+    #
+    # This will load the file stats from the repository if not done yet.
+    #
+    # @return [Array<String>] A list of file paths modified in this commit
+    # @see #load_file_stats
+    def modified_files
+      load_file_stats if @modified_files.nil?
+      @modified_files
     end
 
     # Returns the subject line of the commit message, i.e. the first line
@@ -134,6 +158,15 @@ module Metior
           self.class.name, __id__ * 2, @author.id, @committer.id, @id,
           @repo.path, subject
         ]
+    end
+
+    protected
+
+    # Loads the file stats for this commit from the repository
+    #
+    # @abstract Has to be implemented by VCS specific subclasses
+    def load_file_stats
+      raise NotImplementedError
     end
 
   end
