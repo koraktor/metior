@@ -13,7 +13,7 @@ module Metior::Reports
     end
 
     def commit_count
-      "#{self[:committed_commits].size} commits"
+      "#{self[:authored_commits].size} commits"
     end
 
   end

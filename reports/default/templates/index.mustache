@@ -7,6 +7,9 @@
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Bevan:regular" type="text/css" />
 
         <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+        <meta name="date" content="{{meta_now}}">
+        <meta name="description" content="Metior report for {{repo_name}}" />
+        <meta name="generator" content="Metior {{version}}" />
     </head>
     <body>
         <h1>Stats for <em>{{repo_name}}</em></h1>
@@ -17,5 +20,7 @@
             {{{most_significant_authors}}}
             {{{top_committers}}}
         </div>
+
+        <div id="footer">Generated at <span >{{now}}</div>
     </body>
 </html>

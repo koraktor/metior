@@ -8,6 +8,14 @@ module Metior::Reports
   # @author Sebastian Staudt
   class Default::Index < View
 
+    def meta_now
+      now.strftime('%FT%H:%M:%S%z').insert(-3, ':')
+    end
+
+    def now
+      Time.now
+    end
+
     def repo_name
       repository.name.empty? ? repository.path : repository.name
     end

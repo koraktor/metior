@@ -22,7 +22,17 @@ div#content {
 }
 
 div#content div {
-  padding: 0.5em;
+  padding: 0.5em 0 1em 0.5em;
+}
+
+div#footer {
+  padding-top: 0.5em;
+  text-align:  center;
+}
+
+div#footer, h4 {
+  color:      #aa5;
+  font-size:  10pt;
 }
 
 div#most_significant_authors, div#repository_information {
@@ -34,12 +44,34 @@ div#repository_information strong {
 }
 
 em {
-  color: #f95;
+  color:       #f95;
+  font-style:  normal;
+}
+
+em, h1, h2, h3 {
   font-family: Bevan, serif;
 }
 
+h1 {
+  font-size:     25pt;
+  line-height:   25pt;
+  margin-bottom: 0;
+}
+
+h2, h3 {
+  color:       #f95;
+  text-shadow: #000 1px 1px 2px;
+
+  -moz-text-shadow:    #000 1px 1px 2px;
+  -webkit-text-shadow: #000 1px 1px 2px;
+}
+
 h4 {
-  color:      #aa5;
-  font-size:  10pt;
+  margin-top: 0;
   text-align: right;
+}
+
+ul {
+  list-style:    square;
+  margin-bottom: 0;
 }
