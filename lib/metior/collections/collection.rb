@@ -33,7 +33,7 @@ module Metior
     def initialize(objects = [])
       super()
 
-      objects.each { |obj| self[obj.id] = obj }
+      objects.each { |obj| self << obj }
     end
 
     # Adds an object to this collection
@@ -74,7 +74,7 @@ module Metior
       #        one
       # @return [Collection] The merged collection
       def merge!(other_collection)
-        other_collection.each_pair { |k, v| self[k] = v }
+        other_collection.each { |obj| self << obj }
         self
       end
     end
