@@ -124,6 +124,16 @@ class TestCommitCollection < Test::Unit::TestCase
       assert_equal '3c230a3', commits.last.id
     end
 
+    should 'allow to get the line stats of the commits' do
+      assert_equal 25546, @commits.additions
+      assert_equal 6359, @commits.deletions
+    end
+
+    should 'lazy load the line stats of the commits' do
+      @commits.expects(:load_line_stats).once
+      @commits.additions
+    end
+
   end
 
 end
