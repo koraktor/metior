@@ -52,8 +52,13 @@ module Metior
     #
     # @param [Repository] repo The repository this commit belongs to
     def initialize(repo)
-      @children = []
-      @repo     = repo
+      @additions      = nil
+      @added_files    = nil
+      @children       = []
+      @deletions      = nil
+      @deleted_files  = nil
+      @modified_files = nil
+      @repo           = repo
     end
 
     # Sets the author of this commit
