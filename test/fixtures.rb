@@ -67,9 +67,7 @@ module Fixtures
   end
 
   def self.commits_as_grit_commits(range)
-    commits = commits(range)
-
-    commits.map do |commit|
+    commits = commits(range).map do |commit|
       parents = commit[:parent].nil? ? [] : [commit[:parent]]
 
       diffs = []
@@ -104,12 +102,12 @@ module Fixtures
         }
       })
     end
+
+    HASH_CLASS[commits.map { |c| [c.id, c] }]
   end
 
   def self.commits_as_rashies(range)
-    commits = commits(range)
-
-    commits.map do |commit|
+    commits = commits(range).map do |commit|
       Hashie::Mash.new({
         :author         => {
           :email => commit[:info][4],
@@ -128,6 +126,8 @@ module Fixtures
         :parents        => ([{ :id => commit[:parent][:ids].first }] rescue [])
       })
     end
+
+    HASH_CLASS[commits.map { |c| [c.id, c] }]
   end
 
 end

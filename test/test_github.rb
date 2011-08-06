@@ -25,7 +25,8 @@ class TestGitHub < Test::Unit::TestCase
     setup do
       @repo = Metior::GitHub::Repository.new 'mojombo', 'grit'
 
-      api_response = Fixtures.commits_as_rashies(''..'master')
+      @@github_commits = Fixtures.commits_as_rashies(''..'master')
+      api_response = @@github_commits.values
       @commits_stub = Octokit.stubs :commits
       14.times { @commits_stub.returns api_response.shift(35) }
       @commits_stub.then.raises Octokit::NotFound.new(nil)
@@ -45,7 +46,7 @@ class TestGitHub < Test::Unit::TestCase
     end
 
     should 'be able to load a range of commits from the repository' do
-      api_response = Fixtures.commits_as_rashies('ef2870b'..'4c592b4')
+      api_response = Fixtures.commits_as_rashies('ef2870b'..'4c592b4').values
       Octokit.stubs(:commits).returns(api_response).
         raises(Octokit::NotFound.new nil)
 

@@ -14,7 +14,10 @@ class TestCommitCollection < Test::Unit::TestCase
     setup do
       repo = Metior::Git::Repository.new File.dirname(File.dirname(__FILE__))
       @@grit_commits ||= Fixtures.commits_as_grit_commits(''..'master')
-      Grit::Repo.any_instance.stubs(:commits).returns @@grit_commits
+      Grit::Repo.any_instance.stubs(:commits).returns @@grit_commits.values
+      @@grit_commits.each do |id, commit|
+        Grit::Repo.any_instance.stubs(:commit).with(id).returns commit
+      end
       @commits = repo.commits
     end
 
