@@ -25,20 +25,36 @@ class TestActorCollection < Test::Unit::TestCase
       assert_kind_of Collection, @authors
     end
 
-    should 'allow to get all the commits of those actors' do
-      commits = @authors.commits
+    should 'allow to get all the commits authored by those actors' do
+      commits = @authors.authored_commits
       assert_instance_of CommitCollection, commits
       assert_equal 460, commits.size
       assert_equal '1b2fe77', commits.first.id
       assert_equal '80f136f', commits.last.id
     end
 
-    should 'allow to get the commits of a single of those actors' do
-      commits = @authors.commits 'tom@mojombo.com'
+    should 'allow to get the commits authored by a single of those actors' do
+      commits = @authors.authored_commits 'tom@mojombo.com'
       assert_instance_of CommitCollection, commits
       assert_equal 173, commits.size
       assert_equal 'a3c5139', commits.first.id
       assert_equal '634396b', commits.last.id
+    end
+
+    should 'allow to get all the commits committed by those actors' do
+      commits = @authors.committed_commits
+      assert_instance_of CommitCollection, commits
+      assert_equal 460, commits.size
+      assert_equal '1b2fe77', commits.first.id
+      assert_equal '80f136f', commits.last.id
+    end
+
+    should 'allow to get the commits committed by a single of those actors' do
+      commits = @authors.committed_commits 'technoweenie@gmail.com'
+      assert_instance_of CommitCollection, commits
+      assert_equal 55, commits.size
+      assert_equal 'ed1b3ae', commits.first.id
+      assert_equal 'c9cf68f', commits.last.id
     end
 
     should 'allow to get the most significant actors' do

@@ -15,20 +15,27 @@ module Metior
   # @see Actor
   class ActorCollection < Collection
 
-    # Returns the commits of all or a specific actor in this collection
+    # Returns the commits authored by all or a specific actor in this
+    # collection
     #
     # @param [Object] actor_id The ID of the actor, if only the commits of a
     #        specific actor should be returned
-    # @return [CommitCollection] All commits of the actors in this collection
-    #         or of a specific actor
-    def commits(actor_id = nil)
-      commits = CommitCollection.new
-      if actor_id.nil?
-        each { |actor| commits.merge! actor.authored_commits }
-      elsif key? actor_id
-        commits = self[actor_id].authored_commits
-      end
-      commits
+    # @return [CommitCollection] All commits authored by the actors in this
+    #         collection or by a specific actor
+    def authored_commits(actor_id = nil)
+      load_commits :authored_commits, actor_id
+    end
+    alias_method :commits, :authored_commits
+
+    # Returns the commits committed by all or a specific actor in this
+    # collection
+    #
+    # @param [Object] actor_id The ID of the actor, if only the commits of a
+    #        specific actor should be returned
+    # @return [CommitCollection] All commits committed by the actors in this
+    #         collection or by a specific actor
+    def committed_commits(actor_id = nil)
+      load_commits :committed_commits, actor_id
     end
 
     # Returns up to the given number of actors in this collection with the
@@ -62,6 +69,27 @@ module Metior
         break if authors.size == count
       end
       authors
+    end
+
+    private
+
+    # Loads the commits authored or committed by all actors in this collection
+    # or a specific actor
+    #
+    # @param [:authored_commits, :committed_commits] commit_type The type of
+    #        commits to load
+    # @param [Object] actor_id The ID of the actor, if only the commits of a
+    #        specific actor should be returned
+    # @return [CommitCollection] All commits authored or committed by the
+    #         actors in this collection or by a specific actor
+    def load_commits(commit_type, actor_id = nil)
+      commits = CommitCollection.new
+      if actor_id.nil?
+        each { |actor| commits.merge! actor.send(commit_type) }
+      elsif key? actor_id
+        commits = self[actor_id].send commit_type
+      end
+      commits
     end
 
   end
