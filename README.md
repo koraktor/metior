@@ -4,12 +4,25 @@ Metior
 Metior is a source code history analyzer API that provides various statistics
 about a source code repository and its change over time.
 
-Currently Metior provides basic support for Git repositories.
+Currently Metior provides support for Git and GitHub repositories.
 
 If you're interested in Metior, feel free to join the discussion on Convore in
 [Metior's group](https://convore.com/metior).
 
-## Examples
+## Reports
+
+The most straightforward use of Metior is probably generating an out-of-the-box
+report that analyzes a repository and gives a user-friendly output of the
+gathered data.
+
+    Metior.report :git, '~/open-source/metior', './reports/metior'
+    Metior.report :github, 'koraktor/metior', './reports/metior'
+
+## API Examples
+
+If you want more sophisticated access to the available data, you can use the
+low-level API that provides stats for repositories and their individual commits
+and actors.
 
 ### One-liner for some basic statistics
 
@@ -18,8 +31,8 @@ If you're interested in Metior, feel free to join the discussion on Convore in
 
 ### Create a repository object for different VCSs
 
-    repo = Metior::Git::Repository.new '~/open-source/metior'
-    repo = Metior::GitHub::Repository.new 'koraktor/metior'
+    repo = Metior.repository :git, '~/open-source/metior'
+    repo = Metior.repository :github, 'koraktor/metior'
 
 ### More fine-grained access to repository statistics
 
@@ -32,24 +45,32 @@ If you're interested in Metior, feel free to join the discussion on Convore in
                                        # authors
     repo.significant_commits           # Get up to 3 of the commits changing
                                        # the most lines
-    repo.authors('master').top(5)      # Get the top 5 authors in master
+    repo.authors('master').top 5       # Get the top 5 authors in master
 
 ### Query a collection of commits
 
     repo.commits.activity
-    repo.commits.after('05/29/2010')
+    repo.commits.after '05/29/2010'
+    repo.commits.additions
     repo.commits.authors
-    repo.commits.before('05/29/2010')
-    repo.commits.by('koraktor')
-    repo.commits.changing('lib/metior.rb')
-    repo.commits.most_significant(10)
-    repo.commits.with_impact(100)
+    repo.commits.before '05/29/2010'
+    repo.commits.by 'koraktor'
+    repo.commits.changing 'lib/metior.rb'
+    repo.commits.deletions
+    repo.commits.modifications
+    repo.commits.most_significant 10
+    repo.commits.with_impact 100
+
+See documentation of {Metior::CommitCollection}
 
 ### Query a collection of actors
 
-    repo.authors.commits
-    repo.authors.most_significant(10)
-    repo.authors.top(10)
+    repo.authors.authored_commits
+    repo.authors.comitted_commits
+    repo.authors.most_significant 10
+    repo.authors.top 10
+
+See documentation of {Metior::ActorCollection}
 
 ## Advanced usage
 
@@ -58,10 +79,13 @@ If you're interested in Metior, feel free to join the discussion on Convore in
 Querys on a collection of commits or actors can be easily chained to achieve
 complex filters on the available data.
 
-    repo.commits.by('koraktor').after('05/29/2010').with_impact(100)
-    repo.authors.top(10).commits.changing('lib/metior.rb')
+    repo.commits.by('koraktor').after('05/29/2010').with_impact 100
+    repo.authors.top(10).commits.changing 'lib/metior.rb'
 
 ### Specifying commit ranges
+
+Usually, when Metior queries a repository for its commits and authors it will
+use the default branch of the VCS, e.g. `master` for Git.
 
 Sometimes it's more useful to not analyze the whole history of a repository's
 branch. For example when analyzing the changes from one branch to another, or
@@ -91,8 +115,8 @@ documentation of the current development version is also available [there][5].
 
 ## Future plans
 
-* More statistics and analyses
-* Generation of reports in HTML or other formats
+* Provide more reports
+* Generation of reports in formats other than HTML
 * Support for creating graphs
 * Console and web application to accompany this API
 * More supported VCSs, like Subversion or Mercurial
@@ -131,6 +155,7 @@ LICENSE file.
 * [Metior's homepage][2]
 * [GitHub project page][3]
 * [GitHub issue tracker][4]
+* [Continuous Integration at Travis CI][6]
 
 Follow Metior on Twitter [@metiorstats](http://twitter.com/metiorstats).
 
@@ -139,3 +164,4 @@ Follow Metior on Twitter [@metiorstats](http://twitter.com/metiorstats).
  [3]: http://github.com/koraktor/metior
  [4]: http://github.com/koraktor/metior/issues
  [5]: http://rubydoc.info/github/koraktor/metior/master/frames
+ [6]: http://travis-ci.org/koraktor/metior
