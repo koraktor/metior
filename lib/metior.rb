@@ -31,10 +31,12 @@ module Metior
   # @param [Array<Object>] options The options to use for creating the new
   #        repository, e.g. a file system path
   # @param [String] target_dir The target directory to save the report to
+  # @param [String, Range] range The commit range to analyze for the report
   # @param [String] report The name of the report template to use
-  def self.generate_report(type, repo_options, target_dir, report = 'default')
+  def self.generate_report(type, repo_options, target_dir, range = nil, report = 'default')
     repo = repository type, *repo_options
-    Report.create(report, repo).generate target_dir
+    range ||= repo.vcs::DEFAULT_BRANCH
+    Report.create(report, repo, range).generate target_dir
   end
 
   # Calculates simplistic stats for the given repository and branch

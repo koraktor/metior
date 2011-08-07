@@ -11,7 +11,7 @@ class Metior::Report::Default
     requires :line_stats
 
     def authors
-      repository.authors.most_significant(5).values
+      repository.authors(@report.range).most_significant(5).values
     end
 
   end

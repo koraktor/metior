@@ -11,11 +11,11 @@ class Metior::Report::Default
     def initialize(report)
       super
 
-      @activity = repository.commits.activity
+      @activity = repository.commits(report.range).activity
     end
 
     def commit_count
-      repository.commits.size
+      repository.commits(@report.range).size
     end
 
     def commits_per_active_day
@@ -32,6 +32,10 @@ class Metior::Report::Default
 
     def most_active_day
       @activity[:most_active_day].strftime '%m/%d/%Y'
+    end
+
+    def range
+      @report.range
     end
 
     def repository_path

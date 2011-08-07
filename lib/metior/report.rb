@@ -15,12 +15,14 @@ module Metior
 
     REPORTS_PATH = File.expand_path File.join File.dirname(__FILE__), '..', '..', 'reports'
 
+    attr_reader :range
+
     attr_reader :repository
 
-    def self.create(name, repository)
+    def self.create(name, repository, range = repository.vcs::DEFAULT_BRANCH)
       require File.join(REPORTS_PATH, name.to_s)
       name = name.to_s.split('_').map { |n| n.capitalize }.join('')
-      const_get(name.to_sym).new(repository)
+      const_get(name.to_sym).new(repository, range)
     end
 
     def self.name
@@ -43,7 +45,8 @@ module Metior
       class_variable_get :@@views
     end
 
-    def initialize(repository)
+    def initialize(repository, range = repository.vcs::DEFAULT_BRANCH)
+      @range      = range
       @repository = repository
     end
 

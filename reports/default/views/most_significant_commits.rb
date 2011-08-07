@@ -11,7 +11,7 @@ class Metior::Report::Default
     requires :line_stats
 
     def commits
-      repository.commits.most_significant(5).values
+      repository.commits(@report.range).most_significant(5).values
     end
 
   end
