@@ -59,10 +59,13 @@ module Metior
       Mustache.view_namespace = self.class
 
       self.class.views.each do |view_name|
-        output = Mustache.view_class(view_name).new(self).render
-        output_file = File.open File.join(target_dir, view_name.to_s.downcase + '.html'), 'w'
-        output_file.write output
-        output_file.close
+        file_name = File.join target_dir, view_name.to_s.downcase + '.html'
+        begin
+          output_file = File.open file_name, 'w'
+          output_file.write Mustache.view_class(view_name).new(self).render
+        ensure
+          output_file.close
+        end
       end
     end
 
