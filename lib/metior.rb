@@ -33,7 +33,7 @@ module Metior
   # @param [String] target_dir The target directory to save the report to
   # @param [String, Range] range The commit range to analyze for the report
   # @param [String] report The name of the report template to use
-  def self.generate_report(type, repo_options, target_dir, range = nil, report = 'default')
+  def self.report(type, repo_options, target_dir, range = nil, report = 'default')
     repo = repository type, *repo_options
     range ||= repo.vcs::DEFAULT_BRANCH
     Report.create(report, repo, range).generate target_dir
