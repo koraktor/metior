@@ -13,14 +13,14 @@ class TestReport < Test::Unit::TestCase
       require 'metior/repository'
 
       r = Metior::Repository.new('dummy')
-      @report = Metior::Reports::Report.create 'default', r
+      @report = Metior::Report.create 'default', r
     end
 
     should 'have some basic information' do
-      assert_instance_of Metior::Reports::Default, @report
+      assert_instance_of Metior::Report::Default, @report
       assert_equal 'default', @report.class.name
       assert_equal [:index], @report.class.views
-      assert_equal File.join(Metior::Reports::Report::REPORTS_PATH, 'default'),
+      assert_equal File.join(Metior::Report::REPORTS_PATH, 'default'),
         @report.path
     end
 
@@ -35,7 +35,7 @@ class TestReport < Test::Unit::TestCase
 
       target_dir = File.expand_path './a/target/dir'
       @report.expects(:copy_assets).with(target_dir).once
-      Mustache.expects(:view_namespace=).with(Metior::Reports::Default).once
+      Mustache.expects(:view_namespace=).with(Metior::Report::Default).once
       Mustache.expects(:view_class).with(:index).once.returns view_class
       File.expects(:open).with(File.join(target_dir, 'index.html'), 'w').once.
         returns file

@@ -3,10 +3,10 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-module Metior::Reports
+class Metior::Report::Default
 
   # @author Sebastian Staudt
-  class Default::MostSignificantCommits < View
+  class MostSignificantCommits < View
 
     requires :line_stats
 

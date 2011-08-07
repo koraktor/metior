@@ -3,10 +3,10 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-module Metior::Reports
+class Metior::Report::Default
 
   # @author Sebastian Staudt
-  class Default::TopCommitters < View
+  class TopCommitters < View
 
     def committers
       repository.authors.top(5).values

@@ -3,10 +3,10 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-module Metior::Reports
+class Metior::Report::Default
 
   # @author Sebastian Staudt
-  class Default::Index < View
+  class Index < View
 
     def meta_now
       now.strftime('%FT%H:%M:%S%z').insert(-3, ':')

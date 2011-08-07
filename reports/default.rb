@@ -3,18 +3,14 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-module Metior
+class Metior::Report
 
-  module Reports
+  # @author Sebastian Staudt
+  class Default < self
 
-    # @author Sebastian Staudt
-    class Default < Report
+    @@name = :default
 
-      @@name = :default
-
-      @@views = [ :index ]
-
-    end
+    @@views = [ :index ]
 
   end
 
