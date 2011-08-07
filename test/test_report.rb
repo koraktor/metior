@@ -13,6 +13,7 @@ class TestReport < Test::Unit::TestCase
       require 'metior/repository'
 
       r = Metior::Repository.new('dummy')
+      r.stubs(:vcs).returns Metior::Git
       @report = Metior::Report.create 'default', r
     end
 
