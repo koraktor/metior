@@ -26,7 +26,7 @@ class Metior::Report
       view_class = Mustache.view_class name
       return view_class.new(@report).render if view_class != Mustache
 
-      Mustache.view_namespace = Metior::Reports::Default
+      Mustache.view_namespace = Metior::Report::Default
       view_class = Mustache.view_class name
       return view_class.new(@report).render if view_class != Mustache
 
