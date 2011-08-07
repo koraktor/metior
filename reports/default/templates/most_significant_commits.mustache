@@ -1,8 +1,13 @@
 <div id="most_significant_commits">
     <h3>Top commits by line changes</h3>
-    <ul>
+    <table>
         {{#commits}}
-          <li>{{> commit/minimal}} (+{{additions}}/-{{deletions}})</li>
+          <tr class="{{even_odd}}">
+            <th>{{> commit/minimal}}</th>
+            <td class="add no_padding">+{{additions}}</td>
+            <td class="no_padding">/</td>
+            <td class="del no_padding">-{{deletions}}</td>
+          </tr>
         {{/commits}}
-    </ul>
+    </table>
 </div>

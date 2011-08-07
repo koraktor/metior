@@ -6,7 +6,7 @@ html {
 body {
   color:       #ffb;
   font-family: Helvetica, sans-serif;
-  margin:      2em 0 0 5em;
+  margin:      2em 0 1em 5em;
   width:       980px;
 }
 
@@ -21,8 +21,13 @@ div#content {
   -webkit-box-shadow:    #000 4px 4px 4px;
 }
 
+
 div#content div {
-  padding: 0.5em 0 1em 0.5em;
+  padding: 0.5em 0.5em 1em 0.5em;
+}
+
+div#content div:not(:last-child) {
+  border-bottom: 2px solid #ffb;
 }
 
 div#footer {
@@ -35,12 +40,12 @@ div#footer, h4 {
   font-size:  10pt;
 }
 
-div#most_significant_authors, div#repository_information, div#top_committers {
-  border-bottom: 2px solid #ffb;
-}
-
 div#repository_information strong {
   margin-left: 2em;
+}
+
+div#most_significant_commits th {
+  width: 87%;
 }
 
 em {
@@ -69,6 +74,52 @@ h2, h3 {
 h4 {
   margin-top: 0;
   text-align: right;
+}
+
+span.add, span.del {
+  font-weight: bold;
+}
+
+table {
+  border-collapse: collapse;
+  margin:          0 auto;
+  width:           98%;
+}
+
+td:last-child {
+  text-align: right;
+}
+
+td.add {
+  color: #090;
+}
+
+td.del {
+  color: #a00;
+}
+
+td.no_padding {
+  padding: 0 0.2em;
+}
+
+td, th {
+  padding: 0.2em;
+}
+
+th {
+  text-align: left;
+}
+
+tr:not(:last-child) {
+  border-bottom: 1px solid #652;
+}
+
+tr.even {
+  background: #521;
+}
+
+tr.odd {
+  background: #563412;
 }
 
 ul {

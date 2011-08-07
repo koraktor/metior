@@ -1,8 +1,11 @@
 <div id="top_committers">
     <h3>Top authors by commits</h3>
-    <ul>
+    <table>
         {{#committers}}
-          <li>{{> actor/minimal}} ({{commit_count}})</li>
+          <tr class="{{even_odd}}">
+              <th>{{> actor/minimal}}</th>
+              <td>{{commit_count}} commits</td>
+          </tr>
         {{/committers}}
-    </ul>
+    </table>
 </div>
