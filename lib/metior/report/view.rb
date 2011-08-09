@@ -44,9 +44,8 @@ class Metior::Report
     end
 
     def render(*args)
-      required_features = self.class.send :class_variable_get, :@@required_features
-      return unless required_features.all? { |f| repository.supports? f }
-      super
+      features = self.class.send :class_variable_get, :@@required_features
+      super if features.all? { |feature| repository.supports? feature }
     end
 
     def repository
