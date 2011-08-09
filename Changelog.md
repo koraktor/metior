@@ -1,8 +1,20 @@
 # Changelog
 
+## `master` branch
+
+ * Initial support for HTML reports
+ * Improved caching
+ * Collections can be used to easily query information
+ * Lazy load file and line stats for Git
+ * Lots of bugfixes
+
+See the
+ [Git history](https://github.com/koraktor/metior/compare/0.1.4...master) for
+ changes in the `master` branch since version 0.1.4
+
 ## Version 0.1.4
 
- **June 1X<sup>th</th>, 2011**
+ **June 16<sup>th</th>, 2011**
 
  * Removed Bundler as a dependency loader
  * Fixed GitHub::Commit not requiring 'time'
