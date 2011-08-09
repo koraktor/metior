@@ -3,10 +3,14 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
+require 'metior/report/view_helper'
+
 class Metior::Report
 
   # @author Sebastian Staudt
   class View < Mustache
+
+    include ViewHelper
 
     def self.inherited(subclass)
       subclass.send :class_variable_set, :@@required_features, []
@@ -19,12 +23,7 @@ class Metior::Report
     end
 
     def initialize(report)
-      @count  = 0
       @report = report
-    end
-
-    def even_odd
-      ((@count += 1) % 2 == 0) ? 'even' : 'odd'
     end
 
     def method_missing(name, *args, &block)
@@ -52,10 +51,6 @@ class Metior::Report
 
     def repository
       @report.repository
-    end
-
-    def reset_even_odd
-      @count = 0
     end
 
     def respond_to?(name)
