@@ -67,16 +67,6 @@ class Metior::Report
       view_class = Mustache.view_class name
       return view_class.new(@report).render if view_class != Mustache
 
-      unless Mustache.view_namespace == Metior::Report::Default
-        old_namespace = Mustache.view_namespace
-        Mustache.view_namespace = Metior::Report::Default
-        view_class = Mustache.view_class name
-        if view_class != Mustache
-          Mustache.view_namespace = old_namespace
-          return view_class.new(@report).render
-        end
-      end
-
       repository.send name, *args, &block
     end
 
