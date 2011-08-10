@@ -19,6 +19,10 @@ See the
  * Removed Bundler as a dependency loader
  * Fixed GitHub::Commit not requiring 'time'
 
+ See the
+ [Git history](https://github.com/koraktor/metior/compare/0.1.3...0.1.4) for
+ version 0.1.4
+
 ## Version 0.1.3
 
  **June 13<sup>th</sup>, 2011**
