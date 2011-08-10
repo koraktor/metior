@@ -46,7 +46,7 @@ module Metior
       # @param [String] ref A symbolic reference name
       # @return [String] The SHA1 ID of the commit the reference is pointing to
       def id_for_ref(ref)
-        return ref if ref.match /[0-9a-f]{40}/
+        return ref if ref.match(/[0-9a-f]{40}/)
         @refs[ref] = Octokit.commit(@path, ref).id unless @refs.key? ref
         @refs[ref]
       end
