@@ -74,7 +74,7 @@ module Metior
     def inspect
       '#<%s:0x%x: @commits=%d @id="%s" @name="%s" @repo="%s"' %
         [
-          self.class.name, __id__ * 2, @commits.size, @id, @name,
+          self.class.name, __id__ * 2, @authored_commits.size, @id, @name,
           @repo.path
         ]
     end
