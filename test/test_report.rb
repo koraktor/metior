@@ -22,7 +22,7 @@ class TestReport < Test::Unit::TestCase
       assert_equal 'default', @report.class.name
       assert_equal [:index], @report.class.views
       assert_equal File.join(Metior::Report::REPORTS_PATH, 'default'),
-        @report.path
+        @report.class.path
     end
 
     should 'be able to generate a HTML report using Mustache' do
