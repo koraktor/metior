@@ -114,27 +114,6 @@ module Metior
       end
     end
 
-    # Returns the file system path this report resides in
-    #
-    # @return [String] The path of this report
-    def path
-      self.class.path
-    end
-
-    # Returns the file system path this report's templates reside in
-    #
-    # @return [String] The path of this report's templates
-    def template_path
-      self.class.template_path
-    end
-
-    # Returns the file system path this report's views reside in
-    #
-    # @return [String] The path of this report's views
-    def view_path
-      self.class.view_path
-    end
-
     private
 
     # Copies the assets coming with this report to the given target directory
@@ -148,7 +127,7 @@ module Metior
       FileUtils.mkdir_p target_dir
 
       %w{images javascripts stylesheets}.map do |type|
-        File.join(path, type)
+        File.join(self.class.path, type)
       end.each do |src|
         next unless File.directory? src
         FileUtils.cp_r src, target_dir
