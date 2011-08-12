@@ -6,6 +6,6 @@
 module Metior
 
   # The current version of the Metior gem
-  VERSION = '0.1.4' unless defined? Metior::VERSION
+  VERSION = '0.2.0' unless defined? Metior::VERSION
 
 end

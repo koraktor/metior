@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    metior (0.1.4)
+    metior (0.2.0)
       grit (~> 2.4.1)
       hashery (~> 1.4.0)
       mustache (~> 0.99.4)

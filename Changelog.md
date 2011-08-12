@@ -1,6 +1,6 @@
 # Changelog
 
-## `master` branch
+## Version 0.2.0
 
  * Initial support for HTML reports
  * Improved caching
@@ -8,9 +8,9 @@
  * Lazy load file and line stats for Git
  * Lots of bugfixes
 
-See the
- [Git history](https://github.com/koraktor/metior/compare/0.1.4...master) for
- changes in the `master` branch since version 0.1.4
+ See the
+ [Git history](https://github.com/koraktor/metior/compare/0.1.4...0.2.0) for
+ version 0.2.0
 
 ## Version 0.1.4
 
