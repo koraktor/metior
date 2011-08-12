@@ -147,7 +147,8 @@ LICENSE file.
 ## Credits
 
 * Sebastian Staudt – koraktor(at)gmail.com
-* Alex Manelis - amanelis(at)gmail.com
+* Alex Manelis – amanelis(at)gmail.com
+* Michael Klishin – michaelklishin(at)me.com
 
 ## See Also
 
