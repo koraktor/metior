@@ -1,0 +1,128 @@
+html {
+  background: #382211;
+  width:      100%;
+}
+
+body {
+  color:       #ffb;
+  font-family: Helvetica, sans-serif;
+  margin:      2em 0 1em 5em;
+  width:       980px;
+}
+
+div#content {
+  border:        2px solid #ffb;
+  border-radius: 5px;
+  box-shadow:    #000 4px 4px 4px;
+
+  -moz-border-radius:    5px;
+  -moz-box-shadow:       #000 4px 4px 4px;
+  -webkit-border-radius: 5px;
+  -webkit-box-shadow:    #000 4px 4px 4px;
+}
+
+
+div#content div {
+  padding: 0.5em 0.5em 1em 0.5em;
+}
+
+div#content div:not(:last-child) {
+  border-bottom: 2px solid #ffb;
+}
+
+div#footer {
+  padding-top: 0.5em;
+  text-align:  center;
+}
+
+div#footer, h4 {
+  color:      #aa5;
+  font-size:  10pt;
+}
+
+div#repository_information strong {
+  margin-left: 2em;
+}
+
+div#most_significant_commits th {
+  width: 87%;
+}
+
+em {
+  color:       #f95;
+  font-style:  normal;
+}
+
+em, h1, h2, h3 {
+  font-family: Bevan, serif;
+}
+
+h1 {
+  font-size:     25pt;
+  line-height:   25pt;
+  margin-bottom: 0;
+}
+
+h2, h3 {
+  color:       #f95;
+  text-shadow: #000 1px 1px 2px;
+
+  -moz-text-shadow:    #000 1px 1px 2px;
+  -webkit-text-shadow: #000 1px 1px 2px;
+}
+
+h4 {
+  margin-top: 0;
+  text-align: right;
+}
+
+span.add, span.del {
+  font-weight: bold;
+}
+
+table {
+  border-collapse: collapse;
+  margin:          0 auto;
+  width:           98%;
+}
+
+td:last-child {
+  text-align: right;
+}
+
+td.add {
+  color: #090;
+}
+
+td.del {
+  color: #a00;
+}
+
+td.no_padding {
+  padding: 0 0.2em;
+}
+
+td, th {
+  padding: 0.2em;
+}
+
+th {
+  text-align: left;
+}
+
+tr:not(:last-child) {
+  border-bottom: 1px solid #652;
+}
+
+tr.even {
+  background: #521;
+}
+
+tr.odd {
+  background: #563412;
+}
+
+ul {
+  list-style:    square;
+  margin-bottom: 0;
+}

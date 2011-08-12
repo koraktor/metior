@@ -18,6 +18,8 @@ Metior.report :git, '~/open-source/metior', './reports/metior'
 Metior.report :github, 'koraktor/metior', './reports/metior'
 {% endhighlight %}
 
+See an example report for Metior itself [here][5].
+
 ## API examples
 
 If you want more sophisticated access to the available data, you can use the
@@ -126,3 +128,4 @@ RubyDoc.info.
  [2]: http://rubydoc.info/github/koraktor/metior/master/frames
  [3]: http://rubydoc.info/gems/metior/Metior/CommitCollection
  [4]: http://rubydoc.info/gems/metior/Metior/ActorCollection
+ [5]: example/index.html
