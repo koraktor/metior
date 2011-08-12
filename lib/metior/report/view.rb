@@ -62,7 +62,8 @@ class Metior::Report
     # @param [Object, ...] args The arguments to pass to the method
     # @param [Proc] block The block to pass to the method
     # @see Default
-    # @see Mustache.view_class
+    # @see http://rubydoc.info/gems/mustache/Mustache#view_class-class_method
+    #      Mustache.view_class
     def method_missing(name, *args, &block)
       view_class = Mustache.view_class name
       return view_class.new(@report).render if view_class != Mustache
@@ -75,7 +76,8 @@ class Metior::Report
     #
     # @param [Object, ...] args The arguments expected by {Mustache#render}
     # @see .requires
-    # @see Mustache#render
+    # @see http://rubydoc.info/gems/mustache/Mustache#render-instance_method
+    #      Mustache#render
     def render(*args)
       features = self.class.send :class_variable_get, :@@required_features
       super if features.all? { |feature| repository.supports? feature }
@@ -92,14 +94,14 @@ class Metior::Report
     # Returns whether the given name refers a partial view that can be rendered
     # or method that can be called
     #
-    #
     # This checks whether this view has a method with the given name, or if
     # another view with this name exists, or if the repository has a method
     # with this name.
     #
     # @param [Symbol] name The name of the partial or method
     # @return [Boolean] `true` if the given name refers a partial or method
-    # @see Mustache.view_class
+    # @see http://rubydoc.info/gems/mustache/Mustache#view_class-class_method
+    #      Mustache.view_class
     def respond_to?(name)
       methods.include?(name.to_s) ||
       Mustache.view_class(name) != Mustache ||
