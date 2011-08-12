@@ -21,6 +21,7 @@
 .highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
 .highlight .k { color: #78e087; font-weight: bold } /* Keyword */
 .highlight .o { color: #78e087; font-weight: bold } /* Operator */
+.highlight .p { color: #78e087 } /* Parentheses */
 .highlight .cm { color: #999988; font-style: italic } /* Comment.Multiline */
 .highlight .cp { color: #999999; font-weight: bold } /* Comment.Preproc */
 .highlight .c1 { color: #999988; font-style: italic } /* Comment.Single */
@@ -69,7 +70,7 @@
 .highlight .si { color: #d58f26 } /* Literal.String.Interpol */
 .highlight .sx { color: #d58f26 } /* Literal.String.Other */
 .highlight .sr { color: #009926 } /* Literal.String.Regex */
-.highlight .s1 { color: #dcdc71 } /* Literal.String.Single */
+.highlight .s1 { color: #61ac45 } /* Literal.String.Single */
 .highlight .ss { color: #99ffff } /* Literal.String.Symbol */
 .highlight .bp { color: #999999 } /* Name.Builtin.Pseudo */
 .highlight .vc { color: #008080 } /* Name.Variable.Class */
