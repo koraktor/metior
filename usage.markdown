@@ -9,9 +9,9 @@ complex queries.
 
 ## Reports
 
-The most straightforward use of Metior is probably generating an out-of-the-box
-report that analyzes a repository and gives a user-friendly output of the
-gathered data.
+The most straightforward use of <em>Metior</em> is probably generating an
+out-of-the-box report that analyzes a repository and gives a user-friendly
+output of the gathered data.
 
 {% highlight ruby %}
 Metior.report :git, '~/open-source/metior', './reports/metior'
@@ -64,7 +64,7 @@ repo.commits.most_significant 10
 repo.commits.with_impact 100
 {% endhighlight %}
 
-See documentation of [`Metior::CommitCollection`][2]
+See the documentation of [`Metior::CommitCollection`][3]
 
 ### Query a collection of actors
 
@@ -75,7 +75,7 @@ repo.authors.most_significant 10
 repo.authors.top 10
 {% endhighlight %}
 
-See documentation of [`Metior::ActorCollection`][4]
+See the documentation of [`Metior::ActorCollection`][4]
 
 ## Advanced usage
 
@@ -91,8 +91,8 @@ repo.authors.top(10).commits.changing 'lib/metior.rb'
 
 ### Specifying commit ranges
 
-Usually, when Metior queries a repository for its commits and authors it will
-use the default branch of the VCS, e.g. `master` for Git.
+Usually, when <em>Metior</em> queries a repository for its commits and authors
+it will use the default branch of the VCS, e.g. `master` for Git.
 
 Sometimes it's more useful to not analyze the whole history of a repository's
 branch. For example when analyzing the changes from one branch to another, or
@@ -120,8 +120,8 @@ Metior::Commit.activity repo.authors[author_id].commits
 
 ## More …
 
-For a complete overview of <em>Metior</em>'s API including more examples, see the
-[gem documentation][1] or the [documentation of the development code][2] at
+For a complete overview of <em>Metior</em>'s API including more examples, see
+the [gem documentation][1] or the [documentation of the development code][2] at
 RubyDoc.info.
 
  [1]: http://rubydoc.info/gems/metior/frames
