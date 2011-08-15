@@ -3,8 +3,6 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-require 'metior/auto_include_vcs'
-
 module Metior
 
   # This class represents a commit in a source code repository

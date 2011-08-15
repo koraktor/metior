@@ -3,10 +3,6 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-require 'metior/auto_include_vcs'
-require 'metior/collections/actor_collection'
-require 'metior/collections/commit_collection'
-
 module Metior
 
   # This class represents a source code repository.

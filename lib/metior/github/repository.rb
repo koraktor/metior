@@ -5,8 +5,6 @@
 
 require 'octokit'
 
-require 'metior/repository'
-
 module Metior
 
   module GitHub

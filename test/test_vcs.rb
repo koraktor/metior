@@ -29,9 +29,9 @@ class TestVCS < Test::Unit::TestCase
     end
 
     should 'automatically try to load the VCS implementation files' do
-      MockVCS.expects(:require).with('metior/mock/actor').once
-      MockVCS.expects(:require).with('metior/mock/commit').once
-      MockVCS.expects(:require).with('metior/mock/repository').once
+      MockVCS.expects(:autoload).with(:Actor, 'metior/mock/actor').once
+      MockVCS.expects(:autoload).with(:Commit, 'metior/mock/commit').once
+      MockVCS.expects(:autoload).with(:Repository, 'metior/mock/repository').once
 
       begin
         MockVCS::Commit

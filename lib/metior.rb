@@ -4,9 +4,6 @@
 # Copyright (c) 2011, Sebastian Staudt
 
 require 'core_ext/object'
-require 'metior/git'
-require 'metior/github'
-require 'metior/report'
 require 'metior/version'
 
 # Metior is a source code history analyzer that provides various statistics
@@ -14,6 +11,16 @@ require 'metior/version'
 #
 # @author Sebastian Staudt
 module Metior
+
+  autoload :Actor,            'metior/actor'
+  autoload :ActorCollection,  'metior/collections/actor_collection'
+  autoload :AutoIncludeVCS,   'metior/auto_include_vcs'
+  autoload :Collection,       'metior/collections/collection'
+  autoload :Commit,           'metior/commit'
+  autoload :CommitCollection, 'metior/collections/commit_collection'
+  autoload :Report,           'metior/report'
+  autoload :Repository,       'metior/repository'
+  autoload :VCS,              'metior/vcs'
 
   # Creates a new repository for the given repository type and path
   #
@@ -63,3 +70,6 @@ module Metior
   end
 
 end
+
+require 'metior/git'
+require 'metior/github'

@@ -3,8 +3,6 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-require 'metior/vcs'
-
 module Metior
 
   # The Metior implementation for Git

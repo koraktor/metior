@@ -5,10 +5,6 @@
 
 require 'time'
 
-require 'metior/actor'
-require 'metior/collections/actor_collection'
-require 'metior/collections/collection'
-
 module Metior
 
   # This class implements a collection of commits and provides functionality

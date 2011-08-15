@@ -5,8 +5,6 @@
 
 require 'grit'
 
-require 'metior/repository'
-
 module Metior
 
   module Git

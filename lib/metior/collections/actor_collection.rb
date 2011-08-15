@@ -3,9 +3,6 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-require 'metior/collections/collection'
-require 'metior/collections/commit_collection'
-
 module Metior
 
   # This class implements a collection of actors and provides functionality

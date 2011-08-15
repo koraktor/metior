@@ -63,9 +63,9 @@ module Metior
       # VCS implementation.
       def init
         path = self::NAME.to_s
-        require "metior/#{path}/actor"
-        require "metior/#{path}/commit"
-        require "metior/#{path}/repository"
+        autoload :Actor,      "metior/#{path}/actor"
+        autoload :Commit,     "metior/#{path}/commit"
+        autoload :Repository, "metior/#{path}/repository"
 
         self
       end

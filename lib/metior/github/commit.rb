@@ -5,8 +5,6 @@
 
 require 'time'
 
-require 'metior/commit'
-
 module Metior
 
   module GitHub
