@@ -5,6 +5,7 @@
 
 require 'time'
 
+require 'metior/actor'
 require 'metior/collections/actor_collection'
 require 'metior/collections/collection'
 
