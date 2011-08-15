@@ -9,6 +9,20 @@ require 'metior/collections/actor_collection'
 
 class TestActorCollection < Test::Unit::TestCase
 
+  context 'An empty actor collection' do
+
+    should 'not fail for any method' do
+      @actors = ActorCollection.new
+      assert_nothing_raised do
+        @actors.authored_commits
+        @actors.committed_commits
+        @actors.most_significant
+        @actors.top
+      end
+    end
+
+  end
+
   context 'A collection of actors' do
 
     setup do

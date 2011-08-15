@@ -9,6 +9,29 @@ require 'metior/collections/commit_collection'
 
 class TestCommitCollection < Test::Unit::TestCase
 
+  context 'An empty commit collection' do
+
+    should 'not fail for any method' do
+      @commits = CommitCollection.new
+      assert_nothing_raised do
+        @commits.activity
+        @commits.additions
+        @commits.after Time.now
+        @commits.authors
+        @commits.before Time.now
+        @commits.by 'koraktor'
+        @commits.changing 'some/file'
+        @commits.committers
+        @commits.deletions
+        @commits.line_history
+        @commits.modifications
+        @commits.most_significant
+        @commits.with_impact 100
+      end
+    end
+
+  end
+
   context 'A collection of commits' do
 
     setup do

@@ -56,6 +56,11 @@ class TestCollections < Test::Unit::TestCase
       assert_equal @object3, @collection.last
     end
 
+    should 'delegate support! to its first element' do
+      @object1.expects(:support!).with :some_feature
+      @collection.support! :some_feature
+    end
+
   end
 
 end
