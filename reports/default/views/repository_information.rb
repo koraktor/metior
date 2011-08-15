@@ -19,7 +19,7 @@ class Metior::Report::Default
     end
 
     def commits_per_active_day
-      (@activity[:commits_per_active_day] * 100).round / 100.0
+      (@activity[:commits_per_active_day] * 100).round / 100.0 rescue 0
     end
 
     def initial_commit_date
@@ -31,7 +31,7 @@ class Metior::Report::Default
     end
 
     def most_active_day
-      @activity[:most_active_day].strftime '%m/%d/%Y'
+      @activity[:most_active_day].strftime '%m/%d/%Y' rescue ''
     end
 
     def range
