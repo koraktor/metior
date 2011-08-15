@@ -3,65 +3,61 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-module Metior
+module Metior::Git
 
-  module Git
+  # Represents a commit in a Git source code repository
+  #
+  # @author Sebastian Staudt
+  class Commit < Metior::Commit
 
-    # Represents a commit in a Git source code repository
+    # Creates a new Git commit object linked to the repository and branch it
+    # belongs to and the data from the corresponding `Grit::Commit` object
     #
-    # @author Sebastian Staudt
-    class Commit < Metior::Commit
+    # @param [Repository] repo The Git repository this commit belongs to
+    # @param [Grit::Commit] commit The commit object from Grit
+    def initialize(repo, commit)
+      super repo
 
-      # Creates a new Git commit object linked to the repository and branch it
-      # belongs to and the data from the corresponding `Grit::Commit` object
-      #
-      # @param [Repository] repo The Git repository this commit belongs to
-      # @param [Grit::Commit] commit The commit object from Grit
-      def initialize(repo, commit)
-        super repo
+      @authored_date  = commit.authored_date
+      @committed_date = commit.committed_date
+      @id             = commit.id
+      @message        = commit.message
+      @parents        = commit.parents.map { |parent| parent.id }
 
-        @authored_date  = commit.authored_date
-        @committed_date = commit.committed_date
-        @id             = commit.id
-        @message        = commit.message
-        @parents        = commit.parents.map { |parent| parent.id }
-
-        self.author    = commit.author
-        self.committer = commit.committer
-      end
-
+      self.author    = commit.author
+      self.committer = commit.committer
     end
 
-    # Loads the file stats for this commit from the repository
-    #
-    # @see Repository#raw_commit
-    def load_file_stats
-      @added_files    = []
-      @modified_files = []
-      @deleted_files  = []
-      @repo.raw_commit(@id).diffs.each do |diff|
-        if diff.new_file
-          @added_files    << diff.b_path
-        elsif diff.deleted_file
-          @deleted_files  << diff.b_path
-        elsif diff.renamed_file
-          @added_files    << diff.b_path
-          @deleted_files  << diff.a_path
-        else
-          @modified_files << diff.b_path
-        end
+  end
+
+  # Loads the file stats for this commit from the repository
+  #
+  # @see Repository#raw_commit
+  def load_file_stats
+    @added_files    = []
+    @modified_files = []
+    @deleted_files  = []
+    @repo.raw_commit(@id).diffs.each do |diff|
+      if diff.new_file
+        @added_files    << diff.b_path
+      elsif diff.deleted_file
+        @deleted_files  << diff.b_path
+      elsif diff.renamed_file
+        @added_files    << diff.b_path
+        @deleted_files  << diff.a_path
+      else
+        @modified_files << diff.b_path
       end
     end
+  end
 
-    # Loads the line stats for this commit from the repository
-    #
-    # @see Repository#raw_commit
-    def load_line_stats
-      commit = @repo.raw_commit @id
-      @additions = commit.stats.additions
-      @deletions = commit.stats.deletions
-    end
-
+  # Loads the line stats for this commit from the repository
+  #
+  # @see Repository#raw_commit
+  def load_line_stats
+    commit = @repo.raw_commit @id
+    @additions = commit.stats.additions
+    @deletions = commit.stats.deletions
   end
 
 end

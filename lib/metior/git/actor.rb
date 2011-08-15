@@ -3,37 +3,34 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-module Metior
+module Metior::Git
 
-  module Git
+  # Represents an actor in a Git source code repository, i.e. an author or
+  # committer.
+  #
+  # @author Sebastian Staudt
+  class Actor < Metior::Actor
 
-    # Represents an actor in a Git source code repository, i.e. an author or
-    # committer.
+    alias_method :email, :id
+
+    # Returns the email address as an identifier for the given actor.
     #
-    # @author Sebastian Staudt
-    class Actor < Metior::Actor
+    # Git uses email addresses as identifiers for its actors.
+    #
+    # @param [Grit::Actor] actor The actor object from Grit
+    # @return [String] The email address of the given actor
+    def self.id_for(actor)
+      actor.email
+    end
 
-      alias_method :email, :id
-
-      # Returns the email address as an identifier for the given actor.
-      # Git uses email addresses as identifiers for its actors.
-      #
-      # @param [Grit::Actor] actor The actor object from Grit
-      # @return [String] The email address of the given actor
-      def self.id_for(actor)
-        actor.email
-      end
-
-      # Creates a new actor instance
-      #
-      # @param [Repository] repo The repository this actor belongs to
-      # @param [Grit::Actor] actor The actor object from Grit
-      def initialize(repo, actor)
-        super repo
-        @id   = actor.email
-        @name = actor.name
-      end
-
+    # Creates a new actor instance
+    #
+    # @param [Repository] repo The repository this actor belongs to
+    # @param [Grit::Actor] actor The actor object from Grit
+    def initialize(repo, actor)
+      super repo
+      @id   = actor.email
+      @name = actor.name
     end
 
   end
