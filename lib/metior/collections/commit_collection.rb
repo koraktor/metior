@@ -51,6 +51,8 @@ module Metior
     # @see Commit#committed_date
     def activity
       activity = {}
+      return activity if empty?
+
       commit_count = values.size
 
       active_days = {}
@@ -87,7 +89,7 @@ module Metior
     # @return [Fixnum] The lines of code that have been added
     # @see #load_line_stats
     def additions
-      first.support! :line_stats
+      support! :line_stats
 
       load_line_stats if @additions.nil?
       @additions
@@ -176,7 +178,7 @@ module Metior
     # @see Commit#deleted_files
     # @see Commit#modified_files
     def changing(*files)
-      first.support! :file_stats
+      support! :file_stats
 
       commits = CommitCollection.new
       each do |commit|
@@ -212,7 +214,7 @@ module Metior
     # @return [Fixnum] The lines of code that have been deleted
     # @see #load_line_stats
     def deletions
-      first.support! :line_stats
+      support! :line_stats
 
       load_line_stats if @deletions.nil?
       @deletions
@@ -233,7 +235,7 @@ module Metior
     # @see Commit#additions
     # @see Commit#deletions
     def line_history
-      first.support! :line_stats
+      support! :line_stats
 
       history = { :additions => [], :deletions => [] }
       values.reverse.each do |commit|
@@ -260,7 +262,7 @@ module Metior
     # @return [CommitCollection] The given number of commits ordered by impact
     # @see Commit#modifications
     def most_significant(count = 10)
-      first.support! :line_stats
+      support! :line_stats
 
       commits = CommitCollection.new
       sort_by { |commit| -commit.modifications }.each do |commit|
@@ -280,7 +282,7 @@ module Metior
     #         number of lines
     # @see Commit#modifications
     def with_impact(line_count)
-      first.support! :line_stats
+      support! :line_stats
 
       commits = CommitCollection.new
       each do |commit|

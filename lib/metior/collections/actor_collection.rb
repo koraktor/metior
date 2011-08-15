@@ -45,7 +45,7 @@ module Metior
     # @return [ActorCollection] The given number of actors ordered by impact
     # @see Actor#modifications
     def most_significant(count = 3)
-      first.support! :line_stats
+      support! :line_stats
 
       authors = ActorCollection.new
       sort_by { |author| -author.modifications }.each do |author|

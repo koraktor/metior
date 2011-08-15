@@ -67,6 +67,17 @@ module Metior
       values.last
     end
 
+    # Checks if a specific feature is supported by the VCS (or its
+    # implementation) of the elements in this collection and raises an error if
+    # the feature is not available
+    #
+    # @raise [UnsupportedError] if the feature is not supported by the VCS (or
+    #        its implementation)
+    # @see VCS#supports!
+    def support!(feature)
+      first.support! feature if !empty? && first.respond_to?(:support!)
+    end
+
     if superclass != Hash
       # Adds all elements of another collection to this one
       #
