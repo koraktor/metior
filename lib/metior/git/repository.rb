@@ -62,7 +62,7 @@ module Metior::Git
     # This method uses Grit to load all commits from the given commit range
     #
     # Because of some Grit internal limitations, the commits have to be loaded
-    # in batches of up to 500 commits.
+    # in batches of up to 300 commits.
     #
     # @note Grit will choke on huge repositories, like Homebrew or the Linux
     #       kernel. You will have to raise the timeout limit using
@@ -88,8 +88,8 @@ module Metior::Git
       commits = []
       skip = 0
       begin
-        commits += @grit_repo.commits(range, 500, skip)
-        skip += 500
+        commits += @grit_repo.commits(range, 300, skip)
+        skip += 300
       end while commits.size == skip
 
       [base_commit, commits]
