@@ -8,6 +8,11 @@ class Metior::Report
   # @author Sebastian Staudt
   class Default < self
 
+    @@assets = %w{
+      images/favicon.png
+      stylesheets/default.css
+    }
+
     @@name = :default
 
     @@views = [ :index ]
