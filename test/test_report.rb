@@ -5,6 +5,15 @@
 
 require 'helper'
 
+class Metior::Report
+
+  class Dummy < self
+    @@name = :dummy
+    @@views = [ :index ]
+  end
+
+end
+
 class TestReport < Test::Unit::TestCase
 
   context 'A report' do
@@ -15,15 +24,16 @@ class TestReport < Test::Unit::TestCase
       r = Metior::Repository.new('dummy')
       r.stubs(:commits).returns CommitCollection.new
       r.stubs(:vcs).returns Metior::Git
-      @report = Metior::Report.create 'default', r
+      @report = Metior::Report::Dummy.new r
     end
 
     should 'have some basic information' do
-      assert_instance_of Metior::Report::Default, @report
-      assert_equal 'default', @report.class.name
-      assert_equal [:index], @report.class.views
-      assert_equal File.join(Metior::Report::REPORTS_PATH, 'default'),
-        @report.class.path
+      report = Metior::Report::Dummy
+      assert_equal %w{images javascripts stylesheets}, report.assets
+      assert_equal 'dummy', Metior::Report::Dummy.name
+      assert_equal [:index], report.views
+      assert_equal File.join(Metior::Report::REPORTS_PATH, 'dummy'),
+        report.path
     end
 
     should 'be able to generate a HTML report using Mustache' do
@@ -37,7 +47,7 @@ class TestReport < Test::Unit::TestCase
 
       target_dir = File.expand_path './a/target/dir'
       @report.expects(:copy_assets).with(target_dir).once
-      Mustache.expects(:view_namespace=).with(Metior::Report::Default).once
+      Mustache.expects(:view_namespace=).with(Metior::Report::Dummy).once
       Mustache.expects(:view_class).with(:index).once.returns view_class
       File.expects(:open).with(File.join(target_dir, 'index.html'), 'w').once.
         returns file
