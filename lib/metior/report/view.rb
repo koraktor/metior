@@ -25,6 +25,15 @@ class Metior::Report
       subclass.send :class_variable_set, :@@required_features, []
     end
 
+    # Redirect requests for Mustache partial templates to the `partials`
+    # sub-directory of the report's `templates` directory
+    #
+    # @param [Symbol] name The name of the partial to return
+    # @param [String] The contents of the partial template
+    def self.partial(name)
+      super File.join('partials', name.to_s)
+    end
+
     # Specifies one or more VCS features that are required to generate this
     # view
     #
@@ -65,9 +74,6 @@ class Metior::Report
     # @see http://rubydoc.info/gems/mustache/Mustache#view_class-class_method
     #      Mustache.view_class
     def method_missing(name, *args, &block)
-      view_class = Mustache.view_class name
-      return view_class.new(@report).render if view_class != Mustache
-
       repository.send name, *args, &block
     end
 
@@ -104,7 +110,6 @@ class Metior::Report
     #      Mustache.view_class
     def respond_to?(name)
       methods.include?(name.to_s) ||
-      Mustache.view_class(name) != Mustache ||
       repository.respond_to?(name)
     end
 
