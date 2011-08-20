@@ -22,6 +22,11 @@ module Metior
     # The path where the reports bundled with Metior live
     REPORTS_PATH = File.expand_path File.join File.dirname(__FILE__), '..', '..', 'reports'
 
+    # Returns the commits analyzed by this report
+    #
+    # @return [CommitCollection] The commits analyzed by this report
+    attr_reader :commits
+
     # Returns the range of commits that should be analyzed by this report
     #
     # @return [String, Range] The range of commits covered by this report
@@ -101,6 +106,8 @@ module Metior
     def initialize(repository, range = repository.vcs::DEFAULT_BRANCH)
       @range      = range
       @repository = repository
+      @commits    = repository.commits range
+      @commits.modifications
     end
 
     # Generates this report's output into the given target directory
