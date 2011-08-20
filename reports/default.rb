@@ -10,12 +10,14 @@ class Metior::Report
 
     @@assets = %w{
       images/favicon.png
+      javascripts/d3/d3.min.js
+      javascripts/d3/d3.time.min.js
       stylesheets/default.css
     }
 
     @@name = :default
 
-    @@views = [ :index ]
+    @@views = [ :index, :calendar ]
 
   end
 

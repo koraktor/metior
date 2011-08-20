@@ -10,6 +10,20 @@ body {
   width:       980px;
 }
 
+a {
+  font-weight: bold;
+}
+
+a:hover, a.active {
+  color: #aa5;
+}
+
+a, em {
+  color:       #f95;
+  font-style:  normal;
+  text-shadow: #000 1px 1px 1px;
+}
+
 div#content {
   border:        2px solid #ffb;
   border-radius: 5px;
@@ -20,7 +34,6 @@ div#content {
   -webkit-border-radius: 5px;
   -webkit-box-shadow:    #000 4px 4px 4px;
 }
-
 
 div#content div {
   padding: 0.5em 0.5em 1em 0.5em;
@@ -46,11 +59,6 @@ div#repository_information strong {
 
 div#most_significant_commits th {
   width: 87%;
-}
-
-em {
-  color:       #f95;
-  font-style:  normal;
 }
 
 em, h1, h2, h3 {
