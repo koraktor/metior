@@ -51,13 +51,4 @@ module Metior::Git
     end
   end
 
-  # Loads the line stats for this commit from the repository
-  #
-  # @see Repository#raw_commit
-  def load_line_stats
-    commit = @repo.raw_commit @id
-    @additions = commit.stats.additions
-    @deletions = commit.stats.deletions
-  end
-
 end

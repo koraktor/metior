@@ -36,6 +36,10 @@ class TestActorCollection < Test::Unit::TestCase
         Grit::Repo.any_instance.stubs(:commit).with(id).returns commit
       end
       @authors = repo.authors
+      @authors.commits.each do |commit|
+        commit.line_stats = @@grit_commits[commit.id].stats.additions,
+                            @@grit_commits[commit.id].stats.deletions
+      end
     end
 
     should 'be an instance of Collection' do

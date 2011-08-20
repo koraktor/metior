@@ -131,6 +131,21 @@ module Metior
       @deletions
     end
 
+    # Returns whether the line stats for this commit are available
+    #
+    # @return [Boolean] `true` if this commit's line stats are available
+    def line_stats?
+      !@additions.nil?
+    end
+
+    # Sets the line stats for this commit
+    #
+    # @param [Array<Fixnum>] line_stats An array with the number of additions
+    #        and deletions in this commit
+    def line_stats=(line_stats)
+      @additions, @deletions = *line_stats
+    end
+
     # Returns whether this commits is a merge commit
     #
     # @return [Boolean] `true` if this commit is a merge commit
@@ -186,9 +201,9 @@ module Metior
 
     # Loads the line stats for this commit from the repository
     #
-    # @abstract Has to be implemented by VCS specific subclasses
+    # @see Repository#load_line_stats
     def load_line_stats
-      raise NotImplementedError
+      @additions, @deletions = *@repo.load_line_stats(*@id).values.first
     end
 
   end

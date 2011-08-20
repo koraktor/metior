@@ -24,6 +24,36 @@ module Metior::Git
       @grit_repo = Grit::Repo.new(path)
     end
 
+    # Loads the line stats for the commits given by a set of commit IDs
+    #
+    # @param [Array<String>] ids The IDs of the commits to load line stats for
+    # @return [Hash<String, Array<Fixnum>] An array of two number (line
+    #         additions and deletions) for each of the given commit IDs
+    def load_line_stats(ids)
+      if ids.is_a? Range
+        if ids.first == ''
+          range = ids.last
+        else
+          range = '%s..%s' % [ids.first, ids.last]
+        end
+
+        options = { :numstat => true, :timeout => false }
+        output = @grit_repo.git.native :log, options, range
+        commit_stats = Grit::CommitStats.list_from_string @grit_repo, output
+      else
+        commit_stats = []
+        ids.each_slice(500) do |id_slice|
+          options = { :numstat => true, :timeout => false }
+          output = @grit_repo.git.native :log, options, *id_slice
+          commit_stats += Grit::CommitStats.list_from_string @grit_repo, output
+        end
+      end
+
+      Hash[commit_stats.map do |stats|
+        [stats.first, [stats.last.additions, stats.last.deletions]]
+      end]
+    end
+
     # Retrieves a raw commit object for the given commit ID
     #
     # @param [String] id The ID of the commit

@@ -35,7 +35,7 @@ class TestCommitCollection < Test::Unit::TestCase
   context 'A collection of commits' do
 
     setup do
-      repo = Metior::Git::Repository.new File.dirname(File.dirname(__FILE__))
+      @repo = Metior::Git::Repository.new File.dirname(File.dirname(__FILE__))
       @@grit_commits ||= Fixtures.commits_as_grit_commits(''..'master')
       Grit::Git.any_instance.stubs(:native).with :rev_list, anything, anything
       Grit::Git.any_instance.stubs(:native).
@@ -44,7 +44,11 @@ class TestCommitCollection < Test::Unit::TestCase
       @@grit_commits.each do |id, commit|
         Grit::Repo.any_instance.stubs(:commit).with(id).returns commit
       end
-      @commits = repo.commits
+      @commits = @repo.commits
+      @commits.each do |commit|
+        commit.line_stats = @@grit_commits[commit.id].stats.additions,
+                            @@grit_commits[commit.id].stats.deletions
+      end
     end
 
     should 'be an instance of Collection' do
@@ -151,6 +155,8 @@ class TestCommitCollection < Test::Unit::TestCase
     end
 
     should 'allow to get the line stats of the commits' do
+      @repo.stubs :load_line_stats
+
       assert_equal 25546, @commits.additions
       assert_equal 6359, @commits.deletions
     end

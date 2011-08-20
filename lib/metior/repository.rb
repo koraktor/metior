@@ -212,6 +212,16 @@ module Metior
       commits(range).line_history
     end
 
+    # Loads the line stats for the commits given by a set of commit IDs
+    #
+    # @param [Array<String>] ids The IDs of the commits to load line stats for
+    # @return [Hash<String, Array<Fixnum>] An array of two number (line
+    #         additions and deletions) for each of the given commit IDs
+    # @abstract Has to be implemented by VCS specific subclasses
+    def load_line_stats(ids)
+      raise NotImplementedError
+    end
+
     # Returns the name of the project contained in the repository
     #
     # This will load the name through a VCS specific mechanism if required.

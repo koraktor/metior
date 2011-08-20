@@ -291,13 +291,34 @@ module Metior
 
     private
 
-    # Loads the line stats for all commits in this collection
+    # Loads the line stats for the commits in this collection
+    #
+    # For collections holding a specific range of commits, this always gets the
+    # line stats for all commits. For other, lets say fragmented, collections
+    # this loads the line stats for all commits that are missing their stats.
     #
     # @see Commit#additions
     # @see Commit#deletions
+    # @see Commit#line_stats?
+    # @see Repository#line_stats
     def load_line_stats
       @additions = 0
       @deletions = 0
+
+      line_stats = nil
+      if @range.nil?
+        ids = values.reject { |c| c.line_stats? }.map { |c| c.id }
+        line_stats = first.repo.load_line_stats ids unless ids.empty?
+      else
+        line_stats = first.repo.load_line_stats @range
+      end
+      unless line_stats.nil?
+        line_stats.each do |id, stats|
+          commit = self[id]
+          commit.line_stats = stats
+        end
+      end
+
       each do |commit|
         @additions += commit.additions
         @deletions += commit.deletions
