@@ -28,7 +28,10 @@ class TestActorCollection < Test::Unit::TestCase
     setup do
       repo = Metior::Git::Repository.new File.dirname(File.dirname(__FILE__))
       @@grit_commits ||= Fixtures.commits_as_grit_commits(''..'master')
-      Grit::Repo.any_instance.stubs(:commits).returns @@grit_commits.values
+      Grit::Git.any_instance.stubs(:native).with(:rev_list, anything, anything)
+      Grit::Git.any_instance.stubs(:native).
+        with(:rev_parse, anything, 'master^{}').returns '1b2fe77'
+      Grit::Commit.stubs(:list_from_string).returns @@grit_commits.values
       @@grit_commits.each do |id, commit|
         Grit::Repo.any_instance.stubs(:commit).with(id).returns commit
       end

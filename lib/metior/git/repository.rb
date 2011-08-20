@@ -45,7 +45,9 @@ module Metior::Git
     def id_for_ref(ref)
       return ref if ref.match(/[0-9a-f]{40}/)
       unless @refs.key? ref
-        @refs[ref] = @grit_repo.git.rev_parse({}, "#{ref}^{}")
+        options = { :timeout => false }
+        sha = @grit_repo.git.native(:rev_parse, options, "#{ref}^{}")
+        @refs[ref] = sha.rstrip
       end
       @refs[ref]
     end
@@ -85,12 +87,9 @@ module Metior::Git
         range = '%s..%s' % [range.first, range.last]
       end
 
-      commits = []
-      skip = 0
-      begin
-        commits += @grit_repo.commits(range, 300, skip)
-        skip += 300
-      end while commits.size == skip
+      options = { :pretty => 'raw', :timeout => false }
+      output = @grit_repo.git.native :rev_list, options, range
+      commits = Grit::Commit.list_from_string @grit_repo, output
 
       [base_commit, commits]
     end
