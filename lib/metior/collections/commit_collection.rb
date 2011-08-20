@@ -23,6 +23,16 @@ module Metior
       @deletions = nil
       @range     = range
 
+      commits_with_stats = commits.select { |c| c.line_stats? }
+      unless commits_with_stats.empty?
+        @additions = 0
+        @deletions = 0
+        commits_with_stats.each do |commit|
+          @additions += commit.additions
+          @deletions += commit.deletions
+        end
+      end
+
       super commits
     end
 
@@ -33,7 +43,10 @@ module Metior
     def <<(commit)
       return self if key? commit.id
 
-      unless @additions.nil?
+      if @additions.nil? && empty? && commit.line_stats?
+        @additions = commit.additions
+        @deletions = commit.deletions
+      elsif !@additions.nil?
         @additions += commit.additions
         @deletions += commit.deletions
       end
