@@ -107,7 +107,7 @@ module Metior
         end
       end
 
-      CommitCollection.new commits
+      CommitCollection.new commits, range
     end
 
     # Returns all committers from the given commit range in a hash where the

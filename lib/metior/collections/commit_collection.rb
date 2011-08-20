@@ -18,11 +18,12 @@ module Metior
     #
     # @param [Array<Commit>] commits The commits that should be initially
     #        inserted into the collection
-    def initialize(commits = [])
+    def initialize(commits = [], range = nil)
       @additions = nil
       @deletions = nil
+      @range     = range
 
-      super
+      super commits
     end
 
     # Adds a commit to this collection
