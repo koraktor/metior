@@ -122,12 +122,12 @@ class TestCommitCollection < Test::Unit::TestCase
       assert_instance_of Hash, activity
       assert_instance_of Hash, activity[:active_days]
       assert_equal 157, activity[:active_days].size
-      assert activity[:active_days].keys.all? { |k| k.is_a? Time }
+      assert activity[:active_days].keys.all? { |k| k.is_a? Date }
       assert activity[:active_days].values.all? { |v| v.is_a? Fixnum }
       assert_in_delta 2.9299, activity[:commits_per_active_day], 0.0001
       assert_equal Time.at(1191997100), activity[:first_commit_date]
       assert_equal Time.at(1306794294), activity[:last_commit_date]
-      assert_equal Time.parse('14-02-2009 00:00 +0000'), activity[:most_active_day]
+      assert_equal Date.parse('14-02-2009'), activity[:most_active_day]
     end
 
     should 'allow to get all commits changing specified files' do

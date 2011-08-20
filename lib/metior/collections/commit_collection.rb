@@ -3,6 +3,7 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
+require 'date'
 require 'time'
 
 module Metior
@@ -69,7 +70,7 @@ module Metior
       active_days = {}
       each do |commit|
         date = commit.committed_date.utc
-        day  = Time.utc(date.year, date.month, date.day)
+        day  = Time.utc(date.year, date.month, date.day).send :to_date
         if active_days.key? day
           active_days[day] += 1
         else
