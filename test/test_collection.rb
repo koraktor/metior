@@ -6,32 +6,25 @@
 require 'helper'
 require 'metior/collections/collection'
 
-class Dummy
-    def id
-      __id__
-    end
-end
-
 class TestCollections < Test::Unit::TestCase
 
   context 'A collection of objects' do
 
     setup do
       @collection = Collection.new
-      @object1 = Dummy.new
-      @object2 = Dummy.new
-      @object3 = Dummy.new
-      @collection << @object1
-      @collection << @object2
-      @collection << @object3
+      @objects = Array.new(3) { mock }
+      @objects.each_with_index { |o, i| o.stubs(:id).returns i+1 }
+      @collection << @objects[0]
+      @collection << @objects[1]
+      @collection << @objects[2]
     end
 
     should 'have a simple constructor' do
-      collection = Collection.new [@object1, @object2, @object3]
-      assert_equal [@object1.id, @object2.id, @object3.id], collection.keys
-      assert_equal @object1, collection[@object1.id]
-      assert_equal @object2, collection[@object2.id]
-      assert_equal @object3, collection[@object3.id]
+      collection = Collection.new @objects
+      assert_equal [1, 2, 3], collection.keys
+      assert_equal @objects[0], collection[1]
+      assert_equal @objects[1], collection[2]
+      assert_equal @objects[2], collection[3]
     end
 
     should 'be a subclass of Hash' do
@@ -40,24 +33,24 @@ class TestCollections < Test::Unit::TestCase
     end
 
     should 'have a working << operator' do
-      object = Dummy.new
+      object = mock :id => :x
       @collection << object
-      assert_equal object, @collection[object.id]
+      assert_equal object, @collection[:x]
     end
 
     should 'have a working #each method' do
       objects = []
       result = @collection.each { |obj| objects << obj }
       assert_equal @collection, result
-      assert_equal [@object1, @object2, @object3], objects
+      assert_equal @objects, objects
     end
 
     should 'have a working #last method' do
-      assert_equal @object3, @collection.last
+      assert_equal @objects.last, @collection.last
     end
 
     should 'delegate support! to its first element' do
-      @object1.expects(:support!).with :some_feature
+      @objects.first.expects(:support!).with :some_feature
       @collection.support! :some_feature
     end
 

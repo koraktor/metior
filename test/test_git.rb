@@ -3,7 +3,6 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-require 'fixtures'
 require 'helper'
 
 class TestGit < Test::Unit::TestCase
@@ -23,100 +22,42 @@ class TestGit < Test::Unit::TestCase
   context 'A Git repository' do
 
     setup do
-      @repo = Metior::Git::Repository.new File.dirname(File.dirname(__FILE__))
-      @@grit_commits ||= Fixtures.commits_as_grit_commits(''..'master')
-      Grit::Git.any_instance.stubs(:native).with(:rev_list, anything, anything)
-      Grit::Git.any_instance.stubs(:native).
-        with(:rev_parse, anything, 'master^{}').returns '1b2fe77'
-      Grit::Commit.stubs(:list_from_string).returns @@grit_commits.values
+      @grit_repo = mock
+      Grit::Repo.stubs(:new).with('/path/to/repo').returns @grit_repo
+      @repo = Metior::Git::Repository.new '/path/to/repo'
     end
 
     should 'be able to load all commits from the repository\'s default branch' do
-      commits = @repo.commits
-      assert_equal 460, commits.size
-      assert commits.all? { |commit| commit.is_a? Metior::Git::Commit }
+      grit_commits = Array.new(50) { mock }
+      output = mock
+      @grit_git = mock
 
-      head = commits.first
-      assert_equal '1b2fe77', head.id
+      @grit_repo.expects(:commit).never
+      @grit_repo.expects(:git).returns @grit_git
+      @grit_git.expects(:native).with(:rev_list, anything, 'master').
+        returns output
+      Grit::Commit.expects(:list_from_string).with(@grit_repo, output).
+        returns grit_commits
+
+      commits = @repo.send :load_commits, ''..'master'
+      assert_equal [nil, grit_commits], commits
     end
 
     should 'be able to load a range of commits from the repository' do
-      api_response = Fixtures.commits_as_grit_commits('ef2870b'..'4c592b4').values
-      Grit::Commit.stubs(:list_from_string).returns(api_response)
-      Grit::Repo.any_instance.stubs(:commit)
+      base_commit  = mock
+      grit_commits = Array.new(50) { mock }
+      output = mock
+      @grit_git = mock
 
-      @repo.expects(:id_for_ref).with('ef2870b').once.returns('ef2870b')
-      @repo.expects(:id_for_ref).with('4c592b4').once.returns('4c592b4')
+      @grit_repo.expects(:commit).with('deadbeef').returns base_commit
+      @grit_repo.expects(:git).returns @grit_git
+      @grit_git.expects(:native).with(:rev_list, anything, 'deadbeef..master').
+        returns output
+      Grit::Commit.expects(:list_from_string).with(@grit_repo, output).
+        returns grit_commits
 
-      commits = @repo.commits 'ef2870b'..'4c592b4'
-      assert_equal 6, commits.size
-      assert commits.all? { |commit| commit.is_a? Metior::Git::Commit }
-      assert_equal '4c592b4', commits.first.id
-      assert_equal 'f0cc7f7', commits.last.id
-    end
-
-    should 'know the authors of the repository' do
-      authors = @repo.authors
-      assert_equal 37, authors.size
-      assert authors.values.all? { |author| author.is_a? Metior::Git::Actor }
-
-      assert_equal %w{
-        adam@therealadam.com aman@tmm1.net antonin@hildebrand.cz
-        bobbywilson0@gmail.com bryce@worldmedia.net cehoffman@gmail.com
-        chapados@sciencegeeks.org cho45@lowreal.net chris@ozmm.org
-        davetron5000@gmail.com david.kowis@rackspace.com dustin@spy.net
-        engel@engel.uk.to evil@che.lu gram.gibson@uky.edu
-        hiroshi3110@gmail.com igor@wiedler.ch johan@johansorensen.com
-        jos@catnook.com jpriddle@nevercraft.net kamal.fariz@gmail.com
-        koraktor@gmail.com mtraverso@acm.org ohnobinki@ohnopublishing.net
-        paul+git@mjr.org pjhyett@gmail.com rsanheim@gmail.com
-        rtomayko@gmail.com schacon@gmail.com scott@railsnewbie.com
-        technoweenie@gmail.com tim@dysinger.net tim@spork.in
-        tom@mojombo.com tom@taco.(none) voker57@gmail.com wayne@larsen.st
-      }, authors.keys.sort
-    end
-
-    should 'know the committers of the repository' do
-      committers = @repo.committers
-      assert_equal 29, committers.size
-      assert committers.values.all? { |committer| committer.is_a? Metior::Git::Actor }
-
-      assert_equal %w{
-         adam@therealadam.com aman@tmm1.net antonin@hildebrand.cz
-         bobbywilson0@gmail.com bryce@worldmedia.net chris@ozmm.org
-         davetron5000@gmail.com david.kowis@rackspace.com dustin@spy.net
-         engel@engel.uk.to evil@che.lu hiroshi3110@gmail.com
-         johan@johansorensen.com jos@catnook.com kamal.fariz@gmail.com
-         koraktor@gmail.com mtraverso@acm.org ohnobinki@ohnopublishing.net
-         paul+git@mjr.org pjhyett@gmail.com rsanheim@gmail.com
-         rtomayko@gmail.com schacon@gmail.com technoweenie@gmail.com
-         tim@dysinger.net tim@spork.in tom@mojombo.com tom@taco.(none)
-         voker57@gmail.com
-      }, committers.keys.sort
-    end
-
-    should 'know the top authors of the repository' do
-      authors = @repo.top_authors
-      assert_equal 3, authors.size
-      assert authors.all? { |author| author.is_a? Metior::Git::Actor }
-
-      assert_equal [
-        "tom@mojombo.com", "schacon@gmail.com", "technoweenie@gmail.com"
-      ], authors.collect { |author| author.id }
-    end
-
-    should 'provide easy access to simple repository statistics' do
-      Metior::Git::Repository.any_instance.expects(:id_for_ref).twice.
-        with('master').returns('1b2fe77')
-
-      stats = Metior.simple_stats :git, File.dirname(File.dirname(__FILE__))
-
-      assert_equal 157, stats[:active_days].size
-      assert_equal 460, stats[:commit_count]
-      assert_in_delta 2.92993630573248, stats[:commits_per_active_day], 0.0001
-      assert_equal Time.at(1191997100), stats[:first_commit_date]
-      assert_equal Time.at(1306794294), stats[:last_commit_date]
-      assert_equal 5, stats[:top_contributors].size
+      commits = @repo.send :load_commits, 'deadbeef'..'master'
+      assert_equal [base_commit, grit_commits], commits
     end
 
     should 'be able to load all the branches of a repository' do
@@ -125,11 +66,10 @@ class TestGit < Test::Unit::TestCase
         'branch1' => '1234567',
         'branch2' => '0abcdef'
       }
-      grit_branches = branches.map do |branch|
-        commit = Grit::Commit.new(nil, branch.last, [], nil, nil, nil, nil, nil, [])
-        Grit::Head.new branch.first, commit
+      grit_branches = branches.map do |branch, id|
+        mock :commit => (mock :id => id), :name => branch
       end
-      Grit::Repo.any_instance.expects(:branches).once.returns(grit_branches)
+      @grit_repo.expects(:branches).once.returns(grit_branches)
 
       assert_equal %w{branch1 branch2 master}, @repo.branches
       assert_equal branches, @repo.instance_variable_get(:@refs)
@@ -141,11 +81,10 @@ class TestGit < Test::Unit::TestCase
         'v2.4.0' => 'a3c5139',
         'v2.4.1' => '91940c2'
       }
-      grit_tags = tags.map do |tag|
-        commit = Grit::Commit.new(nil, tag.last, [], nil, nil, nil, nil, nil, [])
-        Grit::Tag.new tag.first, commit
+      grit_tags = tags.map do |tag, id|
+        mock :commit => (mock :id => id), :name => tag
       end
-      Grit::Repo.any_instance.expects(:tags).once.returns(grit_tags)
+      @grit_repo.expects(:tags).once.returns(grit_tags)
 
       assert_equal %w{v2.3.1 v2.4.0 v2.4.1}, @repo.tags
       assert_equal tags, @repo.instance_variable_get(:@refs)
@@ -153,7 +92,7 @@ class TestGit < Test::Unit::TestCase
 
     should 'be able to load the name and description of the project' do
       description = "grit\n\nGrit gives you object oriented read/write access to Git repositories via Ruby."
-      Grit::Repo.any_instance.expects(:description).once.returns description
+      @grit_repo.expects(:description).once.returns description
       @repo.expects(:load_description).never
 
       assert_equal 'grit', @repo.name
@@ -162,10 +101,60 @@ class TestGit < Test::Unit::TestCase
 
     should 'ignore the default Git description file' do
       description = "Unnamed repository; edit this file 'description' to name the repository."
-      Grit::Repo.any_instance.expects(:description).once.returns description
+      @grit_repo.expects(:description).once.returns description
+      @repo.expects(:load_description).never
 
       assert_equal '', @repo.name
       assert_equal '', @repo.description
+    end
+
+    should 'be able to load a raw Grit::Commit' do
+      commit = mock
+      @grit_repo.expects(:commit).with('deadbeef').returns commit
+
+      assert_equal commit, @repo.raw_commit('deadbeef')
+    end
+
+    should 'be able to load the commit SHA ID for a given ref' do
+      @grit_git = mock
+      @grit_git.expects(:native).with(:rev_parse, anything, 'master^{}').
+        returns "deadbeef\n"
+      @grit_repo.expects(:git).returns @grit_git
+
+      assert_equal 'deadbeef', @repo.send(:id_for_ref, 'master')
+    end
+
+    should 'be able to load the line stats for a range of commits' do
+      commit_stats = Array.new(20) do |x|
+        [x, mock(:additions => x, :deletions => x)]
+      end
+      line_stats = Hash[Array.new(20) { |x| [x, [x, x]] }]
+
+      output = mock
+      @grit_git = mock
+      @grit_repo.expects(:git).returns @grit_git
+      @grit_git.expects(:native).with(:log, anything, 'master').returns output
+      Grit::CommitStats.expects(:list_from_string).with(@grit_repo, output).
+        returns commit_stats
+
+      assert_equal line_stats, @repo.load_line_stats(''..'master')
+    end
+
+    should 'be able to load the line stats for a given set of commits' do
+      ids = Array.new(5) { |x| x }
+      commit_stats = Array.new(20) do |x|
+        [x, mock(:additions => x, :deletions => x)]
+      end
+      line_stats = Hash[Array.new(20) { |x| [x, [x, x]] }]
+
+      output = mock
+      @grit_git = mock
+      @grit_repo.expects(:git).returns @grit_git
+      @grit_git.expects(:native).with(:log, anything, *ids).returns output
+      Grit::CommitStats.expects(:list_from_string).with(@grit_repo, output).
+        returns commit_stats
+
+      assert_equal line_stats, @repo.load_line_stats(ids)
     end
 
   end
