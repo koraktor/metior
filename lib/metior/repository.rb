@@ -83,7 +83,7 @@ module Metior
 
       if commits.empty?
         base_commit, raw_commits = load_commits(range)
-        commits = commits + build_commits(raw_commits)
+        commits = build_commits raw_commits
         unless base_commit.nil?
           base_commit = self.class::Commit.new(self, base_commit)
           base_commit.add_child commits.last.id
