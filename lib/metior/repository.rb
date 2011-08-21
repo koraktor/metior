@@ -166,7 +166,7 @@ module Metior
     # @see Commit#deleted_files
     # @see Commit#modified_files
     def file_stats(range = self.class::DEFAULT_BRANCH)
-      support! :line_stats
+      support! :file_stats
 
       stats = {}
       commits(range).each_value do |commit|
