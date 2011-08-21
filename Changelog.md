@@ -1,6 +1,18 @@
 # Changelog
 
+## `master` branch
+
+ * New calendar view for default report
+ * Performance improvements for Git
+ * Minor bugfixes
+
+ See the
+ [Git history](https://github.com/koraktor/metior/compare/0.2.0...master) for
+ changes in the `master` branch since version 0.2.0
+
 ## Version 0.2.0
+
+ **August 12<sup>th</sup>, 2011**
 
  * Initial support for HTML reports
  * Improved caching
@@ -14,7 +26,7 @@
 
 ## Version 0.1.4
 
- **June 16<sup>th</th>, 2011**
+ **June 16<sup>th</sup>, 2011**
 
  * Removed Bundler as a dependency loader
  * Fixed GitHub::Commit not requiring 'time'
