@@ -80,7 +80,9 @@ module Metior::GitHub
             commit.id == range.first
           end
           unless base_commit_index.nil?
-            commits += new_commits[0..base_commit_index-1]
+            if base_commit_index > 0
+              commits += new_commits[0..base_commit_index-1]
+            end
             base_commit = new_commits[base_commit_index]
             break
           end
