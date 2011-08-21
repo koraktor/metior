@@ -315,7 +315,6 @@ module Metior
         commit.add_child child_commit_id unless child_commit_id.nil?
         child_commit_id = commit.id
         @commits[commit.id] = commit
-        @actors[commit.author.id] ||= commit.author
         commit
       end
     end
