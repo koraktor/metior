@@ -58,6 +58,8 @@ class Metior::Report
     # @param [Report] report The report this view belongs to
     def initialize(report)
       @report = report
+
+      init if respond_to? :init
     end
 
     # This will try to render a view as a partial of the current view or call a
@@ -123,3 +125,26 @@ class Metior::Report
   end
 
 end
+
+#class Mustache::Context
+#
+#  def find(obj, key, default = nil)
+#      hash = obj.respond_to?(:has_key?)
+#
+#      if hash && obj.has_key?(key)
+#        obj[key]
+#      elsif hash && obj.has_key?(key.to_s)
+#        obj[key.to_s]
+#      elsif !obj.instance_of?(Hash) && obj.respond_to?(key)
+#        meth = obj.method(key) rescue proc { obj.send(key) }
+#        if meth.arity == 1
+#          meth.to_proc
+#        else
+#          meth[]
+#        end
+#      else
+#        default
+#      end
+#    end
+#
+#end

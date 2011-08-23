@@ -8,10 +8,8 @@ class Metior::Report::Default
   # @author Sebastian Staudt
   class Index < View
 
-    def initialize(report)
-      super
-
-      @activity = report.commits.activity
+    def init
+      @activity = @report.commits.activity
     end
 
     def authors
