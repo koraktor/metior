@@ -3,8 +3,9 @@
 ## `master` branch
 
  * New calendar view for default report
+ * Minimal CLI to generate reports
  * Performance improvements for Git
- * Minor bugfixes
+ * Minor bugfixes and improvements
 
  See the
  [Git history](https://github.com/koraktor/metior/compare/0.2.0...master) for
