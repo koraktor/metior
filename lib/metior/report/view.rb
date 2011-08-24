@@ -87,8 +87,11 @@ class Metior::Report
     # @see http://rubydoc.info/gems/mustache/Mustache#render-instance_method
     #      Mustache#render
     def render(*args)
-      features = self.class.send :class_variable_get, :@@required_features
-      super if features.all? { |feature| repository.supports? feature }
+      begin
+        features = self.class.send :class_variable_get, :@@required_features
+        super if features.all? { |feature| repository.supports? feature }
+      rescue Metior::UnsupportedError
+      end
     end
 
     # Returns the repository that is analyzed by the report this view belongs
