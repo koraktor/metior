@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+
+require 'metior'
+require 'grit'
+
+def show_usage
+  puts "Usage: #{$.} [--git|--github] [repository path|GitHub repository]" <<
+       '[target dir]'
+  exit 1
+end
+
+a_vcs = lambda { |arg| %w{--git --github}.include? arg }
+
+vcs = ARGV.find &a_vcs
+ARGV.reject! &a_vcs
+vcs = vcs.nil? ? :git : vcs[2..-1].to_sym
+
+path = ARGV.delete_at(0) || File.expand_path('.')
+
+if vcs == :git
+  unless File.exist? path
+    target_dir = path
+    path       = File.expand_path '.'
+  end
+
+  begin
+    Grit::Repo.new path
+  rescue Grit::InvalidGitRepositoryError
+    target_dir = path
+    path = File.expand_path '.'
+
+    begin
+      Grit::Repo.new path
+    rescue Grit::InvalidGitRepositoryError
+      puts "Error: '#{path}' is not a valid Git repository."
+      exit 1
+    end
+  end
+elsif vcs == :github && path !=~ /^\w\/\w$/
+  puts "Error: '#{path}' is not a valid GitHub repository."
+  exit 1
+end
+
+repository = Metior.repository vcs, path
+target_dir ||= ARGV.delete_at(0) || 'report'
+repository.report.generate target_dir
