@@ -59,7 +59,15 @@ class Metior::Report
     def initialize(report)
       @report = report
 
-      init if respond_to? :init
+      init
+    end
+
+    # Initializes a new view instance
+    #
+    # This can be used to gather initial data, e.g. used by multiple variables.
+    #
+    # @abstract Override this method to customize the initial setup of a view
+    def init
     end
 
     # This will try to render a view as a partial of the current view or call a
