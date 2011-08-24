@@ -118,9 +118,11 @@ module Metior
     # report.
     #
     # @param [String] target_dir The target directory of the report
-    def generate(target_dir)
+    # @param [Boolean] with_assets If `false` the report's assets will not be
+    #        copied to the target directory
+    def generate(target_dir, with_assets = true)
       target_dir = File.expand_path target_dir
-      copy_assets(target_dir)
+      copy_assets target_dir if with_assets
 
       Mustache.template_path  = self.class.template_path
       Mustache.view_path      = self.class.view_path
