@@ -19,6 +19,10 @@ class Metior::Report
 
     @@views = [ :index, :calendar ]
 
+    def init
+      @commits.modifications if repository.supports? :line_stats
+    end
+
   end
 
 end

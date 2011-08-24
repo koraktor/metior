@@ -108,7 +108,8 @@ module Metior
       @range      = range
       @repository = repository
       @commits    = repository.commits range
-      @commits.modifications
+
+      init
     end
 
     # Generates this report's output into the given target directory
@@ -134,6 +135,14 @@ module Metior
           output_file.close
         end
       end
+    end
+
+    # Initializes a new report instance
+    #
+    # This can be used to gather initial data, e.g. used by multiple views.
+    #
+    # @abstract Override this method to customize the initial setup of a report
+    def init
     end
 
     private
