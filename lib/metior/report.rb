@@ -58,6 +58,7 @@ module Metior
     #        initialize
     # @param [Repository] repository The repository to analyze
     # @param [String, Range] range The commit range to analyze
+    # @return [Report] The requested report
     def self.create(name, repository, range = repository.vcs::DEFAULT_BRANCH)
       require File.join(REPORTS_PATH, name.to_s)
       name = name.to_s.split('_').map { |n| n.capitalize }.join('')

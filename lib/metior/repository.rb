@@ -233,6 +233,17 @@ module Metior
       @name
     end
 
+    # Create a new report instance for the given report name and commit range
+    # of this repository
+    #
+    # @param [String, Symbol] name The name of the report to load and
+    #        initialize
+    # @param [String, Range] range The commit range to analyze
+    # @return [Report] The requested report
+    def report(name = :default, range = self.class::DEFAULT_BRANCH)
+      Report.create name, self, range
+    end
+
     # Returns a list of authors with the biggest impact on the repository, i.e.
     # changing the most code
     #
