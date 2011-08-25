@@ -49,7 +49,7 @@ class TestReport < Test::Unit::TestCase
       @report.expects(:copy_assets).with(target_dir).once
       Mustache.expects(:view_namespace=).with(Metior::Report::Dummy).once
       Mustache.expects(:view_class).with(:index).once.returns view_class
-      File.expects(:open).with(File.join(target_dir, 'index.html'), 'w').once.
+      File.expects(:open).with(File.join(target_dir, 'index.html'), 'wb').once.
         returns file
 
       @report.generate './a/target/dir'
