@@ -118,11 +118,13 @@ class Metior::Report
     # with this name.
     #
     # @param [Symbol] name The name of the partial or method
+    # @param [Boolean] include_private If `true` includes private method in the
+    #        lookup
     # @return [Boolean] `true` if the given name refers a partial or method
     # @see http://rubydoc.info/gems/mustache/Mustache#view_class-class_method
     #      Mustache.view_class
-    def respond_to?(name)
-      methods.include?(name.to_s) || repository.respond_to?(name)
+    def respond_to_missing?(name, include_private = false)
+      repository.respond_to? name
     end
 
     # Returns the name of the VCS the analyzed repository is using
