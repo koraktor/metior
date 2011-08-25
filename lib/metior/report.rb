@@ -131,7 +131,7 @@ module Metior
       self.class.views.each do |view_name|
         file_name = File.join target_dir, view_name.to_s.downcase + '.html'
         begin
-          output_file = File.open file_name, 'w'
+          output_file = File.open file_name, 'wb'
           output_file.write Mustache.view_class(view_name).new(self).render
         ensure
           output_file.close
