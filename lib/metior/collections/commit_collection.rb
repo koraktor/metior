@@ -319,6 +319,8 @@ module Metior
       @additions = 0
       @deletions = 0
 
+      return if empty?
+
       line_stats = nil
       if @range.nil?
         ids = values.reject { |c| c.line_stats? }.map { |c| c.id }

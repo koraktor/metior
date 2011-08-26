@@ -28,24 +28,29 @@ class Metior::Report::Default
       end
 
       js_data = []
-      first = @report.commits.last.committed_date.send :to_date
-      last = @report.commits.first.committed_date.send :to_date
-      first.upto last do |current|
-        next unless data.key? current
-        js_data << ("'#{current.strftime '%m/%d/%Y'}': {" <<
-          "'additions': #{data[current][:additions]}," <<
-          "'commits': #{data[current][:commits]}," <<
-          "'deletions': #{data[current][:deletions]} }")
+
+      unless @report.commits.empty?
+        first = @report.commits.last.committed_date.send :to_date
+        last = @report.commits.first.committed_date.send :to_date
+        first.upto last do |current|
+          next unless data.key? current
+          js_data << ("'#{current.strftime '%m/%d/%Y'}': {" <<
+            "'additions': #{data[current][:additions]}," <<
+            "'commits': #{data[current][:commits]}," <<
+            "'deletions': #{data[current][:deletions]} }")
+        end
       end
 
       "{ #{js_data.join(',')} }"
     end
 
     def first_year
+      return nil if @report.commits.empty?
       @report.commits.last.committed_date.year
     end
 
     def last_year
+      return nil if @report.commits.empty?
       @report.commits.first.committed_date.year
     end
 
