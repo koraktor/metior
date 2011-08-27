@@ -31,6 +31,11 @@ module Metior::Git
       super repo
       @id   = actor.email
       @name = actor.name
+
+      if @id.respond_to? :force_encoding
+        @id.force_encoding 'utf-8'
+        @name.force_encoding 'utf-8'
+      end
     end
 
   end

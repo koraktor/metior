@@ -24,6 +24,8 @@ module Metior::Git
       @message        = commit.message
       @parents        = commit.parents.map { |parent| parent.id }
 
+      @message.force_encoding 'utf-8' if @message.respond_to? :force_encoding
+
       self.author    = commit.author
       self.committer = commit.committer
     end
