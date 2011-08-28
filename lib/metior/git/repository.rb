@@ -24,6 +24,23 @@ module Metior::Git
       @grit_repo = Grit::Repo.new(path)
     end
 
+    # Returns the unique identifier for the commit the given reference – like a
+    # branch name – is pointing to
+    #
+    # Returns the given ref name immediately if it is a full SHA1 commit ID.
+    #
+    # @param [String] ref A symbolic reference name
+    # @return [String] The SHA1 ID of the commit the reference is pointing to
+    def id_for_ref(ref)
+      return ref if ref.match(/[0-9a-f]{40}/)
+      unless @refs.key? ref
+        options = { :timeout => false }
+        sha = @grit_repo.git.native(:rev_parse, options, "#{ref}^{}")
+        @refs[ref] = sha.rstrip
+      end
+      @refs[ref]
+    end
+
     # Loads the line stats for the commits given by a set of commit IDs
     #
     # @param [Array<String>] ids The IDs of the commits to load line stats for
@@ -64,23 +81,6 @@ module Metior::Git
     end
 
     private
-
-    # Returns the unique identifier for the commit the given reference – like a
-    # branch name – is pointing to
-    #
-    # Returns the given ref name immediately if it is a full SHA1 commit ID.
-    #
-    # @param [String] ref A symbolic reference name
-    # @return [String] The SHA1 ID of the commit the reference is pointing to
-    def id_for_ref(ref)
-      return ref if ref.match(/[0-9a-f]{40}/)
-      unless @refs.key? ref
-        options = { :timeout => false }
-        sha = @grit_repo.git.native(:rev_parse, options, "#{ref}^{}")
-        @refs[ref] = sha.rstrip
-      end
-      @refs[ref]
-    end
 
     # Loads all branches and the corresponding commit IDs of this repository
     #

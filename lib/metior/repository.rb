@@ -189,6 +189,17 @@ module Metior
       stats
     end
 
+    # Returns the unique identifier for the commit the given reference – like a
+    # branch name – is pointing to
+    #
+    # @abstract Has to be implemented by VCS subclasses
+    # @param [String] ref A symbolic reference name
+    # @return [Object] The unique identifier of the commit the reference is
+    #         pointing to
+    def id_for_ref(ref)
+      raise NotImplementedError
+    end
+
     # This evaluates the changed lines in each commit of the given commit
     # range.
     #
@@ -376,17 +387,6 @@ module Metior
       end
 
       commits.sort_by { |c| c.committed_date }.reverse
-    end
-
-    # Returns the unique identifier for the commit the given reference – like a
-    # branch name – is pointing to
-    #
-    # @abstract Has to be implemented by VCS subclasses
-    # @param [String] ref A symbolic reference name
-    # @return [Object] The unique identifier of the commit the reference is
-    #         pointing to
-    def id_for_ref(ref)
-      raise NotImplementedError
     end
 
     # Loads all branches and the corresponding commit IDs of this repository

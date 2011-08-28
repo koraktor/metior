@@ -31,8 +31,6 @@ module Metior::GitHub
       @user        = user
     end
 
-    private
-
     # Returns the unique identifier for the commit the given reference – like a
     # branch name – is pointing to
     #
@@ -45,6 +43,8 @@ module Metior::GitHub
       @refs[ref] = Octokit.commit(@path, ref).id unless @refs.key? ref
       @refs[ref]
     end
+
+    private
 
     # Loads all branches and the corresponding commit IDs of this repository
     #

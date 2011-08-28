@@ -95,7 +95,7 @@ class TestGitHub < Test::Unit::TestCase
       commit = mock :id => 'deadbeef'
       Octokit.expects(:commit).with('some/repo', 'master').returns commit
 
-      assert_equal 'deadbeef', @repo.send(:id_for_ref, 'master')
+      assert_equal 'deadbeef', @repo.id_for_ref('master')
     end
 
   end

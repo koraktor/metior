@@ -121,7 +121,7 @@ class TestGit < Test::Unit::TestCase
         returns "deadbeef\n"
       @grit_repo.expects(:git).returns @grit_git
 
-      assert_equal 'deadbeef', @repo.send(:id_for_ref, 'master')
+      assert_equal 'deadbeef', @repo.id_for_ref('master')
     end
 
     should 'be able to load the line stats for a range of commits' do

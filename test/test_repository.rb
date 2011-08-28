@@ -17,7 +17,7 @@ class TestRepository < Test::Unit::TestCase
 
     should 'not implement the #id_for_ref method' do
       assert_raise NotImplementedError do
-        @repo.send :id_for_ref, nil
+        @repo.id_for_ref nil
       end
     end
 
