@@ -124,15 +124,11 @@ module Metior
       target_dir = File.expand_path target_dir
       copy_assets target_dir if with_assets
 
-      Mustache.template_path  = self.class.template_path
-      Mustache.view_path      = self.class.view_path
-      Mustache.view_namespace = self.class
-
-      self.class.views.each do |view_name|
+      render.each do |view_name, output|
         file_name = File.join target_dir, view_name.to_s.downcase + '.html'
         begin
           output_file = File.open file_name, 'wb'
-          output_file.write Mustache.view_class(view_name).new(self).render
+          output_file.write output
         ensure
           output_file.close
         end
@@ -145,6 +141,22 @@ module Metior
     #
     # @abstract Override this method to customize the initial setup of a report
     def init
+    end
+
+    # Renders the views of this report and returns them in a hash
+    #
+    # @return [Hash<Symbol, String>] The names of the views and the
+    #         corresponding rendered content
+    def render
+      Mustache.template_path  = self.class.template_path
+      Mustache.view_path      = self.class.view_path
+      Mustache.view_namespace = self.class
+
+      result = {}
+      self.class.views.each do |view_name|
+        result[view_name] = Mustache.view_class(view_name).new(self).render
+      end
+      result
     end
 
     private
