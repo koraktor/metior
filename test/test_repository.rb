@@ -15,6 +15,12 @@ class TestRepository < Test::Unit::TestCase
 
   context 'The base class for Metior VCS repositories' do
 
+    should 'not implement the #current_branch method method' do
+      assert_raise NotImplementedError do
+        @repo.current_branch
+      end
+    end
+
     should 'not implement the #id_for_ref method' do
       assert_raise NotImplementedError do
         @repo.id_for_ref nil

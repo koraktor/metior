@@ -56,7 +56,7 @@ module Metior
     #        reachable from that ref.
     # @return [ActorCollection] All authors from the given commit range
     # @see #commits
-    def authors(range = self.class::DEFAULT_BRANCH)
+    def authors(range = current_branch)
       commits(range).authors
     end
     alias_method :contributors, :authors
@@ -77,7 +77,7 @@ module Metior
     #        as a single ref (`'master'`). A single ref name means all commits
     #        reachable from that ref.
     # @return [CommitCollection] All commits from the given commit range
-    def commits(range = self.class::DEFAULT_BRANCH)
+    def commits(range = current_branch)
       range = parse_range range
       commits = cached_commits range
 
@@ -123,10 +123,18 @@ module Metior
     #        reachable from that ref.
     # @return [ActorCollection] All committers from the given commit range
     # @see #commits
-    def committers(range = self.class::DEFAULT_BRANCH)
+    def committers(range = current_branch)
       commits(range).committers
     end
     alias_method :collaborators, :committers
+
+    # Returns the current branch of the repository
+    #
+    # @abstract Has to be implemented by VCS specific subclasses
+    # @returns [String] The name of the current branch
+    def current_branch
+      raise NotImplementedError
+    end
 
     # Returns the description of the project contained in the repository
     #
@@ -165,7 +173,7 @@ module Metior
     # @see Commit#added_files
     # @see Commit#deleted_files
     # @see Commit#modified_files
-    def file_stats(range = self.class::DEFAULT_BRANCH)
+    def file_stats(range = current_branch)
       support! :file_stats
 
       stats = {}
@@ -219,7 +227,7 @@ module Metior
     #         assigned to key `:additions`, deleted lines are assigned to
     #         `:deletions`
     # @see CommitCollection#line_history
-    def line_history(range = self.class::DEFAULT_BRANCH)
+    def line_history(range = current_branch)
       commits(range).line_history
     end
 
@@ -251,7 +259,7 @@ module Metior
     #        initialize
     # @param [String, Range] range The commit range to analyze
     # @return [Report] The requested report
-    def report(name = :default, range = self.class::DEFAULT_BRANCH)
+    def report(name = :default, range = current_branch)
       Report.create name, self, range
     end
 
@@ -267,7 +275,7 @@ module Metior
     # @raise [UnsupportedError] if the VCS does not support `:line_stats`
     # @return [Array<Actor>] An array of the given number of the most
     #         significant authors in the given commit range
-    def significant_authors(range = self.class::DEFAULT_BRANCH, count = 3)
+    def significant_authors(range = current_branch, count = 3)
       authors(range).most_significant(count)
     end
     alias_method :significant_contributors, :significant_authors
@@ -284,7 +292,7 @@ module Metior
     # @raise [UnsupportedError] if the VCS does not support `:line_stats`
     # @return [Array<Actor>] An array of the given number of the most
     #         significant commits in the given commit range
-    def significant_commits(range = self.class::DEFAULT_BRANCH, count = 10)
+    def significant_commits(range = current_branch, count = 10)
       commits(range).most_significant(count)
     end
 
@@ -309,7 +317,7 @@ module Metior
     # @return [Array<Actor>] An array of the given number of top contributors
     #         in the given commit range
     # @see #authors
-    def top_authors(range = self.class::DEFAULT_BRANCH, count = 3)
+    def top_authors(range = current_branch, count = 3)
       authors(range).top(count)
     end
     alias_method :top_contributors, :top_authors
@@ -407,7 +415,7 @@ module Metior
     #        as a single ref (`'master'`). A single ref name means all commits
     #        reachable from that ref.
     # @return [Array<Commit>] All commits from the given commit range
-    def load_commits(range = self.class::DEFAULT_BRANCH)
+    def load_commits(range = current_branch)
       raise NotImplementedError
     end
 

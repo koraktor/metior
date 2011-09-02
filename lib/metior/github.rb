@@ -15,9 +15,6 @@ module Metior
 
     include Metior::VCS
 
-    # Git's default branch is _master_
-    DEFAULT_BRANCH = 'master'
-
     not_supported :file_stats, :line_stats
 
   end

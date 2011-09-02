@@ -98,6 +98,10 @@ class TestGitHub < Test::Unit::TestCase
       assert_equal 'deadbeef', @repo.id_for_ref('master')
     end
 
+    should 'have a current branch of "master"' do
+      assert_equal 'master', @repo.current_branch
+    end
+
   end
 
 end

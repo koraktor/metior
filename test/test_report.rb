@@ -23,6 +23,7 @@ class TestReport < Test::Unit::TestCase
 
       r = Metior::Repository.new('dummy')
       r.stubs(:commits).returns CommitCollection.new
+      r.stubs(:current_branch).returns 'master'
       r.stubs(:vcs).returns Metior::Git
       @report = Metior::Report::Dummy.new r
     end

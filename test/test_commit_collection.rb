@@ -36,6 +36,7 @@ class TestCommitCollection < Test::Unit::TestCase
 
     setup do
       @repo = Metior::Git::Repository.new File.dirname(File.dirname(__FILE__))
+      @repo.stubs(:current_branch).returns 'master'
       @@grit_commits ||= Fixtures.commits_as_grit_commits(''..'master')
       Grit::Git.any_instance.stubs(:native).with :rev_list, anything, anything
       Grit::Git.any_instance.stubs(:native).

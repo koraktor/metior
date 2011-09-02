@@ -42,7 +42,7 @@ module Metior
   # @param [String] report The name of the report template to use
   def self.report(type, repo_options, target_dir, range = nil, report = 'default')
     repo = repository type, *repo_options
-    range ||= repo.vcs::DEFAULT_BRANCH
+    range ||= repo.current_branch
     Report.create(report, repo, range).generate target_dir
   end
 
@@ -59,8 +59,8 @@ module Metior
   # @return [Hash<Symbol, Object>] The calculated stats for the given
   #         repository and branch
   def self.simple_stats(type, repo_options, range = nil)
-    range = vcs(type)::DEFAULT_BRANCH if range.nil?
     repo  = repository type, *repo_options
+    range ||= repo.current_branch
 
     commits = repo.commits(range)
     {

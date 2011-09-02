@@ -157,6 +157,14 @@ class TestGit < Test::Unit::TestCase
       assert_equal line_stats, @repo.load_line_stats(ids)
     end
 
+    should 'be able to get the current branch of a repository' do
+      head = mock
+      head.expects(:name).returns 'master'
+      @grit_repo.expects(:head).returns head
+
+      assert_equal 'master', @repo.current_branch
+    end
+
   end
 
 end

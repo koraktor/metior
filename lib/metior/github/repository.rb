@@ -31,6 +31,17 @@ module Metior::GitHub
       @user        = user
     end
 
+    # Returns the current branch of the repository
+    #
+    # There's no information about the default branch of a repository in the
+    # GitHub API v2 which is supported by Octokit. So we just return `'master'`
+    # here.
+    #
+    # @return ['master'] Always `'master'`
+    def current_branch
+      'master'
+    end
+
     # Returns the unique identifier for the commit the given reference – like a
     # branch name – is pointing to
     #

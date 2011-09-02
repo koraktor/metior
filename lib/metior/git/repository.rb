@@ -24,6 +24,20 @@ module Metior::Git
       @grit_repo = Grit::Repo.new(path)
     end
 
+    # Returns the current branch of the repository
+    #
+    # This is the target ref of Git's HEAD, i.e. the currently checked out
+    # branch. For a detached HEAD this may also be the commit ID of the checked
+    # out commit.
+    #
+    # @see Grit::Repo#head
+    def current_branch
+      branch = @grit_repo.head
+      return branch.name unless branch.nil?
+      commit = @grit_repo.commit('HEAD')
+      commit.id unless commit.nil?
+    end
+
     # Returns the unique identifier for the commit the given reference – like a
     # branch name – is pointing to
     #

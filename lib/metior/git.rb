@@ -15,9 +15,6 @@ module Metior
 
     include Metior::VCS
 
-    # Git's default branch is _master_
-    DEFAULT_BRANCH = 'master'
-
   end
 
 end

@@ -104,7 +104,7 @@ module Metior
     #
     # @param [Repository] repository The repository to analyze
     # @param [String, Range] range The commit range to analyze
-    def initialize(repository, range = repository.vcs::DEFAULT_BRANCH)
+    def initialize(repository, range = repository.current_branch)
       @range      = range
       @repository = repository
       @commits    = repository.commits range
