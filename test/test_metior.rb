@@ -32,22 +32,26 @@ class TestMetior < Test::Unit::TestCase
     should 'allow easy generation of a report' do
       require File.join(Report::REPORTS_PATH, 'default')
 
+      repo1   = mock
+      repo1.expects(:current_branch).returns 'master'
       report1 = mock
       report1.expects(:generate).once
+      repo2   = mock
       report2 = mock
       report2.expects(:generate).once
 
-      Report::Default.expects(:new).with() do |repository, range|
-        repository.instance_of?(Git::Repository) &&
-        range == 'master'
+      Metior.expects(:repository).with(:git, '/some/path').once.returns(repo1)
+      Metior.expects(:repository).with(:github, 'some/repo').once.returns(repo2)
+
+      Report::Default.expects(:new).with do |repository, range|
+        repository == repo1 && range == 'master'
       end.once.returns(report1)
-      Report::Default.expects(:new).with() do |repository, range|
-        repository.instance_of?(GitHub::Repository) &&
-        range == 'development'
+      Report::Default.expects(:new).with do |repository, range|
+        repository == repo2 && range == 'development'
       end.once.returns(report2)
 
-      Metior.report(:git, File.dirname(File.dirname(__FILE__)), '/target/dir' )
-      Metior.report(:github, 'some/user', '/target/dir', 'development')
+      Metior.report(:git, '/some/path', '/target/dir')
+      Metior.report(:github, 'some/repo', '/target/dir', 'development')
     end
 
   end
