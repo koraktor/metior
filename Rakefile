@@ -29,7 +29,7 @@ begin
   # Create a rake task +:doc+ to build the documentation using YARD
   YARD::Rake::YardocTask.new do |yardoc|
     yardoc.name    = 'doc'
-    yardoc.files   = [ 'lib/**/*.rb', 'LICENSE', 'README.md' ]
+    yardoc.files   = [ 'lib/**/*.rb', 'Changelog.md', 'LICENSE', 'README.md' ]
     yardoc.options = [ '--private', '--title', 'Metior — API Documentation' ]
   end
 rescue LoadError
