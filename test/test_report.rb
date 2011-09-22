@@ -8,8 +8,8 @@ require 'helper'
 class Metior::Report
 
   class Dummy < self
-    @@name = :dummy
-    @@views = [ :index ]
+    assets %w{images javascripts stylesheets}
+    views [ :index ]
   end
 
 end
@@ -40,11 +40,17 @@ class TestReport < Test::Unit::TestCase
     should 'be able to generate a HTML report using Mustache' do
       view = mock
       view.expects(:render).once.returns 'content'
+      view.expects(:template_name=).with :index
       view_class = mock
       view_class.expects(:new).with(@report).once.returns view
       file = mock
       file.expects(:write).with('content').once
       file.expects(:close).once
+
+      Metior::Report::Dummy.expects(:find).with('templates/index.mustache').
+        returns ''
+      Metior::Report::Dummy.expects(:find).with('views/index.rb').
+        returns ''
 
       target_dir = File.expand_path './a/target/dir'
       @report.expects(:copy_assets).with(target_dir).once

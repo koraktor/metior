@@ -37,17 +37,20 @@ module Metior
     # @return [Repository] The repository attached to this report
     attr_reader :repository
 
-    # Returns the paths of the assets that need to be included in the report
+    # Sets or returns the paths of the assets that need to be included in the
+    # report
     #
-    # By default, a report uses the directories `images`, `javascripts` and
-    # `stylesheets` as asset sources.
-    #
+    # @param [Array<String>] assets The paths of the assets for this report
     # @return [Array<String>] The paths of the assets to include
-    def self.assets
-      if class_variable_defined? :@@assets
-        class_variable_get :@@assets
+    def self.assets(assets = nil)
+      if assets.nil?
+        if class_variable_defined? :@@assets
+          class_variable_get :@@assets
+        else
+          self == Report ? [] : superclass.assets
+        end
       else
-        %w{images javascripts stylesheets}
+        class_variable_set :@@assets, assets
       end
     end
 
@@ -65,11 +68,20 @@ module Metior
       const_get(name.to_sym).new(repository, range)
     end
 
-    # Returns the name of this report
+    # Sets or returns the name of this report
     #
+    # @param [String] name The name for this report
     # @return [String] The name of this report
-    def self.name
-      class_variable_get(:@@name).to_s
+    def self.name(name = nil)
+      if name.nil?
+        if class_variable_defined? :@@name
+          class_variable_get(:@@views).to_s
+        else
+          self.to_s.split('::').last.downcase
+        end
+      else
+        class_variable_set :@@name, name
+      end
     end
 
     # Returns the file system path this report resides in
@@ -93,11 +105,21 @@ module Metior
       File.join path, 'views'
     end
 
-    # Returns the symbolic names of the main views this report consists of
+    # Sets or returns the symbolic names of the main views this report consists
+    # of
     #
-    # @reeturn [Array<Symbol>] This report's views
-    def self.views
-      class_variable_get :@@views
+    # @param [Array<Symbol>] views The views for this report
+    # @return [Array<Symbol>] This report's views
+    def self.views(views = nil)
+      if views.nil?
+        if class_variable_defined? :@@views
+          class_variable_get :@@views
+        else
+          self == Report ? [] : superclass.views
+        end
+      else
+        class_variable_set :@@views, views
+      end
     end
 
     # Creates a new report for the given repository and commit range
@@ -143,28 +165,52 @@ module Metior
     def init
     end
 
-    # Renders the views of this report and returns them in a hash
+    # Renders the views of this report (or the its ancestors) and returns them
+    # in a hash
     #
     # @return [Hash<Symbol, String>] The names of the views and the
     #         corresponding rendered content
     def render
-      Mustache.template_path  = self.class.template_path
-      Mustache.view_path      = self.class.view_path
       Mustache.view_namespace = self.class
 
       result = {}
       self.class.views.each do |view_name|
-        result[view_name] = Mustache.view_class(view_name).new(self).render
+        template = File.join 'templates', "#{view_name}.mustache"
+        template_path = self.class.find template
+
+        view = File.join 'views', "#{view_name}.rb"
+        view_path = self.class.find view
+
+        Mustache.template_path = File.dirname template_path
+        Mustache.view_path     = File.dirname view_path
+        mustache = Mustache.view_class(view_name).new(self)
+        mustache.template_name = view_name
+        result[view_name] = mustache.render
       end
       result
     end
 
     private
 
+    # Find a file inside this report or one of its ancestors
+    #
+    # @param [String] file The name of the file to find
+    # @return [String, nil] The absolute path of the file or `nil` if it
+    #         doesn't exist in this reports hierarchy
+    def self.find(file)
+      current_path = File.join self.path, file
+      if File.exist? current_path
+        current_path
+      else
+        self == Report ? nil : superclass.find(file)
+      end
+    end
+
     # Copies the assets coming with this report to the given target directory
     #
     # This will copy the files and directories that have been specified for the
-    # report from the report's path into the target directory.
+    # report from the report's path (or the report's ancestors) into the target
+    # directory.
     #
     # @param [String] target_dir The target directory of the report
     # @see .assets
@@ -172,9 +218,10 @@ module Metior
       FileUtils.mkdir_p target_dir
 
       self.class.assets.map do |asset|
+        asset_path = self.class.find asset
         asset_dir = File.join target_dir, File.dirname(asset)
         FileUtils.mkdir_p asset_dir unless File.exists? asset_dir
-        FileUtils.cp_r File.join(self.class.path, asset), asset_dir
+        FileUtils.cp_r asset_path, asset_dir
       end
     end
 
