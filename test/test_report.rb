@@ -33,8 +33,7 @@ class TestReport < Test::Unit::TestCase
       assert_equal %w{images javascripts stylesheets}, report.assets
       assert_equal 'dummy', Metior::Report::Dummy.name
       assert_equal [:index], report.views
-      assert_equal File.join(Metior::Report::REPORTS_PATH, 'dummy'),
-        report.path
+      assert_equal File.join(File.dirname(__FILE__), 'dummy'), report.path
     end
 
     should 'be able to generate a HTML report using Mustache' do

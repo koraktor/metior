@@ -22,6 +22,10 @@ module Metior
     # The path where the reports bundled with Metior live
     REPORTS_PATH = File.expand_path File.join File.dirname(__FILE__), '..', '..', 'reports'
 
+    # This holds all available reports, i.e. their names and the corresponding
+    # class
+    @@reports = {}
+
     # Returns the commits analyzed by this report
     #
     # @return [CommitCollection] The commits analyzed by this report
@@ -63,9 +67,19 @@ module Metior
     # @param [String, Range] range The commit range to analyze
     # @return [Report] The requested report
     def self.create(name, repository, range = repository.current_branch)
-      require File.join(REPORTS_PATH, name.to_s)
-      name = name.to_s.split('_').map { |n| n.capitalize }.join('')
-      const_get(name.to_sym).new(repository, range)
+      @@reports[name.to_s].new(repository, range)
+    end
+
+    # Automatically registers a new report subclass as an available report type
+    #
+    # This will also set the path of the new report class, so it can find its
+    # views, templates and assets.
+    #
+    # @param [Class] subclass A report subclass
+    def self.inherited(subclass)
+      @@reports[subclass.name] = subclass
+      base_path = File.dirname caller.first.split(':').first
+      subclass.send :class_variable_set, :@@base_path, base_path
     end
 
     # Sets or returns the name of this report
@@ -88,7 +102,7 @@ module Metior
     #
     # @return [String] The path of this report
     def self.path
-      File.join REPORTS_PATH, name
+      File.join class_variable_get(:@@base_path), name
     end
 
     # Returns the file system path this report's templates reside in
@@ -189,6 +203,8 @@ module Metior
       end
       result
     end
+
+    require File.join(REPORTS_PATH, 'default')
 
     private
 
