@@ -52,10 +52,6 @@ class Metior::Report::Default
       @report.commits.most_significant(5).values
     end
 
-    def now
-      Time.now
-    end
-
     def range
       @report.range
     end
@@ -70,10 +66,6 @@ class Metior::Report::Default
 
     def title
       "Stats for #{repo_name}"
-    end
-
-    def version
-      Metior::VERSION
     end
 
   end

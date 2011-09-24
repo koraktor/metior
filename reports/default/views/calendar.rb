@@ -58,20 +58,12 @@ class Metior::Report::Default
       now.strftime('%FT%H:%M:%S%z').insert(-3, ':')
     end
 
-    def now
-      Time.now
-    end
-
     def repo_name
       repository.name.empty? ? repository.path : repository.name
     end
 
     def title
       "Calendar for #{repo_name}"
-    end
-
-    def version
-      Metior::VERSION
     end
 
   end

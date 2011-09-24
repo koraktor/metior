@@ -87,6 +87,13 @@ class Metior::Report
       repository.send name, *args, &block
     end
 
+    # Returns the current time
+    #
+    # @return [Time] The current time
+    def now
+      Time.now
+    end
+
     # This checks if all required VCS features of this view are available for
     # this report's repository
     #
@@ -132,6 +139,13 @@ class Metior::Report
     # @return [Symbol] The name of the current VCS
     def vcs_name
       repository.vcs::NAME
+    end
+
+    # Returns the current version of the Metior gem
+    #
+    # @return [String] The current Metior version
+    def version
+      Metior::VERSION
     end
 
   end
