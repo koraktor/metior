@@ -3,7 +3,6 @@
 #
 # Copyright (c) 2011, Sebastian Staudt
 
-require 'fixtures'
 require 'helper'
 require 'metior/collections/commit_collection'
 

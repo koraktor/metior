@@ -18,6 +18,8 @@ $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'metior'
 include Metior
 
+require 'fixtures'
+
 # Extends TestCase functionality
 class Test::Unit::TestCase
 
