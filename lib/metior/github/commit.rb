@@ -22,17 +22,17 @@ module Metior::GitHub
 
       @added_files    = []
       @additions      = 0
-      @authored_date  = Time.parse commit.authored_date
-      @committed_date = Time.parse commit.committed_date
+      @authored_date  = Time.parse commit.commit.author.date
+      @committed_date = Time.parse commit.commit.committer.date
       @deleted_files  = []
       @deletions      = 0
-      @id             = commit.id
-      @message        = commit.message
+      @id             = commit.sha
+      @message        = commit.commit.message
       @modified_files = []
-      @parents        = commit.parents.map { |parent| parent.id }
+      @parents        = commit.parents.map { |parent| parent.sha }
 
-      self.author    = commit.author
-      self.committer = commit.committer
+      self.author    = commit.author.merge commit.commit.author
+      self.committer = commit.committer.merge commit.commit.committer
     end
 
   end

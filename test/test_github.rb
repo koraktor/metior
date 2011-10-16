@@ -26,32 +26,35 @@ class TestGitHub < Test::Unit::TestCase
     end
 
     should 'be able to load all commits from the repository\'s default branch' do
-      first_page  = Array.new(35) { |x| mock :id => x }
-      second_page = Array.new(35) { |x| mock :id => 35 + x }
+      first_page  = Array.new(100) { |x| mock }
+      second_page = Array.new(100) { |x| mock }
+      first_page.last.expects(:sha).returns '99'
+      second_page.last.expects(:sha).returns '199'
 
-      Octokit.expects(:commits).with('some/repo', 'master', { :page => 1 }).
+      Octokit.expects(:commits).with('some/repo', nil, { :last_sha => nil, :per_page =>  100, :top => 'master' }).
         returns first_page
-      Octokit.expects(:commits).with('some/repo', 'master', { :page => 2 }).
+      Octokit.expects(:commits).with('some/repo', nil, { :last_sha => '99', :per_page =>  100, :top => 'master' }).
         returns second_page
-      Octokit.expects(:commits).with('some/repo', 'master', { :page => 3 }).
-        raises Octokit::NotFound
+      Octokit.expects(:commits).with('some/repo', nil, { :last_sha => '199', :per_page =>  100, :top => 'master' }).
+        returns []
 
       commits = @repo.send :load_commits, ''..'master'
       assert_equal [nil, first_page + second_page], commits
     end
 
     should 'be able to load a range of commits from the repository' do
-      first_page  = Array.new(35) { |x| mock :id => x.to_s }
-      second_page = Array.new(35) { |x| mock }
+      first_page  = Array.new(100) { |x| mock :sha => x.to_s }
+      second_page = Array.new(100) { |x| mock }
+      first_page.last.expects(:sha).returns '99'
       base_commit = second_page.first
-      base_commit.expects(:id).returns '35'
+      base_commit.expects(:sha).returns '100'
 
-      Octokit.expects(:commits).with('some/repo', 'master', { :page => 1 }).
+      Octokit.expects(:commits).with('some/repo', nil, { :last_sha => nil, :per_page =>  100, :top => 'master' }).
         returns first_page
-      Octokit.expects(:commits).with('some/repo', 'master', { :page => 2 }).
+      Octokit.expects(:commits).with('some/repo', nil, { :last_sha => '99', :per_page =>  100, :top => 'master'  }).
         returns second_page
 
-      commits = @repo.send :load_commits, '35'..'master'
+      commits = @repo.send :load_commits, '100'..'master'
       assert_equal [base_commit, first_page], commits
     end
 
@@ -92,7 +95,7 @@ class TestGitHub < Test::Unit::TestCase
     end
 
     should 'be able to load the commit SHA ID for a given ref' do
-      commit = mock :id => 'deadbeef'
+      commit = mock :sha => 'deadbeef'
       Octokit.expects(:commit).with('some/repo', 'master').returns commit
 
       assert_equal 'deadbeef', @repo.id_for_ref('master')

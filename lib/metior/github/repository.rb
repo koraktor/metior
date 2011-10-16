@@ -51,7 +51,7 @@ module Metior::GitHub
     # @return [String] The SHA1 ID of the commit the reference is pointing to
     def id_for_ref(ref)
       return ref if ref.match(/[0-9a-f]{40}/)
-      @refs[ref] = Octokit.commit(@path, ref).id unless @refs.key? ref
+      @refs[ref] = Octokit.commit(@path, ref).sha unless @refs.key? ref
       @refs[ref]
     end
 
@@ -83,24 +83,23 @@ module Metior::GitHub
     def load_commits(range)
       base_commit = nil
       commits = []
-      page = 1
-      begin
-        loop do
-          new_commits = Octokit.commits(@path, range.last, :page => page)
-          base_commit_index = new_commits.find_index do |commit|
-            commit.id == range.first
+      last_commit = nil
+      loop do
+        new_commits = Octokit.commits(@path, nil, :last_sha => last_commit, :per_page => 100, :top => range.last)
+        break if new_commits.empty?
+        
+        base_commit_index = new_commits.find_index do |commit|
+          commit.sha == range.first
+        end unless range.first == ''
+        unless base_commit_index.nil?
+          if base_commit_index > 0
+            commits += new_commits[0..base_commit_index-1]
           end
-          unless base_commit_index.nil?
-            if base_commit_index > 0
-              commits += new_commits[0..base_commit_index-1]
-            end
-            base_commit = new_commits[base_commit_index]
-            break
-          end
-          commits += new_commits
-          page += 1
+          base_commit = new_commits[base_commit_index]
+          break
         end
-      rescue Octokit::NotFound
+        commits += new_commits
+        last_commit = new_commits.last.sha
       end
 
       [base_commit, commits]
