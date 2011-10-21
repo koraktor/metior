@@ -23,8 +23,10 @@ GEM
       mime-types (~> 1.15)
     hashery (1.4.0)
     hashie (1.2.0)
+    metaclass (0.0.1)
     mime-types (1.16)
-    mocha (0.9.12)
+    mocha (0.10.0)
+      metaclass (~> 0.0.1)
     multi_json (1.0.3)
     multipart-post (1.1.3)
     mustache (0.99.4)
@@ -45,7 +47,7 @@ PLATFORMS
 
 DEPENDENCIES
   metior!
-  mocha (~> 0.9.12)
+  mocha (~> 0.10.0)
   rake (~> 0.9.2)
   shoulda (~> 2.11.3)
   yard (~> 0.7.2)
