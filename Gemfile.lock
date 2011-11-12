@@ -24,7 +24,7 @@ GEM
     hashery (1.4.0)
     hashie (1.2.0)
     metaclass (0.0.1)
-    mime-types (1.16)
+    mime-types (1.17.2)
     mocha (0.10.0)
       metaclass (~> 0.0.1)
     multi_json (1.0.3)
