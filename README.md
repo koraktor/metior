@@ -156,13 +156,16 @@ LICENSE file.
 * [Metior's homepage][2]
 * [GitHub project page][3]
 * [GitHub issue tracker][4]
-* [Continuous Integration at Travis CI][6]
+* [Continuous Integration at Travis CI][6]: [![Build Status](https://secure.travis-ci.org/koraktor/metior.png?branch=master)][6]
+* [Dependency status at Gemnasium][7]: [![Dependency Status](https://gemnasium.com/koraktor/metior.png?travis)][7]
 
 Follow Metior on Twitter [@metiorstats](http://twitter.com/metiorstats).
 
  [1]: http://rubydoc.info/gems/metior/frames
  [2]: http://koraktor.de/metior
- [3]: http://github.com/koraktor/metior
- [4]: http://github.com/koraktor/metior/issues
+ [3]: https://github.com/koraktor/metior
+ [4]: https://github.com/koraktor/metior/issues
  [5]: http://rubydoc.info/github/koraktor/metior/master/frames
  [6]: http://travis-ci.org/koraktor/metior
+ [7]: https://gemnasium.com/koraktor/metior
+ 
