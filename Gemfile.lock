@@ -3,7 +3,7 @@ PATH
   specs:
     metior (0.2.0)
       grit (~> 2.4.1)
-      hashery (~> 1.4.0)
+      hashery (~> 1.5.0)
       mustache (~> 0.99.4)
       octokit (~> 0.6.5)
 
@@ -11,6 +11,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     addressable (2.2.6)
+    blankslate (2.1.2.4)
     diff-lcs (1.1.3)
     faraday (0.7.5)
       addressable (~> 2.2.6)
@@ -21,7 +22,8 @@ GEM
     grit (2.4.1)
       diff-lcs (~> 1.1)
       mime-types (~> 1.15)
-    hashery (1.4.0)
+    hashery (1.5.0)
+      blankslate
     hashie (1.2.0)
     metaclass (0.0.1)
     mime-types (1.17.2)
