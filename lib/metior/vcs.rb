@@ -37,7 +37,8 @@ module Metior
 
       # Sets or returns the default adapter for this VCS
       #
-      # @param [Symbol] The 
+      # @param [Symbol, nil] name The name of the adapter to register as the
+      #        default one or `nil` to return the current
       # @return [Module] This VCS's default adapter
       def default_adapter(name = nil)
         if name.nil?
