@@ -193,14 +193,12 @@
                     var additions, commits, deletions;
                     var dayData = data[d.Date];
                     if(dayData == undefined) {
-                        additions = 0;
-                        commits   = 0;
-                        deletions = 0;
-                    } else {
-                        additions = dayData.additions;
-                        commits   = dayData.commits;
-                        deletions = dayData.deletions;
+                        return d.Date + ': No activity'
                     }
+
+                    additions = dayData.additions;
+                    commits   = dayData.commits;
+                    deletions = dayData.deletions;
 
                     return d.Date + ': ' + commits + ' commits, +' +
                            additions + '/-' + deletions + ' lines';
