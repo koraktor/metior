@@ -1,20 +1,20 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
 require 'helper'
 
-class TestGitHub < Test::Unit::TestCase
+class TestOctokit < Test::Unit::TestCase
 
-  context 'The GitHub implementation' do
+  context 'The Octokit adapter' do
 
     should 'not support file stats' do
-      assert_not Metior::GitHub.supports? :file_stats
+      assert_not Metior::Adapter::Octokit.supports? :file_stats
     end
 
     should 'not support line stats' do
-      assert_not Metior::GitHub.supports? :line_stats
+      assert_not Metior::Adapter::Octokit.supports? :line_stats
     end
 
   end
@@ -22,7 +22,7 @@ class TestGitHub < Test::Unit::TestCase
   context 'A GitHub repository' do
 
     setup do
-      @repo = Metior::GitHub::Repository.new 'some/repo'
+      @repo = Metior::Adapter::Octokit::Repository.new 'some/repo'
     end
 
     should 'be able to load all commits from the repository\'s default branch' do
@@ -31,11 +31,11 @@ class TestGitHub < Test::Unit::TestCase
       first_page.last.expects(:sha).returns '99'
       second_page.last.expects(:sha).returns '199'
 
-      Octokit.expects(:commits).with('some/repo', nil, { :last_sha => nil, :per_page =>  100, :top => 'master' }).
+      ::Octokit.expects(:commits).with('some/repo', nil, { :last_sha => nil, :per_page =>  100, :top => 'master' }).
         returns first_page
-      Octokit.expects(:commits).with('some/repo', nil, { :last_sha => '99', :per_page =>  100, :top => 'master' }).
+      ::Octokit.expects(:commits).with('some/repo', nil, { :last_sha => '99', :per_page =>  100, :top => 'master' }).
         returns second_page
-      Octokit.expects(:commits).with('some/repo', nil, { :last_sha => '199', :per_page =>  100, :top => 'master' }).
+      ::Octokit.expects(:commits).with('some/repo', nil, { :last_sha => '199', :per_page =>  100, :top => 'master' }).
         returns []
 
       commits = @repo.send :load_commits, ''..'master'
@@ -49,9 +49,9 @@ class TestGitHub < Test::Unit::TestCase
       base_commit = second_page.first
       base_commit.expects(:sha).returns '100'
 
-      Octokit.expects(:commits).with('some/repo', nil, { :last_sha => nil, :per_page =>  100, :top => 'master' }).
+      ::Octokit.expects(:commits).with('some/repo', nil, { :last_sha => nil, :per_page =>  100, :top => 'master' }).
         returns first_page
-      Octokit.expects(:commits).with('some/repo', nil, { :last_sha => '99', :per_page =>  100, :top => 'master'  }).
+      ::Octokit.expects(:commits).with('some/repo', nil, { :last_sha => '99', :per_page =>  100, :top => 'master'  }).
         returns second_page
 
       commits = @repo.send :load_commits, '100'..'master'
@@ -64,7 +64,7 @@ class TestGitHub < Test::Unit::TestCase
         'branch1' => '1234567',
         'branch2' => '0abcdef'
       }
-      Octokit.expects(:branches).with('some/repo').once.returns(branches)
+      ::Octokit.expects(:branches).with('some/repo').once.returns(branches)
 
       assert_equal %w{branch1 branch2 master}, @repo.branches
       assert_equal branches, @repo.instance_variable_get(:@refs)
@@ -76,7 +76,7 @@ class TestGitHub < Test::Unit::TestCase
         'v2.4.0' => 'a3c5139',
         'v2.4.1' => '91940c2'
       }
-      Octokit.expects(:tags).with('some/repo').once.returns(tags)
+      ::Octokit.expects(:tags).with('some/repo').once.returns(tags)
 
       assert_equal %w{v2.3.1 v2.4.0 v2.4.1}, @repo.tags
       assert_equal tags, @repo.instance_variable_get(:@refs)
@@ -87,7 +87,7 @@ class TestGitHub < Test::Unit::TestCase
         :name        => 'grit',
         :description => 'Grit gives you object oriented read/write access to Git repositories via Ruby.'
       })
-      Octokit.expects(:repo).with('some/repo').once.returns repo
+      ::Octokit.expects(:repo).with('some/repo').once.returns repo
       @repo.expects(:load_description).never
 
       assert_equal repo.name, @repo.name
@@ -96,7 +96,7 @@ class TestGitHub < Test::Unit::TestCase
 
     should 'be able to load the commit SHA ID for a given ref' do
       commit = mock :sha => 'deadbeef'
-      Octokit.expects(:commit).with('some/repo', 'master').returns commit
+      ::Octokit.expects(:commit).with('some/repo', 'master').returns commit
 
       assert_equal 'deadbeef', @repo.id_for_ref('master')
     end

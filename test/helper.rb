@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
 require 'test/unit'
 
@@ -19,6 +19,9 @@ require 'metior'
 include Metior
 
 require 'fixtures'
+
+autoload :Grit, 'grit'
+autoload :Octokit, 'octokit'
 
 # Extends TestCase functionality
 class Test::Unit::TestCase

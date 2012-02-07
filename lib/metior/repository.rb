@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
 module Metior
 
@@ -12,7 +12,7 @@ module Metior
   # @author Sebastian Staudt
   class Repository
 
-    include AutoIncludeVCS
+    include AutoIncludeAdapter
 
     # @return [String] The file system path of this repository
     attr_reader :path
@@ -131,7 +131,7 @@ module Metior
     # Returns the current branch of the repository
     #
     # @abstract Has to be implemented by VCS specific subclasses
-    # @returns [String] The name of the current branch
+    # @return [String] The name of the current branch
     def current_branch
       raise NotImplementedError
     end

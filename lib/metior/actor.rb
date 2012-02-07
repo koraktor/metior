@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
 module Metior
 
@@ -15,7 +15,7 @@ module Metior
   # @author Sebastian Staudt
   class Actor
 
-    include AutoIncludeVCS
+    include AutoIncludeAdapter
 
     # @return [CommitCollection] The list of commits this actor has contributed
     #         to the source code repository

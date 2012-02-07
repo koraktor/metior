@@ -21,14 +21,47 @@ module Metior
     end
 
   end
+  
+  # This error is raised when an VCS adapter is requested that is not known to
+  # Metior
+  #
+  # @author Sebastian Staudt
+  class UnknownAdapterError < RuntimeError
+
+    # Creates a new instance of this error
+    #
+    # @param [Symbol] adapter The symbolic name for which no adapter is known
+    def initialize(adapter)
+      super 'No VCS adapter registered for :%s' % adapter
+    end
+
+  end
+
+  # This error is raised when a VCS is requested that is not known to Metior
+  #
+  # @author Sebastian Staudt
+  class UnknownVCSError < RuntimeError
+
+    # Creates a new instance of this error
+    #
+    # @param [Symbol] vcs The symbolic name for which no VCS is known
+    def initialize(vcs)
+      super 'No VCS registered for :%s' % vcs
+    end
+
+  end
 
   # This error is raised when an operation is not supported by the currently
-  # used VCS (or its implementation)
+  # used VCS or its adapter implementation
+  #
+  # @author Sebastian Staudt
   class UnsupportedError < RuntimeError
 
     # Creates a new instance of this error
-    def initialize(vcs)
-      super 'Operation not supported by the current VCS (:%s).' % vcs::NAME
+    #
+    # @param [Module] adapter The VCS adapter
+    def initialize(adapter)
+      super 'Operation not supported by the current VCS adapter (:%s).' % adapter.id
     end
 
   end

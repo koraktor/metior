@@ -1,36 +1,11 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
 require 'metior/errors'
 
 module Metior
-
-  # This hash will be dynamically filled with all available VCS types and the
-  # corresponding implementation modules
-  @@vcs_types = {}
-
-  # Returns the VCS implementation `Module` for a given symbolic VCS name
-  #
-  # @param [Symbol] type The symbolic type name of the VCS
-  # @return [VCS] The VCS for the given name
-  def self.vcs(type)
-    type = type.to_sym
-    unless @@vcs_types.key? type
-      raise 'No VCS registered for :%s' % type
-    end
-    @@vcs_types[type].init
-  end
-
-  # Returns a Hash with all available VCS types as keys and the implementation
-  # modules as values
-  #
-  # @return [Hash<Symbol, VCS>] All available VCS implementations and their
-  #         corresponding names
-  def self.vcs_types
-    @@vcs_types
-  end
 
   # This module provides functionality to automatically register new VCS
   # implementations `Module`s
@@ -44,67 +19,61 @@ module Metior
     # @author Sebastian Staudt
     module ClassMethods
 
-      # Missing constants may indicate
+      # Returns the adapter implementation `Module` for a given symbolic
+      # adapter name
       #
-      # Trying to access either the `Actor`, `Commit` or `Repository` class
-      # in a VCS `Module` will trigger auto-loading first.
-      #
-      # @param [Symbol] const The symbolic name of the missing constant
-      # @see #init
-      def const_missing(const)
-        init if [:Actor, :Commit, :Repository].include?(const)
-        super unless const_defined? const
-        const_get const
+      # @param [Symbol] name The symbolic name of the adapter
+      # @return [Module] The adapter for the given name
+      def adapter(name)
+        adapters[name.to_sym]
       end
 
-      # This initializes the VCS's implementation `Module`
+      # Returns the adapters registered for this VCS
       #
-      # This requires the `Actor`, `Commit` and `Repository` classes for that
-      # VCS implementation.
-      def init
-        path = self::NAME.to_s
-        autoload :Actor,      "metior/#{path}/actor"
-        autoload :Commit,     "metior/#{path}/commit"
-        autoload :Repository, "metior/#{path}/repository"
-
-        self
+      # @return [Hash<Symbol, Module>] The registered VCS adapters
+      def adapters
+        class_variable_get :@@adapters
+      end
+      
+      # Sets the symbolic name for this VCS and registers it
+      #
+      # @param [Symbol] name The symbolic name for this VCS
+      def as(name)
+        Metior.register name, self
+        class_variable_set :@@id, name
       end
 
-      # Marks one or more features as not supported by the VCSs (or its
-      # implementation)
+      # Sets or returns the default adapter for this VCS
       #
-      # @param [Array<Symbol>] features The features that are not supported
-      # @see #supports?
-      def not_supported(*features)
-        features.each do |feature|
-          self.send(:class_variable_get, :@@features)[feature] = false
+      # @param [Symbol] The 
+      # @return [Module] This VCS's default adapter
+      def default_adapter(name = nil)
+        if name.nil?
+          Metior.adapter(class_variable_get :@@default_adapter)
+        else
+          class_variable_set :@@default_adapter, name
         end
       end
-
-      # Checks if a specific feature is supported by the VCS (or its
-      # implementation)
+      
+      # Returns the symbolic name of this VCS
       #
-      # @param [Symbol] feature The feature to check
-      # @return [true, false] `true` if the feature is supported
-      # @see #not_supported
-      # @see VCS#supports?
-      def supports?(feature)
-        self.send(:class_variable_get, :@@features)[feature] == true
+      # @return [Symbol] The symbolic name of this VCS
+      def id
+        class_variable_get :@@id
+      end
+
+      # Registers an adapter `Module` to be used for this VCS
+      #
+      # @param [Symbol] name The symbolic name to use for the adapter
+      # @param [Module] adapter The adapter to register
+      def register_adapter(name, adapter)
+        adapters[name] = adapter
       end
 
     end
 
-    # Including `VCS` will make a `Module` available as a supported VCS type in
-    # Metior
-    #
-    # @example This will automatically register `ExoticVCS` as `:exotic`
-    #   module ExoticVCS
-    #
-    #     NAME = :exotic
-    #
-    #     include Metior::VCS
-    #
-    #   end
+    # Including `VCS` will prepare a `Module` for use as a supported VCS type
+    # in Metior
     #
     # @param [Module] mod The `Module` that provides a Metior implementation
     #        for a specific VCS
@@ -113,32 +82,7 @@ module Metior
     # @see Metior.vcs_types
     def self.included(mod)
       mod.extend ClassMethods
-      mod.send :class_variable_set, :@@features, {
-        :file_stats => true,
-        :line_stats => true
-      }
-
-      raise "#{mod}::NAME is not set." unless mod.const_defined? :NAME
-      Metior.vcs_types[mod::NAME.to_sym] = mod
-    end
-
-    # Checks if a specific feature is supported by the VCS (or its
-    # implementation) and raises an error if the feature is not available
-    #
-    # @raise [UnsupportedError] if the feature is not supported by the VCS (or
-    #        its implementation)
-    # @see #supports?
-    def support!(feature)
-      raise UnsupportedError.new(vcs) unless supports? feature
-    end
-
-    # Checks if a specific feature is supported by the VCS (or its
-    # implementation)
-    #
-    # @return [true, false] `true` if the feature is supported
-    # @see ClassMethods#supports?
-    def supports?(feature)
-      vcs.supports? feature
+      mod.send :class_variable_set, :@@adapters, {}
     end
 
     # Returns the VCS module that is included by this object
@@ -146,7 +90,7 @@ module Metior
     # @return [Metior::VCS] The VCS implementation module of this object
     # @see Metior.vcs_types
     def vcs
-      Metior.vcs_types[singleton_class::NAME.to_sym]
+      singleton_class.included_modules.find { |mod| mod.include? VCS }
     end
 
   end

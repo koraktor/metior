@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
 require 'helper'
 
@@ -9,9 +9,8 @@ class TestMetior < Test::Unit::TestCase
 
   context 'Metior' do
 
-    should 'should provide several VCS implementations' do
-      assert_equal({ :git => Git, :github => GitHub }, Metior.vcs_types)
-      assert_equal Git, Metior.vcs(:git)
+    should 'should provide a VCS implementation for Git' do
+      assert_equal VCS::Git, Metior.vcs(:git)
     end
 
     should 'raise an error if an implementation does not exist' do
@@ -19,14 +18,18 @@ class TestMetior < Test::Unit::TestCase
         Metior.vcs :unknown
         assert false
       rescue
-        assert_instance_of RuntimeError, $!
+        assert_instance_of UnknownVCSError, $!
         assert_equal 'No VCS registered for :unknown', $!.message
       end
     end
 
-    should 'allow easy creation of a implementation specific repository' do
-      assert_kind_of Git::Repository, Metior.repository(:git, File.dirname(File.dirname(__FILE__)))
-      assert_kind_of GitHub::Repository, Metior.repository(:github, 'some', 'user')
+    should 'allow easy creation of an adapter specific repository' do
+      assert_kind_of Adapter::Grit::Repository, Metior.repository(:grit, File.dirname(File.dirname(__FILE__)))
+      assert_kind_of Adapter::Octokit::Repository, Metior.repository(:octokit, 'some', 'user')
+    end
+
+    should 'allow easy creation of a VCS specific repository with the default adapter' do
+      assert_kind_of Adapter::Grit::Repository, Metior.repository(:git, File.dirname(File.dirname(__FILE__)))
     end
 
     should 'allow easy generation of a report' do

@@ -1,60 +1,41 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
 require 'helper'
 require 'metior/vcs'
-
-module MockVCS
-  NAME = :mock
-  include VCS
-  not_supported :some_feature
-end
-Metior.module_exec { @@vcs_types.delete :mock }
 
 class TestVCS < Test::Unit::TestCase
 
   context 'The VCS module' do
 
     setup do
-      Metior.module_exec { @@vcs_types[:mock] = MockVCS }
+      @adapter = mock
+      @adapter.stubs(:include?).with(VCS).returns false
+      @adapter.stubs(:include?).with(Adapter).returns true
+      Metior.register :mock, @adapter
 
-      @vcs_object = Object.new
-      @vcs_object.extend MockVCS
-    end
-
-    should 'allow access to the features of a VCS' do
-      assert_not MockVCS.supports? :some_feature
-    end
-
-    should 'automatically try to load the VCS implementation files' do
-      MockVCS.expects(:autoload).with(:Actor, 'metior/mock/actor').once
-      MockVCS.expects(:autoload).with(:Commit, 'metior/mock/commit').once
-      MockVCS.expects(:autoload).with(:Repository, 'metior/mock/repository').once
-
-      begin
-        MockVCS::Commit
-      rescue NameError
+      module MockVCS
+        include VCS
+        as :mock
+        default_adapter :mock
       end
+    end
+
+    should 'provide an default adapter' do
+      assert_equal @adapter, MockVCS.default_adapter
     end
 
     should 'allow an object of a specific VCS to access the VCS module' do
-      assert_equal MockVCS, @vcs_object.vcs
-    end
+      object = Object.new
+      object.extend MockVCS
 
-    should 'allow an object of a specific VCS to access the VCS features' do
-      assert_not @vcs_object.supports? :some_feature
-      begin
-        @vcs_object.support! :some_feature
-        assert false
-      rescue
-        assert_instance_of UnsupportedError, $!
-        assert_equal "Operation not supported by the current VCS (:mock).", $!.message
-      end
+      assert_equal MockVCS, object.vcs
     end
 
     teardown do
+      Metior.module_exec { @@vcs_adapters.delete :mock }
       Metior.module_exec { @@vcs_types.delete :mock }
     end
 

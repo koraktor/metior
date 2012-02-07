@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
 require 'helper'
 
@@ -24,7 +24,7 @@ class TestReport < Test::Unit::TestCase
       r = Metior::Repository.new('dummy')
       r.stubs(:commits).returns CommitCollection.new
       r.stubs(:current_branch).returns 'master'
-      r.stubs(:vcs).returns Metior::Git
+      r.stubs(:adapter).returns Metior::Adapter::Grit
       @report = Metior::Report::Dummy.new r
     end
 

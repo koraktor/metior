@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
 require 'helper'
 require 'metior/collections/commit_collection'
@@ -34,15 +34,15 @@ class TestCommitCollection < Test::Unit::TestCase
   context 'A collection of commits' do
 
     setup do
-      @repo = Metior::Git::Repository.new File.dirname(File.dirname(__FILE__))
+      @repo = Metior::Adapter::Grit::Repository.new File.dirname(File.dirname(__FILE__))
       @repo.stubs(:current_branch).returns 'master'
       @@grit_commits ||= Fixtures.commits_as_grit_commits(''..'master')
-      Grit::Git.any_instance.stubs(:native).with :rev_list, anything, anything
-      Grit::Git.any_instance.stubs(:native).
+      ::Grit::Git.any_instance.stubs(:native).with :rev_list, anything, anything
+      ::Grit::Git.any_instance.stubs(:native).
         with(:rev_parse, anything, 'master^{}').returns '1b2fe77'
-      Grit::Commit.stubs(:list_from_string).returns @@grit_commits.values
+      ::Grit::Commit.stubs(:list_from_string).returns @@grit_commits.values
       @@grit_commits.each do |id, commit|
-        Grit::Repo.any_instance.stubs(:commit).with(id).returns commit
+        ::Grit::Repo.any_instance.stubs(:commit).with(id).returns commit
       end
       @commits = @repo.commits
       @commits.each do |commit|

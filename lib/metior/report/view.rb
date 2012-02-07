@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
 require 'metior/report/view_helper'
 
@@ -137,8 +137,8 @@ class Metior::Report
     # Returns the name of the VCS the analyzed repository is using
     #
     # @return [Symbol] The name of the current VCS
-    def vcs_name
-      repository.vcs::NAME
+    def vcs_id
+      repository.vcs.id
     end
 
     # Returns the current version of the Metior gem

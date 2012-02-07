@@ -1,30 +1,30 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
 require 'helper'
 
-class TestGit < Test::Unit::TestCase
+class TestGrit < Test::Unit::TestCase
 
-  context 'The Git implementation' do
+  context 'The Grit adapter' do
 
     should 'support file stats' do
-      assert Metior::Git.supports? :file_stats
+      assert Metior::Adapter::Grit.supports? :file_stats
     end
 
     should 'support line stats' do
-      assert Metior::Git.supports? :line_stats
+      assert Metior::Adapter::Grit.supports? :line_stats
     end
 
   end
 
-  context 'A Git repository' do
+  context 'A Grit repository' do
 
     setup do
       @grit_repo = mock
-      Grit::Repo.stubs(:new).with('/path/to/repo').returns @grit_repo
-      @repo = Metior::Git::Repository.new '/path/to/repo'
+      ::Grit::Repo.stubs(:new).with('/path/to/repo').returns @grit_repo
+      @repo = Metior::Adapter::Grit::Repository.new '/path/to/repo'
     end
 
     should 'be able to load all commits from the repository\'s default branch' do
@@ -36,7 +36,7 @@ class TestGit < Test::Unit::TestCase
       @grit_repo.expects(:git).returns @grit_git
       @grit_git.expects(:native).with(:rev_list, anything, 'master').
         returns output
-      Grit::Commit.expects(:list_from_string).with(@grit_repo, output).
+      ::Grit::Commit.expects(:list_from_string).with(@grit_repo, output).
         returns grit_commits
 
       commits = @repo.send :load_commits, ''..'master'
@@ -53,7 +53,7 @@ class TestGit < Test::Unit::TestCase
       @grit_repo.expects(:git).returns @grit_git
       @grit_git.expects(:native).with(:rev_list, anything, 'deadbeef..master').
         returns output
-      Grit::Commit.expects(:list_from_string).with(@grit_repo, output).
+      ::Grit::Commit.expects(:list_from_string).with(@grit_repo, output).
         returns grit_commits
 
       commits = @repo.send :load_commits, 'deadbeef'..'master'
@@ -134,7 +134,7 @@ class TestGit < Test::Unit::TestCase
       @grit_git = mock
       @grit_repo.expects(:git).returns @grit_git
       @grit_git.expects(:native).with(:log, anything, 'master').returns output
-      Grit::CommitStats.expects(:list_from_string).with(@grit_repo, output).
+      ::Grit::CommitStats.expects(:list_from_string).with(@grit_repo, output).
         returns commit_stats
 
       assert_equal line_stats, @repo.load_line_stats(''..'master')
@@ -151,7 +151,7 @@ class TestGit < Test::Unit::TestCase
       @grit_git = mock
       @grit_repo.expects(:git).returns @grit_git
       @grit_git.expects(:native).with(:log, anything, *ids).returns output
-      Grit::CommitStats.expects(:list_from_string).with(@grit_repo, output).
+      ::Grit::CommitStats.expects(:list_from_string).with(@grit_repo, output).
         returns commit_stats
 
       assert_equal line_stats, @repo.load_line_stats(ids)

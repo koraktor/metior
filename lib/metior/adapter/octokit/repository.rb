@@ -1,11 +1,11 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
 require 'octokit'
 
-module Metior::GitHub
+module Metior::Adapter::Octokit
 
   # Represents a GitHub source code repository
   #
@@ -51,7 +51,7 @@ module Metior::GitHub
     # @return [String] The SHA1 ID of the commit the reference is pointing to
     def id_for_ref(ref)
       return ref if ref.match(/[0-9a-f]{40}/)
-      @refs[ref] = Octokit.commit(@path, ref).sha unless @refs.key? ref
+      @refs[ref] = ::Octokit.commit(@path, ref).sha unless @refs.key? ref
       @refs[ref]
     end
 
@@ -63,7 +63,7 @@ module Metior::GitHub
     #         corresponding commit IDs
     # @see Octokit#branches
     def load_branches
-      Octokit.branches(@path)
+      ::Octokit.branches(@path)
     end
 
     # This method uses Octokit to load all commits from the given commit range
@@ -85,9 +85,9 @@ module Metior::GitHub
       commits = []
       last_commit = nil
       loop do
-        new_commits = Octokit.commits(@path, nil, :last_sha => last_commit, :per_page => 100, :top => range.last)
+        new_commits = ::Octokit.commits(@path, nil, :last_sha => last_commit, :per_page => 100, :top => range.last)
         break if new_commits.empty?
-        
+
         base_commit_index = new_commits.find_index do |commit|
           commit.sha == range.first
         end unless range.first == ''
@@ -112,7 +112,7 @@ module Metior::GitHub
     # @see #name
     # @see Octokit.repo
     def load_name_and_description
-      github_repo  = Octokit.repo @path
+      github_repo  = ::Octokit.repo @path
       @description = github_repo.description
       @name        = github_repo.name
     end
@@ -125,7 +125,7 @@ module Metior::GitHub
     #         corresponding commit IDs
     # @see Octokit#tags
     def load_tags
-      Octokit.tags @path
+      ::Octokit.tags @path
     end
 
   end

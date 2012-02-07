@@ -1,9 +1,9 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
-module Metior::GitHub
+module Metior::Adapter::Octokit
 
   # Represents an actor in a GitHub source code repository, i.e. an author or
   # committer.

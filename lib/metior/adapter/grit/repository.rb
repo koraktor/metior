@@ -1,11 +1,11 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
 require 'grit'
 
-module Metior::Git
+module Metior::Adapter::Grit
 
   # Represents a Git source code repository
   #
@@ -21,7 +21,7 @@ module Metior::Git
     def initialize(path)
       super path
 
-      @grit_repo = Grit::Repo.new(path)
+      @grit_repo = ::Grit::Repo.new(path)
     end
 
     # Returns the current branch of the repository
@@ -70,13 +70,13 @@ module Metior::Git
 
         options = { :numstat => true, :timeout => false }
         output = @grit_repo.git.native :log, options, range
-        commit_stats = Grit::CommitStats.list_from_string @grit_repo, output
+        commit_stats = ::Grit::CommitStats.list_from_string @grit_repo, output
       else
         commit_stats = []
         ids.each_slice(500) do |id_slice|
           options = { :numstat => true, :timeout => false }
           output = @grit_repo.git.native :log, options, *id_slice
-          commit_stats += Grit::CommitStats.list_from_string @grit_repo, output
+          commit_stats += ::Grit::CommitStats.list_from_string @grit_repo, output
         end
       end
 
@@ -133,7 +133,7 @@ module Metior::Git
 
       options = { :pretty => 'raw', :timeout => false }
       output = @grit_repo.git.native :rev_list, options, range
-      commits = Grit::Commit.list_from_string @grit_repo, output
+      commits = ::Grit::Commit.list_from_string @grit_repo, output
 
       [base_commit, commits]
     end
