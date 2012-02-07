@@ -20,6 +20,7 @@ module Metior
   autoload :Collection,         'metior/collections/collection'
   autoload :Commit,             'metior/commit'
   autoload :CommitCollection,   'metior/collections/commit_collection'
+  autoload :Registerable,       'metior/registerable'
   autoload :Report,             'metior/report'
   autoload :Repository,         'metior/repository'
   autoload :VCS,                'metior/vcs'
@@ -84,7 +85,7 @@ module Metior
       :top_contributors => repo.top_contributors(range, 5)
     }.merge commits.activity
   end
-  
+
   # Returns the adapter `Module` for a given symbolic adapter name
   #
   # @param [Symbol] name The symbolic name of the adapter

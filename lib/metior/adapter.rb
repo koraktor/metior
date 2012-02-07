@@ -9,14 +9,6 @@ module Metior::Adapter
   # @author Sebastian Staudt
   module ClassMethods
 
-    # Sets the symbolic name for this adapter and registers it
-    #
-    # @param [Symbol] name The symbolic name for this adapter
-    def as(name)
-      Metior.register name, self
-      class_variable_set :@@id, name
-    end
-
     # Missing constants may indicate that the adapter is not yet initialized
     #
     # Trying to access either the `Actor`, `Commit` or `Repository` class
@@ -41,13 +33,6 @@ module Metior::Adapter
       autoload :Repository, "metior/adapter/#{path}/repository"
 
       self
-    end
-
-    # Returns the symbolic name of this adapter
-    #
-    # @return [Symbol] The symbolic name of this adapter
-    def id
-      class_variable_get :@@id
     end
 
     # Marks one or more features as not supported by the adapter
@@ -98,6 +83,7 @@ module Metior::Adapter
   #        VCS
   def self.included(mod)
     mod.extend ClassMethods
+    mod.extend Metior::Registerable
     mod.send :class_variable_set, :@@features, {
       :file_stats => true,
       :line_stats => true

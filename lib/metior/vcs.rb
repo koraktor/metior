@@ -34,14 +34,6 @@ module Metior
       def adapters
         class_variable_get :@@adapters
       end
-      
-      # Sets the symbolic name for this VCS and registers it
-      #
-      # @param [Symbol] name The symbolic name for this VCS
-      def as(name)
-        Metior.register name, self
-        class_variable_set :@@id, name
-      end
 
       # Sets or returns the default adapter for this VCS
       #
@@ -53,13 +45,6 @@ module Metior
         else
           class_variable_set :@@default_adapter, name
         end
-      end
-      
-      # Returns the symbolic name of this VCS
-      #
-      # @return [Symbol] The symbolic name of this VCS
-      def id
-        class_variable_get :@@id
       end
 
       # Registers an adapter `Module` to be used for this VCS
@@ -82,6 +67,7 @@ module Metior
     # @see Metior.vcs_types
     def self.included(mod)
       mod.extend ClassMethods
+      mod.extend Metior::Registerable
       mod.send :class_variable_set, :@@adapters, {}
     end
 
