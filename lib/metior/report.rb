@@ -211,14 +211,18 @@ module Metior
     # Find a file inside this report or one of its ancestors
     #
     # @param [String] file The name of the file to find
+    # @param [Report] report The report this file was initially requested for
     # @return [String, nil] The absolute path of the file or `nil` if it
     #         doesn't exist in this reports hierarchy
-    def self.find(file)
+    def self.find(file, report = self)
       current_path = File.join self.path, file
       if File.exist? current_path
         current_path
       else
-        self == Report ? nil : superclass.find(file)
+        if superclass == Report
+          raise FileNotFoundError.new file, report
+        end
+        superclass.find file, report
       end
     end
 
