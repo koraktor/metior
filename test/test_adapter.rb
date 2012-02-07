@@ -11,9 +11,9 @@ class TestAdapter < Test::Unit::TestCase
   context 'The Adapter module' do
 
     setup do
-      mock_vcs = mock
-      mock_vcs.stubs(:register_adapter).with :mock, anything
-      Metior.stubs(:vcs).with(:mock).returns mock_vcs
+      @mock_vcs = mock
+      @mock_vcs.stubs(:register_adapter).with :mock, anything
+      Metior.stubs(:vcs).with(:mock).returns @mock_vcs
       module MockAdapter
         include Adapter
         as :mock
@@ -23,6 +23,10 @@ class TestAdapter < Test::Unit::TestCase
 
       @adapter_object = Object.new
       @adapter_object.extend MockAdapter
+    end
+
+    should 'be registerable' do
+      Adapter.include? Registerable
     end
 
     should 'allow access to the features of a VCS' do
@@ -40,7 +44,14 @@ class TestAdapter < Test::Unit::TestCase
       end
     end
 
-   should 'allow an object of a specific adapter to access the adapter module' do
+    should 'be able to register with a VCS' do
+      mock_vcs = mock
+      mock_vcs.expects(:register_adapter).with :mock, MockAdapter
+      Metior.stubs(:vcs).with(:mock).returns mock_vcs
+      MockAdapter.register_for :mock
+    end
+
+    should 'allow an object of a specific adapter to access the adapter module' do
       assert_equal MockAdapter, @adapter_object.adapter
     end
 
@@ -53,6 +64,10 @@ class TestAdapter < Test::Unit::TestCase
         assert_instance_of UnsupportedError, $!
         assert_equal 'Operation not supported by the current VCS adapter (:mock).', $!.message
       end
+    end
+
+    should 'allow an object of a specific adapter to acces the VCS' do
+      assert_equal @mock_vcs, @adapter_object.vcs
     end
 
     teardown do

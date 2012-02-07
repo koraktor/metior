@@ -23,7 +23,18 @@ class TestVCS < Test::Unit::TestCase
       end
     end
 
-    should 'provide an default adapter' do
+    should 'be registerable' do
+      VCS.include? Registerable
+    end
+
+    should 'allow registering and accessing adapters' do
+      adapter = mock
+      MockVCS.register_adapter :mock, adapter
+      assert_equal adapter, MockVCS.adapters[:mock]
+      assert_equal adapter, MockVCS.adapter(:mock)
+    end
+
+    should 'provide a default adapter' do
       assert_equal @adapter, MockVCS.default_adapter
     end
 
