@@ -15,7 +15,7 @@ class Metior::Report
       stylesheets/default.css
     }
 
-    views [ :index, :calendar, :impact ]
+    views [ :index, :calendar ]
 
     def init
       @commits.modifications if repository.supports? :line_stats
