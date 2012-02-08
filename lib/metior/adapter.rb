@@ -104,7 +104,7 @@ module Metior::Adapter
   # @raise [UnsupportedError] if the feature is not supported by the adapter
   # @see #supports?
   def support!(feature)
-    raise UnsupportedError.new(adapter) unless supports? feature
+    raise Metior::UnsupportedError.new(adapter) unless supports? feature
   end
 
   # Checks if a specific feature is supported by the adapter
