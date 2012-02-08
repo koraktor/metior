@@ -10,6 +10,8 @@ class Metior::Report::Default
   # @author Sebastian Staudt
   class Calendar < View
 
+    requires :line_stats
+
     def data
       data = {}
       @report.commits.each do |commit|
