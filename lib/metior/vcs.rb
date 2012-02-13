@@ -42,7 +42,7 @@ module Metior
       # @return [Module] This VCS's default adapter
       def default_adapter(name = nil)
         if name.nil?
-          Metior.adapter(class_variable_get :@@default_adapter)
+          Metior.find_adapter(class_variable_get :@@default_adapter)
         else
           class_variable_set :@@default_adapter, name
         end

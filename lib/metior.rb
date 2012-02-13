@@ -46,9 +46,9 @@ module Metior
   # @return [Repository] A VCS specific `Repository` instance
   def self.repository(name, *options)
     begin
-      adapter = adapter(name)
+      adapter = find_adapter name
     rescue UnknownAdapterError
-      adapter = vcs(name).default_adapter
+      adapter = find_vcs(name).default_adapter
     end
     adapter::Repository.new *options
   end
@@ -94,7 +94,7 @@ module Metior
   #
   # @param [Symbol] name The symbolic name of the adapter
   # @return [Module] The adapter for the given name
-  def self.adapter(name)
+  def self.find_adapter(name)
     name = name.to_sym
     raise UnknownAdapterError.new(name) unless @@vcs_adapters.key? name
     @@vcs_adapters[name]
@@ -128,7 +128,7 @@ module Metior
   #
   # @param [Symbol] name The symbolic name of the VCS
   # @return [Module] The VCS for the given name
-  def self.vcs(name)
+  def self.find_vcs(name)
     name = name.to_sym
     raise UnknownVCSError.new(name) unless @@vcs_types.key? name
     @@vcs_types[name]

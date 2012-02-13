@@ -52,7 +52,7 @@ module Metior::Adapter
     # @param [Symbol] vcs_name The name of the VCS to register this adapter
     #        with
     def register_for(vcs)
-      vcs = Metior.vcs vcs
+      vcs = Metior.find_vcs vcs
       vcs.register_adapter id, self
       class_variable_set :@@vcs, vcs
     end
