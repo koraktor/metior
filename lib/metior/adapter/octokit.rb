@@ -10,6 +10,7 @@ module Metior::Adapter::Octokit
 
   include Metior::Adapter
 
+  as :github
   as :octokit
   register_for :git
 
