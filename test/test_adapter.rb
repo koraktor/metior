@@ -13,7 +13,7 @@ class TestAdapter < Test::Unit::TestCase
     setup do
       @mock_vcs = mock
       @mock_vcs.stubs(:register_adapter).with :mock, anything
-      Metior.stubs(:vcs).with(:mock).returns @mock_vcs
+      Metior.stubs(:find_vcs).with(:mock).returns @mock_vcs
       module MockAdapter
         include Adapter
         as :mock
@@ -47,7 +47,7 @@ class TestAdapter < Test::Unit::TestCase
     should 'be able to register with a VCS' do
       mock_vcs = mock
       mock_vcs.expects(:register_adapter).with :mock, MockAdapter
-      Metior.stubs(:vcs).with(:mock).returns mock_vcs
+      Metior.stubs(:find_vcs).with(:mock).returns mock_vcs
       MockAdapter.register_for :mock
     end
 

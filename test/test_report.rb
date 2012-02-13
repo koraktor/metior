@@ -5,13 +5,12 @@
 
 require 'helper'
 
-class Metior::Report
+class Dummy
+  include Report
 
-  class Dummy < self
-    assets %w{images javascripts stylesheets}
-    views [ :index ]
-  end
-
+  as :dummy
+  assets %w{images javascripts stylesheets}
+  views [ :index ]
 end
 
 class TestReport < Test::Unit::TestCase
@@ -25,15 +24,14 @@ class TestReport < Test::Unit::TestCase
       r.stubs(:commits).returns CommitCollection.new
       r.stubs(:current_branch).returns 'master'
       r.stubs(:adapter).returns Metior::Adapter::Grit
-      @report = Metior::Report::Dummy.new r
+      @report = Dummy.new r
     end
 
     should 'have some basic information' do
-      report = Metior::Report::Dummy
-      assert_equal %w{images javascripts stylesheets}, report.assets
-      assert_equal 'dummy', Metior::Report::Dummy.name
-      assert_equal [:index], report.views
-      assert_equal File.join(File.dirname(__FILE__), 'dummy'), report.path
+      assert_equal %w{images javascripts stylesheets}, @report.class.assets
+      assert_equal :dummy, @report.class.id
+      assert_equal [:index], @report.class.views
+      assert_equal File.join(File.dirname(__FILE__), 'dummy'), @report.class.path
     end
 
     should 'be able to generate a HTML report using Mustache' do
@@ -46,14 +44,14 @@ class TestReport < Test::Unit::TestCase
       file.expects(:write).with('content').once
       file.expects(:close).once
 
-      Metior::Report::Dummy.expects(:find).with('templates/index.mustache').
+      Dummy.expects(:find).with('templates/index.mustache').
         returns ''
-      Metior::Report::Dummy.expects(:find).with('views/index.rb').
+      Dummy.expects(:find).with('views/index.rb').
         returns ''
 
       target_dir = File.expand_path './a/target/dir'
       @report.expects(:copy_assets).with(target_dir).once
-      Mustache.expects(:view_namespace=).with(Metior::Report::Dummy).once
+      Mustache.expects(:view_namespace=).with(Dummy).once
       Mustache.expects(:view_class).with(:index).once.returns view_class
       File.expects(:open).with(File.join(target_dir, 'index.html'), 'wb').once.
         returns file

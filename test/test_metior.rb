@@ -10,12 +10,12 @@ class TestMetior < Test::Unit::TestCase
   context 'Metior' do
 
     should 'should provide a VCS implementation for Git' do
-      assert_equal VCS::Git, Metior.vcs(:git)
+      assert_equal VCS::Git, Metior.find_vcs(:git)
     end
 
     should 'raise an error if an implementation does not exist' do
       begin
-        Metior.vcs :unknown
+        Metior.find_vcs :unknown
         assert false
       rescue
         assert_instance_of UnknownVCSError, $!
