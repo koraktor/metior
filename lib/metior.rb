@@ -25,6 +25,10 @@ module Metior
   autoload :Repository,         'metior/repository'
   autoload :VCS,                'metior/vcs'
 
+  # This holds all available reports, i.e. their names and the corresponding
+  # class
+  @@reports = {}
+
   # This hash will be dynamically filled with all available VCS adapters and
   # the corresponding modules
   @@vcs_adapters = {}
@@ -96,6 +100,16 @@ module Metior
     @@vcs_adapters[name]
   end
 
+  # Find the base class of the report with the given name
+  #
+  # @param [Symbol] The symbolic name of the report
+  # @return [Class] The report for the given name
+  def self.find_report(name)
+    name = name.to_sym
+    raise UnknownReportError.new(name) unless @@reports.key? name
+    @@reports[name]
+  end
+
   # Registers a VCS or adapter `Module` using the given symbolic name
   #
   # @param [Symbol] name The symbolic name to register the `Module` as
@@ -105,6 +119,8 @@ module Metior
       @@vcs_types[name] = mod
     elsif mod.include? Adapter
       @@vcs_adapters[name] = mod
+    elsif mod.include? Report
+      @@reports[name] = mod
     end
   end
 

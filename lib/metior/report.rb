@@ -1,11 +1,12 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
 require 'fileutils'
 require 'mustache'
 
+require 'metior/registerable'
 require 'metior/report/view'
 
 module Metior
@@ -17,14 +18,10 @@ module Metior
   #
   # @author Sebastian Staudt
   # @see View
-  class Report
+  module Report
 
     # The path where the reports bundled with Metior live
     REPORTS_PATH = File.expand_path File.join File.dirname(__FILE__), '..', '..', 'reports'
-
-    # This holds all available reports, i.e. their names and the corresponding
-    # class
-    @@reports = {}
 
     # Returns the commits analyzed by this report
     #
@@ -41,21 +38,81 @@ module Metior
     # @return [Repository] The repository attached to this report
     attr_reader :repository
 
-    # Sets or returns the paths of the assets that need to be included in the
-    # report
-    #
-    # @param [Array<String>] assets The paths of the assets for this report
-    # @return [Array<String>] The paths of the assets to include
-    def self.assets(assets = nil)
-      if assets.nil?
-        if class_variable_defined? :@@assets
-          class_variable_get :@@assets
+    module ClassMethods
+
+      # Sets or returns the paths of the assets that need to be included in the
+      # report
+      #
+      # @param [Array<String>] assets The paths of the assets for this report
+      # @return [Array<String>] The paths of the assets to include
+      def assets(assets = nil)
+        if assets.nil?
+          if class_variable_defined? :@@assets
+            class_variable_get :@@assets
+          else
+            self == Report ? [] : superclass.assets
+          end
         else
-          self == Report ? [] : superclass.assets
+          class_variable_set :@@assets, assets
         end
-      else
-        class_variable_set :@@assets, assets
       end
+
+      # Find a file inside this report or one of its ancestors
+      #
+      # @param [String] file The name of the file to find
+      # @param [Report] report The report this file was initially requested for
+      # @return [String, nil] The absolute path of the file or `nil` if it
+      #         doesn't exist in this reports hierarchy
+      def find(file, report = self)
+        current_path = File.join self.path, file
+        if File.exist? current_path
+          current_path
+        else
+          if superclass == Report
+            raise FileNotFoundError.new file, report
+          end
+          superclass.find file, report
+        end
+      end
+
+      # Returns the file system path this report resides in
+      #
+      # @return [String] The path of this report
+      def path
+        File.join class_variable_get(:@@base_path), id.to_s
+      end
+
+      # Returns the file system path this report's templates reside in
+      #
+      # @return [String] The path of this report's templates
+      def template_path
+        File.join path, 'templates'
+      end
+
+      # Returns the file system path this report's views reside in
+      #
+      # @return [String] The path of this report's views
+      def view_path
+        File.join path, 'views'
+      end
+
+      # Sets or returns the symbolic names of the main views this report consists
+      # of
+      #
+      # @param [Array<Symbol>] views The views for this report
+      # @return [Array<Symbol>] This report's views
+      def views(views = nil)
+        if views.nil?
+          if class_variable_defined? :@@views
+            class_variable_get :@@views
+          else
+            self == Report ? [] : superclass.views
+          end
+        else
+          class_variable_set :@@views, views
+        end
+      end
+
     end
 
     # Create a new report instance for the given report name, repository and
@@ -67,7 +124,7 @@ module Metior
     # @param [String, Range] range The commit range to analyze
     # @return [Report] The requested report
     def self.create(name, repository, range = repository.current_branch)
-      @@reports[name.to_s].new(repository, range)
+      Metior.find_report(name).new(repository, range)
     end
 
     # Automatically registers a new report subclass as an available report type
@@ -75,65 +132,12 @@ module Metior
     # This will also set the path of the new report class, so it can find its
     # views, templates and assets.
     #
-    # @param [Class] subclass A report subclass
-    def self.inherited(subclass)
-      @@reports[subclass.name] = subclass
+    # @param [Module] mod A report subclass
+    def self.included(mod)
+      mod.extend ClassMethods
+      mod.extend Metior::Registerable
       base_path = File.dirname caller.first.split(':').first
-      subclass.send :class_variable_set, :@@base_path, base_path
-    end
-
-    # Sets or returns the name of this report
-    #
-    # @param [String] name The name for this report
-    # @return [String] The name of this report
-    def self.name(name = nil)
-      if name.nil?
-        if class_variable_defined? :@@name
-          class_variable_get(:@@views).to_s
-        else
-          self.to_s.split('::').last.downcase
-        end
-      else
-        class_variable_set :@@name, name
-      end
-    end
-
-    # Returns the file system path this report resides in
-    #
-    # @return [String] The path of this report
-    def self.path
-      File.join class_variable_get(:@@base_path), name
-    end
-
-    # Returns the file system path this report's templates reside in
-    #
-    # @return [String] The path of this report's templates
-    def self.template_path
-      File.join path, 'templates'
-    end
-
-    # Returns the file system path this report's views reside in
-    #
-    # @return [String] The path of this report's views
-    def self.view_path
-      File.join path, 'views'
-    end
-
-    # Sets or returns the symbolic names of the main views this report consists
-    # of
-    #
-    # @param [Array<Symbol>] views The views for this report
-    # @return [Array<Symbol>] This report's views
-    def self.views(views = nil)
-      if views.nil?
-        if class_variable_defined? :@@views
-          class_variable_get :@@views
-        else
-          self == Report ? [] : superclass.views
-        end
-      else
-        class_variable_set :@@views, views
-      end
+      mod.send :class_variable_set, :@@base_path, base_path
     end
 
     # Creates a new report for the given repository and commit range
@@ -204,27 +208,7 @@ module Metior
       result
     end
 
-    require File.join(REPORTS_PATH, 'default')
-
     private
-
-    # Find a file inside this report or one of its ancestors
-    #
-    # @param [String] file The name of the file to find
-    # @param [Report] report The report this file was initially requested for
-    # @return [String, nil] The absolute path of the file or `nil` if it
-    #         doesn't exist in this reports hierarchy
-    def self.find(file, report = self)
-      current_path = File.join self.path, file
-      if File.exist? current_path
-        current_path
-      else
-        if superclass == Report
-          raise FileNotFoundError.new file, report
-        end
-        superclass.find file, report
-      end
-    end
 
     # Copies the assets coming with this report to the given target directory
     #
@@ -248,3 +232,5 @@ module Metior
   end
 
 end
+
+require File.join(Metior::Report::REPORTS_PATH, 'default')

@@ -1,26 +1,26 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
-class Metior::Report
+# @author Sebastian Staudt
+class Metior::Report::Default
 
-  # @author Sebastian Staudt
-  class Default < self
+  include Metior::Report
 
-    assets %w{
-      images/favicon.png
-      javascripts/d3/d3.min.js
-      javascripts/d3/d3.time.min.js
-      stylesheets/default.css
-    }
+  as :default
 
-    views [ :index, :calendar ]
+  assets %w{
+    images/favicon.png
+    javascripts/d3/d3.min.js
+    javascripts/d3/d3.time.min.js
+    stylesheets/default.css
+  }
 
-    def init
-      @commits.modifications if repository.supports? :line_stats
-    end
+  views [ :index, :calendar ]
 
+  def init
+    @commits.modifications if repository.supports? :line_stats
   end
 
 end

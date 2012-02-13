@@ -1,9 +1,9 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2011, Sebastian Staudt
+# Copyright (c) 2011-2012, Sebastian Staudt
 
-class Metior::Report
+module Metior::Report
 
   # This helper module implements generic functionality that is included in all
   # report views

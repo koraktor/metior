@@ -5,7 +5,7 @@
 
 require 'metior/report/view_helper'
 
-class Metior::Report
+module Metior::Report
 
   # This class is an extended Mustache view
   #
