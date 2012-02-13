@@ -11,9 +11,13 @@ Gem::Specification.new do |s|
   s.description = 'Metior is a source code history analyzer that provides various statistics about a source code repository and its change over time.'
 
   s.add_dependency 'grit', '~> 2.4.1'
-  s.add_dependency 'hashery', '~> 1.4.0' if RUBY_VERSION.match(/^1\.8/)
   s.add_dependency 'mustache', '~> 0.99.4'
-  s.add_dependency 'octokit', '~> 0.6.5'
+  s.add_dependency 'octokit', '~> 1.0.0'
+
+  if RUBY_VERSION.match(/^1\.8/)
+    s.add_dependency 'hashery', '~> 1.4.0'
+    s.add_dependency 'json', '~> 1.6.5'
+  end
 
   s.add_development_dependency 'mocha', '~> 0.10.0'
   s.add_development_dependency 'rake', '~> 0.9.2'
