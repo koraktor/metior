@@ -3,6 +3,9 @@
 #
 # Copyright (c) 2011-2012, Sebastian Staudt
 
+require 'metior/auto_include_adapter'
+require 'metior/collections/commit_collection'
+
 module Metior
 
   # Represents an actor in a source code repository

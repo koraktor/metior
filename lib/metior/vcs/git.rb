@@ -3,6 +3,8 @@
 #
 # Copyright (c) 2012, Sebastian Staudt
 
+require 'metior/vcs'
+
 # The VCS module for Git
 #
 # @author Sebastian Staudt

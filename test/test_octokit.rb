@@ -5,6 +5,8 @@
 
 require 'helper'
 
+require 'metior/adapter/octokit'
+
 class TestOctokit < Test::Unit::TestCase
 
   context 'The Octokit adapter' do

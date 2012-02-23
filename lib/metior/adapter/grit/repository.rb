@@ -5,6 +5,8 @@
 
 require 'grit'
 
+require 'metior/repository'
+
 module Metior::Adapter::Grit
 
   # Represents a Git source code repository

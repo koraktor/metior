@@ -3,6 +3,7 @@
 #
 # Copyright (c) 2011-2012, Sebastian Staudt
 
+require 'metior/report'
 require 'metior/report/view_helper'
 
 module Metior::Report

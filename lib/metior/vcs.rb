@@ -4,6 +4,7 @@
 # Copyright (c) 2011-2012, Sebastian Staudt
 
 require 'metior/errors'
+require 'metior/registerable'
 
 module Metior
 

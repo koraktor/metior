@@ -6,24 +6,13 @@
 require 'core_ext/object'
 require 'metior/errors'
 require 'metior/version'
+require 'metior/vcs'
 
 # Metior is a source code history analyzer that provides various statistics
 # about a source code repository and its change over time.
 #
 # @author Sebastian Staudt
 module Metior
-
-  autoload :Actor,              'metior/actor'
-  autoload :Adapter,            'metior/adapter'
-  autoload :ActorCollection,    'metior/collections/actor_collection'
-  autoload :AutoIncludeAdapter, 'metior/auto_include_adapter'
-  autoload :Collection,         'metior/collections/collection'
-  autoload :Commit,             'metior/commit'
-  autoload :CommitCollection,   'metior/collections/commit_collection'
-  autoload :Registerable,       'metior/registerable'
-  autoload :Report,             'metior/report'
-  autoload :Repository,         'metior/repository'
-  autoload :VCS,                'metior/vcs'
 
   # This holds all available reports, i.e. their names and the corresponding
   # class

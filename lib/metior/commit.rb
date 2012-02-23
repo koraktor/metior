@@ -3,6 +3,8 @@
 #
 # Copyright (c) 2011-2012, Sebastian Staudt
 
+require 'metior/auto_include_adapter'
+
 module Metior
 
   # This class represents a commit in a source code repository

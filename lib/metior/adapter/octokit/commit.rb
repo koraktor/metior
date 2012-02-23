@@ -5,6 +5,8 @@
 
 require 'time'
 
+require 'metior/commit'
+
 module Metior::Adapter::Octokit
 
   # Represents a commit in a GitHub source code repository

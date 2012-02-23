@@ -5,6 +5,8 @@
 
 require 'octokit'
 
+require 'metior/repository'
+
 module Metior::Adapter::Octokit
 
   # Represents a GitHub source code repository

@@ -3,6 +3,8 @@
 #
 # Copyright (c) 2012, Sebastian Staudt
 
+require 'metior/registerable'
+
 # @author Sebastian Staudt
 module Metior::Adapter
 
@@ -28,9 +30,9 @@ module Metior::Adapter
     # adapter implementation.
     def init
       path = id.to_s
-      autoload :Actor,      "metior/adapter/#{path}/actor"
-      autoload :Commit,     "metior/adapter/#{path}/commit"
-      autoload :Repository, "metior/adapter/#{path}/repository"
+      require "metior/adapter/#{path}/actor"
+      require "metior/adapter/#{path}/commit"
+      require "metior/adapter/#{path}/repository"
 
       self
     end

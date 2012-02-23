@@ -5,6 +5,8 @@
 
 require 'helper'
 
+require 'metior/report'
+
 class Dummy
   include Report
 

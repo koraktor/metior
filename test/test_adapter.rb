@@ -34,9 +34,9 @@ class TestAdapter < Test::Unit::TestCase
     end
 
     should 'automatically try to load the VCS implementation files' do
-      MockAdapter.expects(:autoload).with(:Actor, 'metior/adapter/mock/actor').once
-      MockAdapter.expects(:autoload).with(:Commit, 'metior/adapter/mock/commit').once
-      MockAdapter.expects(:autoload).with(:Repository, 'metior/adapter/mock/repository').once
+      MockAdapter.expects(:require).with('metior/adapter/mock/actor').once
+      MockAdapter.expects(:require).with('metior/adapter/mock/commit').once
+      MockAdapter.expects(:require).with('metior/adapter/mock/repository').once
 
       begin
         MockAdapter::Commit

@@ -3,6 +3,8 @@
 #
 # Copyright (c) 2011-2012, Sebastian Staudt
 
+require 'metior/actor'
+
 module Metior::Adapter::Octokit
 
   # Represents an actor in a GitHub source code repository, i.e. an author or

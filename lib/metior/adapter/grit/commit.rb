@@ -3,6 +3,8 @@
 #
 # Copyright (c) 2011-2012, Sebastian Staudt
 
+require 'metior/commit'
+
 module Metior::Adapter::Grit
 
   # Represents a commit in a Git source code repository

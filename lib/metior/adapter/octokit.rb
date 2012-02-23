@@ -3,6 +3,8 @@
 #
 # Copyright (c) 2012, Sebastian Staudt
 
+require 'metior/adapter'
+
 # The Metior implementation for Git using GitHub's API via Octokit
 #
 # @author Sebastian Staudt
