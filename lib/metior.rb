@@ -4,6 +4,7 @@
 # Copyright (c) 2011-2012, Sebastian Staudt
 
 require 'core_ext/object'
+require 'metior/adapter'
 require 'metior/errors'
 require 'metior/version'
 require 'metior/vcs'
@@ -125,4 +126,5 @@ module Metior
 
 end
 
+require 'metior/report'
 require 'metior/vcs/git'
