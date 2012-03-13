@@ -11,7 +11,7 @@ module Metior::Registerable
   # @param [Symbol] name The symbolic name for this component
   def as(name)
     Metior.register name, self
-    class_variable_set :@@id, name
+    class_variable_set :@@id, name if id.nil?
   end
 
   # Returns the symbolic name of this adapter
