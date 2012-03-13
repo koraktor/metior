@@ -12,8 +12,8 @@ module Metior::Adapter::Octokit
 
   include Metior::Adapter
 
-  as :github
   as :octokit
+  as :github
   register_for :git
 
   not_supporting :file_stats, :line_stats
