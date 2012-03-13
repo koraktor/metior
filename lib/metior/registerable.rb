@@ -18,6 +18,7 @@ module Metior::Registerable
   #
   # @return [Symbol] The symbolic name of this adapter
   def id
+    return unless class_variable_defined? :@@id
     class_variable_get :@@id
   end
 
