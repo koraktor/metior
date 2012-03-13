@@ -68,7 +68,7 @@ module Metior
         if File.exist? current_path
           current_path
         else
-          if superclass == Report
+          if superclass == Object
             raise FileNotFoundError.new file, report
           end
           superclass.find file, report
