@@ -12,8 +12,7 @@ class Metior::Report::Default
 
   assets %w{
     images/favicon.png
-    javascripts/d3/d3.min.js
-    javascripts/d3/d3.time.min.js
+    javascripts/d3/d3.v2.min.js
     stylesheets/default.css
   }
 
