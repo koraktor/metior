@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'octokit', '~> 1.0.0'
 
   if RUBY_VERSION.match(/^1\.8/)
-    s.add_dependency 'hashery', '~> 1.4.0'
+    s.add_dependency 'hashery', '~> 1.5.0'
     s.add_dependency 'json', '~> 1.6.5'
   end
 
