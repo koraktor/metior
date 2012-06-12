@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'grit', '~> 2.5.0'
   s.add_dependency 'mustache', '~> 0.99.4'
-  s.add_dependency 'octokit', '~> 1.0.0'
+  s.add_dependency 'octokit', '~> 1.4.0'
   s.add_dependency 'rugged', '~> 0.16.0'
 
   if RUBY_VERSION.match(/^1\.8/)
